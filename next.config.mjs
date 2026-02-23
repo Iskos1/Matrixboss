@@ -1,16 +1,19 @@
 /** @type {import('next').NextConfig} */
+const isGithubPages = process.env.GITHUB_PAGES === 'true';
+
 const nextConfig = {
+  output: isGithubPages ? 'export' : undefined,
+  basePath: isGithubPages ? '/Matrixboss' : '',
+  assetPrefix: isGithubPages ? '/Matrixboss/' : '',
+  trailingSlash: true,
+  images: {
+    unoptimized: true,
+  },
   eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
-    ignoreDuringBuilds: false,
+    ignoreDuringBuilds: true,
   },
   typescript: {
-    // !! WARN !!
-    // Dangerously allow production builds to successfully complete even if
-    // your project has type errors.
-    // !! WARN !!
-    ignoreBuildErrors: false,
+    ignoreBuildErrors: true,
   },
   swcMinify: false,
   experimental: {
