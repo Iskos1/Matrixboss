@@ -1,0 +1,140 @@
+\documentclass[11pt, a4paper]{article}
+
+% --- UNIVERSAL PREAMBLE BLOCK ---
+\usepackage[a4paper, top=1.5cm, bottom=1.5cm, left=1.5cm, right=1.5cm]{geometry}
+\usepackage{fontspec}
+
+% Use babel for font management
+\usepackage[english, provide=*]{babel}
+\babelprovide[import, main]{english}
+% Font setup with TeX Gyre Heros (Helvetica clone)
+\setmainfont{texgyreheros-regular.otf}[
+  BoldFont = texgyreheros-bold.otf,
+  ItalicFont = texgyreheros-italic.otf,
+  BoldItalicFont = texgyreheros-bolditalic.otf,
+]
+
+% List formatting
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=*, nosep, label=\textbullet}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries\uppercase}{}{0em}{}[\titlerule]
+\titlespacing{\section}{0pt}{12pt}{8pt}
+
+% Link Coloring (Professional Dark Blue)
+\usepackage{xcolor}
+\definecolor{linkblue}{RGB}{0, 0, 139} % Dark Blue
+
+% Hyperlink setup
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=linkblue,
+    filecolor=linkblue,
+    urlcolor=linkblue,
+    pdftitle={Resume - Jawad Mousa Iskandar},
+    pdfpagemode=FullScreen,
+}
+
+% --- USER CONFIGURATION SECTION ---
+\newcommand{\myName}{Jawad Mousa Iskandar}
+\newcommand{\myEmail}{Jawad.iskandar@outlook.com}
+\newcommand{\myPhone}{(571) 269-8465}
+
+% Social Links
+\newcommand{\myGithubLink}{https://github.com/Iskos1}
+\newcommand{\myGithubDisp}{github.com/Iskos1}
+
+\newcommand{\myLinkedinLink}{https://linkedin.com/in/jawad-iskandar/}
+\newcommand{\myLinkedinDisp}{linkedin.com/in/jawad-iskandar}
+
+\begin{document}
+
+\pagestyle{empty}
+
+% --- CONTACT INFORMATION ---
+\begin{center}
+    {\LARGE \textbf{\myName}} \\
+    \vspace{4pt}
+    {\small \myEmail \ | \myPhone | \href{\myGithubLink}{\myGithubDisp} | \href{\myLinkedinLink}{\myLinkedinDisp}} \\
+    \vspace{4pt}
+    U.S. Citizen | Eligible for Security Clearance
+\end{center}
+
+% --- SKILLS ---
+\section{Skills}
+\begin{itemize}
+    \item \textbf{Development:} JavaScript (ES6+), SQL, OpenAI API, AWS (VPC, S3, Security Groups), Azure Blob Storage, HTML5/CSS3, Git/GitHub.
+    \item \textbf{Analysis:} Technical SEO (Search Engine Optimization), Web Analytics \& Data Reporting, Conversion Rate Optimization (CRO), Prompt Engineering, Financial Modeling, User Acceptance Testing (UAT).
+\end{itemize}
+
+% --- PROJECT WORK ---
+\section{Project Work}
+
+\noindent
+\textbf{Product Engineer | FlashConverter (SaaS)} \hfill Dec 2025 - Present
+\begin{itemize}
+    \item Integrated OpenAI API to automatically categorize bank transactions with 90\% accuracy, streamlining financial reconciliation.
+    \item Accelerated dashboard development by 70\% using AI-assisted workflows to prototype and deploy secure financial features.
+    \item Implemented privacy-first architecture using IndexedDB to store sensitive banking data 100\% locally in the browser, ensuring zero-trust security.
+\end{itemize}
+
+\vspace{6pt}
+
+\noindent
+\textbf{Technical Lead | Dispomode.com} \hfill Mar 2023 - Dec 2023
+\begin{itemize}
+    \item Launched a custom HTML/JS storefront optimized for SEO, scaling organic traffic to 100,000 monthly visitors.
+    \item Generated \$500 in daily revenue by identifying high-value, low-competition keywords using Ahrefs for targeted content strategy.
+    \item Developed automated upsell funnels and email capture systems that significantly increased customer lifetime value and retention.
+    \item Managed end-to-end logistics and financial auditing via QuickBooks to maintain strict legal and tax compliance.
+\end{itemize}
+
+\vspace{6pt}
+
+\noindent
+\textbf{Cloud Infrastructure} \hfill Mar 2025
+\begin{itemize}
+    \item Configured a secure hybrid cloud network using AWS VPC and VPN gateways to filter and monitor inbound/outbound traffic.
+    \item Provisioned multi-cloud storage solutions using AWS S3 and Azure with granular IAM policies for cross-platform data security.
+\end{itemize}
+
+% --- WORK EXPERIENCE ---
+\section{Work Experience}
+
+\noindent
+\textbf{Handshake} \hfill Remote \\
+\textit{Generative AI Fellow} \hfill Dec 2025 – Present
+\begin{itemize}
+    \item Refined LLM accuracy by engineering 500+ complex prompts per week for high-quality supervised fine-tuning.
+    \item Decreased model error rates by 15\% through rigorous fact-checking and identification of safety/bias edge cases.
+    \item Developed standardized prompt templates that improved team workflow efficiency by 20\% while maintaining model training quality.
+\end{itemize}
+
+\vspace{8pt}
+
+\noindent
+\textbf{Apple Inc.} \hfill Fairfax, VA \\
+\textit{Business Specialist} \hfill Sept 2021 – June 2024
+\begin{itemize}
+    \item Optimized client inventory management workflows through strategic MDM (Mobile Device Management) solutions, facilitating scalable and secure enterprise deployments.
+    \item Streamlined business support processes by conducting technical diagnostic analyses, prioritizing operational efficiency and long-term client success.
+\end{itemize}
+
+% --- EDUCATION ---
+\section{Education}
+\noindent
+\textbf{George Mason University} \hfill Fairfax, VA \\
+\textit{B.S. in Business and Information Systems} \hfill Dec 2025 \\
+\textbf{Relevant Coursework:} Cloud Computing Essentials, Data Mining for Business Applications, Information Systems Audit and Control, Systems Analysis and Design, Programming for Analytics.
+
+% --- CERTIFICATIONS ---
+\section{Certifications}
+\noindent
+\textbf{AWS Certified Cloud Practitioner} \hfill 2025 \\
+\textbf{CompTIA Security+} \hfill 2025 \\
+\textbf{Google Analytics Individual Qualification (GAIQ)} \hfill 2024
+
+\end{document}

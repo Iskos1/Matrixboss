@@ -1,0 +1,678 @@
+{
+  "paths": [
+    {
+      "id": "data-scientist",
+      "title": "Data Scientist",
+      "description": "Master data analysis, machine learning, and predictive modeling using Python and R. Build real-world projects from data cleaning to advanced ML models.",
+      "icon": "📊",
+      "estimatedTime": "8-12 weeks",
+      "levels": [
+        {
+          "level": "easy",
+          "title": "Data Cleaning & Basic Analysis",
+          "description": "Learn to clean messy data and perform basic exploratory analysis using Python and Pandas.",
+          "estimatedTime": "1-2 weeks",
+          "skills": ["Python", "Pandas", "Data Cleaning", "Basic Statistics"],
+          "steps": [
+            {
+              "id": 1,
+              "title": "Set Up Your Environment",
+              "description": "Install Python and required libraries",
+              "content": "Install Python 3.8+ from python.org. Then install pandas and jupyter:\n\n```bash\npip install pandas jupyter numpy matplotlib\n```\n\nCreate a new Jupyter notebook to get started.",
+              "codeSnippet": "# Verify installation\nimport pandas as pd\nimport numpy as np\nprint('Setup complete!')\nprint(f'Pandas version: {pd.__version__}')",
+              "resources": [
+                {
+                  "title": "Pandas Documentation",
+                  "url": "https://pandas.pydata.org/docs/"
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "title": "Load Your First Dataset",
+              "description": "Download and load a CSV file into a DataFrame",
+              "content": "Find a dataset (try Kaggle or data.gov). Download it and load it into pandas:\n\n```python\nimport pandas as pd\n\n# Load the dataset\ndf = pd.read_csv('your_dataset.csv')\n\n# View first few rows\nprint(df.head())\nprint(df.info())\n```",
+              "codeSnippet": "df = pd.read_csv('data.csv')\nprint(df.shape)\nprint(df.columns.tolist())",
+              "resources": [
+                {
+                  "title": "Kaggle Datasets",
+                  "url": "https://www.kaggle.com/datasets"
+                }
+              ]
+            },
+            {
+              "id": 3,
+              "title": "Handle Missing Values",
+              "description": "Identify and handle missing data",
+              "content": "Real-world data is messy. Learn to identify and handle missing values:\n\n```python\n# Check for missing values\nprint(df.isnull().sum())\n\n# Drop rows with missing values (if appropriate)\ndf_clean = df.dropna()\n\n# Or fill with mean/median\ndf['column'].fillna(df['column'].mean(), inplace=True)\n```",
+              "codeSnippet": "# Check missing values\nmissing = df.isnull().sum()\nprint(missing[missing > 0])\n\n# Fill numeric columns with median\ndf.fillna(df.select_dtypes(include=[np.number]).median(), inplace=True)",
+              "resources": []
+            },
+            {
+              "id": 4,
+              "title": "Basic Exploratory Analysis",
+              "description": "Calculate statistics and create simple visualizations",
+              "content": "Explore your data with descriptive statistics and visualizations:\n\n```python\nimport matplotlib.pyplot as plt\n\n# Summary statistics\nprint(df.describe())\n\n# Create a simple histogram\ndf['column'].hist()\nplt.title('Distribution')\nplt.show()\n\n# Correlation matrix\nprint(df.corr())\n```",
+              "codeSnippet": "# Summary statistics\nprint(df.describe())\n\n# Visualize distribution\nimport matplotlib.pyplot as plt\ndf['numeric_column'].hist(bins=20)\nplt.show()",
+              "resources": []
+            },
+            {
+              "id": 5,
+              "title": "Export Cleaned Data",
+              "description": "Save your cleaned dataset",
+              "content": "Save your cleaned data for future use:\n\n```python\n# Save to CSV\ndf_clean.to_csv('cleaned_data.csv', index=False)\n\n# Or to Excel\nwith pd.ExcelWriter('cleaned_data.xlsx') as writer:\n    df_clean.to_excel(writer, sheet_name='Data', index=False)\n```",
+              "codeSnippet": "df_clean.to_csv('cleaned_data.csv', index=False)\nprint('Data exported successfully!')",
+              "resources": []
+            }
+          ]
+        },
+        {
+          "level": "medium",
+          "title": "Data Visualization & Geographic Analysis",
+          "description": "Build an interactive COVID-19 data visualization dashboard similar to Jawad's project. Learn to work with geographic data and create compelling visualizations.",
+          "estimatedTime": "2-3 weeks",
+          "skills": ["Python", "Pandas", "GeoPandas", "Folium", "Data Visualization"],
+          "portfolioProjectId": 4,
+          "steps": [
+            {
+              "id": 1,
+              "title": "Set Up Geographic Libraries",
+              "description": "Install GeoPandas and Folium for mapping",
+              "content": "Install the required libraries for geographic data analysis:\n\n```bash\npip install geopandas folium pandas requests\n```\n\nNote: GeoPandas installation may require additional system dependencies on some platforms.",
+              "codeSnippet": "import geopandas as gpd\nimport folium\nimport pandas as pd\nprint('Libraries loaded successfully!')",
+              "resources": [
+                {
+                  "title": "GeoPandas Installation Guide",
+                  "url": "https://geopandas.org/en/stable/getting_started/install.html"
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "title": "Download COVID-19 Data",
+              "description": "Fetch live COVID-19 data from a public API",
+              "content": "Use a public API to get COVID-19 data. Example using Johns Hopkins data:\n\n```python\nimport requests\nimport pandas as pd\n\n# Download data (example URL - verify current endpoint)\nurl = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv'\ndf = pd.read_csv(url)\nprint(f'Loaded {len(df)} counties')\n```",
+              "codeSnippet": "# Load COVID-19 data\ndf = pd.read_csv('covid_data.csv')\nprint(df.head())\nprint(f'Total counties: {len(df)}')",
+              "resources": [
+                {
+                  "title": "Johns Hopkins COVID-19 Data",
+                  "url": "https://github.com/CSSEGISandData/COVID-19"
+                }
+              ]
+            },
+            {
+              "id": 3,
+              "title": "Process and Aggregate Data",
+              "description": "Clean and aggregate data by county/state",
+              "content": "Process the data to get the latest case counts:\n\n```python\n# Get the latest date column\nlatest_date = df.columns[-1]\n\n# Create summary by county\ndf_summary = df[['Admin2', 'Province_State', 'Lat', 'Long_', latest_date]].copy()\ndf_summary.columns = ['County', 'State', 'Lat', 'Lon', 'Cases']\ndf_summary = df_summary[df_summary['Cases'] > 0]  # Remove zeros\n```",
+              "codeSnippet": "# Aggregate data\nlatest_col = df.columns[-1]\ndf_agg = df.groupby('State')[latest_col].sum().reset_index()\ndf_agg.columns = ['State', 'Total_Cases']\nprint(df_agg.head())",
+              "resources": []
+            },
+            {
+              "id": 4,
+              "title": "Create Interactive Map",
+              "description": "Build a Folium choropleth map",
+              "content": "Create an interactive map showing COVID-19 cases:\n\n```python\nimport folium\nfrom folium.plugins import HeatMap\n\n# Create base map\nm = folium.Map(location=[39.8283, -98.5795], zoom_start=4)\n\n# Add markers for each county\nfor idx, row in df_summary.iterrows():\n    folium.CircleMarker(\n        location=[row['Lat'], row['Lon']],\n        radius=row['Cases'] / 1000,  # Scale radius\n        popup=f\"{row['County']}, {row['State']}: {row['Cases']} cases\",\n        color='red',\n        fill=True\n    ).add_to(m)\n\nm.save('covid_map.html')\n```",
+              "codeSnippet": "# Create map\nm = folium.Map(location=[39.8283, -98.5795], zoom_start=4)\n\n# Add data points\nfor idx, row in df.iterrows():\n    folium.CircleMarker(\n        [row['Lat'], row['Lon']],\n        radius=5,\n        popup=f\"{row['State']}: {row['Cases']}\"\n    ).add_to(m)\n\nm.save('map.html')",
+              "resources": [
+                {
+                  "title": "Folium Documentation",
+                  "url": "https://python-visualization.github.io/folium/"
+                }
+              ]
+            },
+            {
+              "id": 5,
+              "title": "Build Dashboard Panels",
+              "description": "Create multiple visualization panels",
+              "content": "Create a 4-panel dashboard with different views:\n\n```python\nimport matplotlib.pyplot as plt\n\nfig, axes = plt.subplots(2, 2, figsize=(15, 10))\n\n# Panel 1: Cases by state (bar chart)\nstate_totals = df_summary.groupby('State')['Cases'].sum().sort_values(ascending=False).head(10)\naxes[0, 0].barh(state_totals.index, state_totals.values)\naxes[0, 0].set_title('Top 10 States by Cases')\n\n# Panel 2: Time series (if you have time data)\n# ... add more panels\n\nplt.tight_layout()\nplt.savefig('dashboard.png')\n```",
+              "codeSnippet": "# Create dashboard\nfig, axes = plt.subplots(2, 2, figsize=(12, 10))\n\n# Add your visualizations to each subplot\n# axes[0,0].bar(...)\n# axes[0,1].plot(...)\n# etc.\n\nplt.tight_layout()\nplt.show()",
+              "resources": []
+            }
+          ]
+        },
+        {
+          "level": "hard",
+          "title": "Customer Conversion Prediction with Machine Learning",
+          "description": "Build a complete ML pipeline to predict customer behavior. This project mirrors Jawad's PrimeStop analysis, using R and machine learning to solve real business problems.",
+          "estimatedTime": "4-6 weeks",
+          "skills": ["R Programming", "Machine Learning", "Predictive Analytics", "tidymodels", "Statistical Analysis"],
+          "portfolioProjectId": 6,
+          "steps": [
+            {
+              "id": 1,
+              "title": "Set Up R Environment",
+              "description": "Install R, RStudio, and required packages",
+              "content": "Install R from r-project.org and RStudio from rstudio.com. Then install the tidyverse and tidymodels packages:\n\n```r\n# Install required packages\ninstall.packages(c(\"tidyverse\", \"tidymodels\", \"randomForest\", \"caret\"))\n\n# Load libraries\nlibrary(tidyverse)\nlibrary(tidymodels)\n```",
+              "codeSnippet": "library(tidyverse)\nlibrary(tidymodels)\nprint('R environment ready!')",
+              "resources": [
+                {
+                  "title": "R for Data Science",
+                  "url": "https://r4ds.had.co.nz/"
+                },
+                {
+                  "title": "tidymodels Documentation",
+                  "url": "https://www.tidymodels.org/"
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "title": "Load and Explore Data",
+              "description": "Import your dataset and perform exploratory data analysis",
+              "content": "Load your customer data and explore it:\n\n```r\n# Load data\ndata <- read_csv('customer_data.csv')\n\n# Explore structure\nstr(data)\nglimpse(data)\nsummary(data)\n\n# Check for missing values\nsum(is.na(data))\n\n# Visualize distributions\nlibrary(ggplot2)\nggplot(data, aes(x = conversion)) + geom_bar()\n```",
+              "codeSnippet": "# Load and explore\ndata <- read_csv('data.csv')\nglimpse(data)\nsummary(data)\n\n# Check target variable distribution\ntable(data$conversion)",
+              "resources": []
+            },
+            {
+              "id": 3,
+              "title": "Feature Engineering",
+              "description": "Create meaningful features from raw data",
+              "content": "Engineer features that might predict conversion:\n\n```r\n# Create new features\ndata <- data %>%\n  mutate(\n    visit_frequency = case_when(\n      visits_per_month >= 20 ~ 'daily',\n      visits_per_month >= 4 ~ 'weekly',\n      TRUE ~ 'monthly'\n    ),\n    avg_transaction_value = total_spent / total_visits,\n    loyalty_member = ifelse(loyalty_id != '', 1, 0)\n  )\n\n# Select relevant features\nfeatures <- data %>%\n  select(visit_frequency, loyalty_member, avg_transaction_value, \n         store_type, conversion)\n```",
+              "codeSnippet": "# Feature engineering\ndata <- data %>%\n  mutate(\n    member_status = ifelse(is.na(loyalty_id), 'non_member', 'member'),\n    visit_category = cut(visits_per_month, breaks = c(0, 4, 20, Inf), \n                        labels = c('monthly', 'weekly', 'daily'))\n  )",
+              "resources": []
+            },
+            {
+              "id": 4,
+              "title": "Split Data and Preprocess",
+              "description": "Create train/test splits and preprocess features",
+              "content": "Split your data and prepare it for modeling:\n\n```r\n# Split data\nset.seed(123)\ndata_split <- initial_split(data, strata = conversion)\ntrain_data <- training(data_split)\ntest_data <- testing(data_split)\n\n# Create recipe for preprocessing\nrecipe <- recipe(conversion ~ ., data = train_data) %>%\n  step_impute_mean(all_numeric()) %>%\n  step_dummy(all_nominal_predictors()) %>%\n  step_normalize(all_numeric_predictors())\n\n# Prep recipe\nprepped_recipe <- prep(recipe, training = train_data)\n```",
+              "codeSnippet": "# Data splitting\nset.seed(123)\nsplit <- initial_split(data, prop = 0.75, strata = conversion)\ntrain <- training(split)\ntest <- testing(split)\n\n# Preprocessing recipe\nrecipe <- recipe(conversion ~ ., data = train) %>%\n  step_impute_mean(all_numeric()) %>%\n  step_dummy(all_nominal_predictors())",
+              "resources": []
+            },
+            {
+              "id": 5,
+              "title": "Build Logistic Regression Model",
+              "description": "Create your first predictive model",
+              "content": "Build a logistic regression model:\n\n```r\n# Define model\nlr_model <- logistic_reg() %>%\n  set_engine('glm') %>%\n  set_mode('classification')\n\n# Create workflow\nlr_workflow <- workflow() %>%\n  add_recipe(recipe) %>%\n  add_model(lr_model)\n\n# Fit model\nlr_fit <- lr_workflow %>%\n  fit(data = train_data)\n\n# Make predictions\npredictions <- lr_fit %>%\n  predict(new_data = test_data, type = 'prob')\n```",
+              "codeSnippet": "# Logistic regression\nlr_model <- logistic_reg() %>%\n  set_engine('glm') %>%\n  set_mode('classification')\n\nlr_workflow <- workflow() %>%\n  add_recipe(recipe) %>%\n  add_model(lr_model)\n\nlr_fit <- lr_workflow %>% fit(data = train)",
+              "resources": []
+            },
+            {
+              "id": 6,
+              "title": "Build Random Forest Model",
+              "description": "Create a more advanced ensemble model",
+              "content": "Build a Random Forest model for comparison:\n\n```r\n# Define Random Forest model\nrf_model <- rand_forest(\n  trees = 500,\n  min_n = 10\n) %>%\n  set_engine('ranger') %>%\n  set_mode('classification')\n\n# Create workflow\nrf_workflow <- workflow() %>%\n  add_recipe(recipe) %>%\n  add_model(rf_model)\n\n# Fit model\nrf_fit <- rf_workflow %>%\n  fit(data = train_data)\n```",
+              "codeSnippet": "# Random Forest\nrf_model <- rand_forest(trees = 500) %>%\n  set_engine('ranger') %>%\n  set_mode('classification')\n\nrf_workflow <- workflow() %>%\n  add_recipe(recipe) %>%\n  add_model(rf_model)\n\nrf_fit <- rf_workflow %>% fit(data = train)",
+              "resources": []
+            },
+            {
+              "id": 7,
+              "title": "Evaluate and Compare Models",
+              "description": "Calculate accuracy, AUC, and other metrics",
+              "content": "Evaluate both models and compare performance:\n\n```r\n# Evaluate Logistic Regression\nlr_pred <- lr_fit %>%\n  predict(new_data = test_data) %>%\n  bind_cols(test_data %>% select(conversion))\n\nlr_metrics <- lr_pred %>%\n  metrics(truth = conversion, estimate = .pred_class)\n\n# Evaluate Random Forest\nrf_pred <- rf_fit %>%\n  predict(new_data = test_data) %>%\n  bind_cols(test_data %>% select(conversion))\n\nrf_metrics <- rf_pred %>%\n  metrics(truth = conversion, estimate = .pred_class)\n\n# Compare\nbind_rows(\n  lr_metrics %>% mutate(model = 'Logistic Regression'),\n  rf_metrics %>% mutate(model = 'Random Forest')\n)\n```",
+              "codeSnippet": "# Evaluate models\nlr_pred <- predict(lr_fit, new_data = test) %>%\n  bind_cols(test %>% select(conversion))\n\nlr_metrics <- lr_pred %>%\n  metrics(truth = conversion, estimate = .pred_class)\n\nprint(lr_metrics)",
+              "resources": []
+            },
+            {
+              "id": 8,
+              "title": "Analyze Feature Importance",
+              "description": "Identify which features drive predictions",
+              "content": "Understand what drives your model's predictions:\n\n```r\n# For Random Forest, get variable importance\nlibrary(vip)\n\nrf_fit %>%\n  extract_fit_parsnip() %>%\n  vip(num_features = 10)\n\n# For Logistic Regression, examine coefficients\nlr_fit %>%\n  extract_fit_parsnip() %>%\n  tidy() %>%\n  arrange(desc(abs(estimate)))\n```",
+              "codeSnippet": "# Feature importance\nlibrary(vip)\n\nrf_fit %>%\n  extract_fit_parsnip() %>%\n  vip(num_features = 10)",
+              "resources": []
+            },
+            {
+              "id": 9,
+              "title": "Create Business Recommendations",
+              "description": "Translate insights into actionable recommendations",
+              "content": "Based on your analysis, create business recommendations:\n\n```r\n# Example: If loyalty membership is a key predictor\n# Recommendation: Expand loyalty enrollment campaigns\n\n# If visit frequency matters\n# Recommendation: Implement targeted promotions for frequent visitors\n\n# Document your findings\nrecommendations <- data.frame(\n  insight = c('Loyalty members convert 2x more', \n              'Daily visitors convert 68% vs 38% monthly'),\n  recommendation = c('Expand loyalty enrollment', \n                    'Target frequent visitors with promotions'),\n  expected_impact = c('15% conversion increase', '10% revenue boost')\n)\n```",
+              "codeSnippet": "# Generate insights\ninsights <- list(\n  'Loyalty members convert at higher rates',\n  'Visit frequency strongly predicts conversion',\n  'Store type impacts customer behavior'\n)\n\nprint(insights)",
+              "resources": []
+            },
+            {
+              "id": 10,
+              "title": "Create Final Report",
+              "description": "Document your analysis with visualizations and insights",
+              "content": "Create a comprehensive report:\n\n```r\n# Create ROC curve\nlibrary(pROC)\n\nroc_curve <- roc(test_data$conversion, predictions$.pred_1)\nplot(roc_curve, main = 'ROC Curve')\n\n# Create confusion matrix visualization\nlibrary(ggplot2)\n\nconf_matrix <- table(test_data$conversion, predictions$.pred_class)\nggplot(data = as.data.frame(conf_matrix), \n       aes(x = Var1, y = Var2, fill = Freq)) +\n  geom_tile() +\n  labs(title = 'Confusion Matrix')\n\n# Save your report\n# Consider using R Markdown for a professional report\n```",
+              "codeSnippet": "# Final report\nlibrary(pROC)\nroc_obj <- roc(test$conversion, predictions$.pred_1)\nplot(roc_obj, main = 'ROC Curve')\n\n# Confusion matrix\nconf_mat <- conf_mat(test, truth = conversion, estimate = .pred_class)\nprint(conf_mat)",
+              "resources": [
+                {
+                  "title": "R Markdown Guide",
+                  "url": "https://rmarkdown.rstudio.com/"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "full-stack-developer",
+      "title": "Full Stack Developer",
+      "description": "Build modern web applications with JavaScript, React, and full-stack technologies. Learn to create interactive dashboards and data-driven applications.",
+      "icon": "💻",
+      "estimatedTime": "10-14 weeks",
+      "levels": [
+        {
+          "level": "easy",
+          "title": "Interactive Web Page with JavaScript",
+          "description": "Build your first interactive web page with vanilla JavaScript. Learn DOM manipulation and event handling.",
+          "estimatedTime": "1-2 weeks",
+          "skills": ["HTML", "CSS", "JavaScript", "DOM Manipulation"],
+          "steps": [
+            {
+              "id": 1,
+              "title": "Set Up HTML Structure",
+              "description": "Create a basic HTML page",
+              "content": "Create an `index.html` file with a proper structure:\n\n```html\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>My First Interactive Page</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n    <div class=\"container\">\n        <h1>Welcome to My Page</h1>\n        <button id=\"clickBtn\">Click Me!</button>\n        <p id=\"output\">Click the button to see magic happen!</p>\n    </div>\n    <script src=\"script.js\"></script>\n</body>\n</html>\n```",
+              "codeSnippet": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Interactive Page</title>\n</head>\n<body>\n    <h1>Hello World!</h1>\n    <button id=\"btn\">Click Me</button>\n    <script src=\"script.js\"></script>\n</body>\n</html>",
+              "resources": [
+                {
+                  "title": "MDN Web Docs - HTML",
+                  "url": "https://developer.mozilla.org/en-US/docs/Web/HTML"
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "title": "Style with CSS",
+              "description": "Add styling to make your page look good",
+              "content": "Create a `styles.css` file:\n\n```css\n* {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n}\n\nbody {\n    font-family: Arial, sans-serif;\n    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\n    min-height: 100vh;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n\n.container {\n    background: white;\n    padding: 2rem;\n    border-radius: 10px;\n    box-shadow: 0 10px 30px rgba(0,0,0,0.2);\n    text-align: center;\n}\n\nbutton {\n    background: #667eea;\n    color: white;\n    border: none;\n    padding: 10px 20px;\n    border-radius: 5px;\n    cursor: pointer;\n    font-size: 16px;\n}\n\nbutton:hover {\n    background: #5568d3;\n}\n```",
+              "codeSnippet": "body {\n    font-family: Arial, sans-serif;\n    background: #f0f0f0;\n    padding: 20px;\n}\n\nbutton {\n    background: #007bff;\n    color: white;\n    padding: 10px 20px;\n    border: none;\n    border-radius: 5px;\n    cursor: pointer;\n}",
+              "resources": [
+                {
+                  "title": "MDN Web Docs - CSS",
+                  "url": "https://developer.mozilla.org/en-US/docs/Web/CSS"
+                }
+              ]
+            },
+            {
+              "id": 3,
+              "title": "Add JavaScript Interactivity",
+              "description": "Make your page interactive with JavaScript",
+              "content": "Create a `script.js` file:\n\n```javascript\n// Wait for DOM to load\ndocument.addEventListener('DOMContentLoaded', function() {\n    const button = document.getElementById('clickBtn');\n    const output = document.getElementById('output');\n    let clickCount = 0;\n    \n    button.addEventListener('click', function() {\n        clickCount++;\n        output.textContent = `Button clicked ${clickCount} times!`;\n        \n        // Add some visual feedback\n        button.style.transform = 'scale(0.95)';\n        setTimeout(() => {\n            button.style.transform = 'scale(1)';\n        }, 100);\n    });\n});\n```",
+              "codeSnippet": "const btn = document.getElementById('btn');\nconst output = document.getElementById('output');\n\nbtn.addEventListener('click', () => {\n    output.textContent = 'Button was clicked!';\n});",
+              "resources": [
+                {
+                  "title": "MDN Web Docs - JavaScript",
+                  "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript"
+                }
+              ]
+            },
+            {
+              "id": 4,
+              "title": "Add Form Handling",
+              "description": "Create a form and handle user input",
+              "content": "Add a form to your HTML and handle submissions:\n\n```html\n<form id=\"userForm\">\n    <input type=\"text\" id=\"nameInput\" placeholder=\"Enter your name\">\n    <button type=\"submit\">Submit</button>\n</form>\n<div id=\"greeting\"></div>\n```\n\n```javascript\nconst form = document.getElementById('userForm');\nconst nameInput = document.getElementById('nameInput');\nconst greeting = document.getElementById('greeting');\n\nform.addEventListener('submit', function(e) {\n    e.preventDefault(); // Prevent page reload\n    const name = nameInput.value.trim();\n    \n    if (name) {\n        greeting.textContent = `Hello, ${name}! Welcome!`;\n        nameInput.value = ''; // Clear input\n    }\n});\n```",
+              "codeSnippet": "const form = document.getElementById('form');\nform.addEventListener('submit', (e) => {\n    e.preventDefault();\n    const name = document.getElementById('name').value;\n    alert(`Hello, ${name}!`);\n});",
+              "resources": []
+            },
+            {
+              "id": 5,
+              "title": "Add Local Storage",
+              "description": "Save user data in the browser",
+              "content": "Use localStorage to persist data:\n\n```javascript\n// Save data\nlocalStorage.setItem('userName', name);\n\n// Retrieve data\nconst savedName = localStorage.getItem('userName');\nif (savedName) {\n    greeting.textContent = `Welcome back, ${savedName}!`;\n}\n\n// Clear data\nlocalStorage.removeItem('userName');\n```",
+              "codeSnippet": "// Save to localStorage\nlocalStorage.setItem('key', 'value');\n\n// Retrieve\nconst value = localStorage.getItem('key');\n\n// Remove\nlocalStorage.removeItem('key');",
+              "resources": []
+            }
+          ]
+        },
+        {
+          "level": "medium",
+          "title": "E-commerce Product Page",
+          "description": "Build a responsive product page with shopping cart functionality. Learn modern web development practices used in real e-commerce sites.",
+          "estimatedTime": "3-4 weeks",
+          "skills": ["HTML", "CSS", "JavaScript", "Responsive Design", "State Management"],
+          "steps": [
+            {
+              "id": 1,
+              "title": "Design Product Layout",
+              "description": "Create HTML structure for product display",
+              "content": "Design a product page layout:\n\n```html\n<div class=\"product-container\">\n    <div class=\"product-image\">\n        <img src=\"product.jpg\" alt=\"Product\">\n    </div>\n    <div class=\"product-info\">\n        <h1>Product Name</h1>\n        <p class=\"price\">$99.99</p>\n        <p class=\"description\">Product description here...</p>\n        <div class=\"quantity-selector\">\n            <button id=\"decrease\">-</button>\n            <span id=\"quantity\">1</span>\n            <button id=\"increase\">+</button>\n        </div>\n        <button id=\"addToCart\">Add to Cart</button>\n    </div>\n</div>\n<div id=\"cart\"></div>\n```",
+              "codeSnippet": "<div class=\"product\">\n    <img src=\"product.jpg\" alt=\"Product\">\n    <h2>Product Name</h2>\n    <p class=\"price\">$99.99</p>\n    <button id=\"addToCart\">Add to Cart</button>\n</div>",
+              "resources": []
+            },
+            {
+              "id": 2,
+              "title": "Implement Shopping Cart Logic",
+              "description": "Create cart functionality with JavaScript",
+              "content": "Build a shopping cart system:\n\n```javascript\nlet cart = [];\n\nfunction addToCart(product) {\n    const existingItem = cart.find(item => item.id === product.id);\n    \n    if (existingItem) {\n        existingItem.quantity += 1;\n    } else {\n        cart.push({ ...product, quantity: 1 });\n    }\n    \n    updateCartDisplay();\n    saveCartToStorage();\n}\n\nfunction removeFromCart(productId) {\n    cart = cart.filter(item => item.id !== productId);\n    updateCartDisplay();\n    saveCartToStorage();\n}\n\nfunction updateCartDisplay() {\n    const cartElement = document.getElementById('cart');\n    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);\n    \n    cartElement.innerHTML = `\n        <h3>Shopping Cart (${cart.length} items)</h3>\n        ${cart.map(item => `\n            <div class=\"cart-item\">\n                <span>${item.name} x${item.quantity}</span>\n                <span>$${(item.price * item.quantity).toFixed(2)}</span>\n                <button onclick=\"removeFromCart(${item.id})\">Remove</button>\n            </div>\n        `).join('')}\n        <p><strong>Total: $${total.toFixed(2)}</strong></p>\n    `;\n}\n```",
+              "codeSnippet": "let cart = [];\n\nfunction addToCart(product) {\n    cart.push(product);\n    updateCart();\n}\n\nfunction updateCart() {\n    const total = cart.reduce((sum, item) => sum + item.price, 0);\n    document.getElementById('cart-total').textContent = `$${total.toFixed(2)}`;\n}",
+              "resources": []
+            },
+            {
+              "id": 3,
+              "title": "Add Responsive Design",
+              "description": "Make your page work on mobile devices",
+              "content": "Use CSS media queries for responsive design:\n\n```css\n.product-container {\n    display: flex;\n    gap: 2rem;\n    max-width: 1200px;\n    margin: 0 auto;\n    padding: 2rem;\n}\n\n@media (max-width: 768px) {\n    .product-container {\n        flex-direction: column;\n    }\n    \n    .product-image img {\n        width: 100%;\n    }\n}\n```",
+              "codeSnippet": "@media (max-width: 768px) {\n    .container {\n        flex-direction: column;\n    }\n}",
+              "resources": []
+            },
+            {
+              "id": 4,
+              "title": "Implement Search and Filter",
+              "description": "Add product search and filtering",
+              "content": "Add search functionality:\n\n```javascript\nfunction filterProducts(searchTerm) {\n    const products = document.querySelectorAll('.product');\n    \n    products.forEach(product => {\n        const name = product.querySelector('h2').textContent.toLowerCase();\n        if (name.includes(searchTerm.toLowerCase())) {\n            product.style.display = 'block';\n        } else {\n            product.style.display = 'none';\n        }\n    });\n}\n\nconst searchInput = document.getElementById('search');\nsearchInput.addEventListener('input', (e) => {\n    filterProducts(e.target.value);\n});\n```",
+              "codeSnippet": "function searchProducts(query) {\n    const products = document.querySelectorAll('.product');\n    products.forEach(p => {\n        const name = p.querySelector('h2').textContent;\n        p.style.display = name.toLowerCase().includes(query.toLowerCase()) ? 'block' : 'none';\n    });\n}",
+              "resources": []
+            },
+            {
+              "id": 5,
+              "title": "Add Checkout Flow",
+              "description": "Create a simple checkout process",
+              "content": "Build a checkout form:\n\n```html\n<div id=\"checkout\" style=\"display: none;\">\n    <h2>Checkout</h2>\n    <form id=\"checkoutForm\">\n        <input type=\"text\" placeholder=\"Name\" required>\n        <input type=\"email\" placeholder=\"Email\" required>\n        <input type=\"text\" placeholder=\"Address\" required>\n        <button type=\"submit\">Complete Order</button>\n    </form>\n</div>\n```\n\n```javascript\ndocument.getElementById('checkoutBtn').addEventListener('click', () => {\n    if (cart.length === 0) {\n        alert('Your cart is empty!');\n        return;\n    }\n    document.getElementById('checkout').style.display = 'block';\n});\n\ndocument.getElementById('checkoutForm').addEventListener('submit', (e) => {\n    e.preventDefault();\n    alert('Order placed! Thank you!');\n    cart = [];\n    updateCartDisplay();\n});\n```",
+              "codeSnippet": "function checkout() {\n    if (cart.length === 0) {\n        alert('Cart is empty!');\n        return;\n    }\n    \n    const total = calculateTotal();\n    alert(`Order total: $${total.toFixed(2)}`);\n    cart = [];\n    updateCart();\n}",
+              "resources": []
+            }
+          ]
+        },
+        {
+          "level": "hard",
+          "title": "Financial Intelligence Dashboard (StatementProMax)",
+          "description": "Build a comprehensive financial analytics platform that processes bank statements, categorizes transactions, and provides insights. This mirrors Jawad's StatementProMax project.",
+          "estimatedTime": "6-8 weeks",
+          "skills": ["JavaScript ES6", "Machine Learning", "Chart.js", "IndexedDB", "File Processing", "Data Visualization"],
+          "portfolioProjectId": 1,
+          "steps": [
+            {
+              "id": 1,
+              "title": "Set Up Project Structure",
+              "description": "Initialize your project with HTML, CSS, and JavaScript files",
+              "content": "Create the basic project structure:\n\n```\nproject/\n  ├── index.html\n  ├── styles.css\n  ├── script.js\n  ├── lib/\n  │   ├── chart.js (or use CDN)\n  │   └── pdf-lib.js (for PDF processing)\n  └── data/ (for sample data)\n```\n\nSet up your HTML with Chart.js from CDN:\n\n```html\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n```",
+              "codeSnippet": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Financial Dashboard</title>\n    <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n</head>\n<body>\n    <div id=\"app\"></div>\n    <script src=\"script.js\"></script>\n</body>\n</html>",
+              "resources": [
+                {
+                  "title": "Chart.js Documentation",
+                  "url": "https://www.chartjs.org/docs/latest/"
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "title": "Implement PDF Upload and Parsing",
+              "description": "Allow users to upload bank statement PDFs",
+              "content": "Create file upload functionality:\n\n```html\n<input type=\"file\" id=\"pdfUpload\" accept=\".pdf\">\n```\n\n```javascript\n// For PDF parsing, you'll need a library like pdf.js\n// This is a simplified example\n\nconst fileInput = document.getElementById('pdfUpload');\n\nfileInput.addEventListener('change', async (e) => {\n    const file = e.target.files[0];\n    if (file && file.type === 'application/pdf') {\n        const text = await extractTextFromPDF(file);\n        const transactions = parseTransactions(text);\n        processTransactions(transactions);\n    }\n});\n\n// Note: Full PDF parsing requires pdf.js or a backend service\n// For learning, start with CSV/Excel uploads\n```",
+              "codeSnippet": "const fileInput = document.getElementById('fileInput');\nfileInput.addEventListener('change', (e) => {\n    const file = e.target.files[0];\n    const reader = new FileReader();\n    reader.onload = (event) => {\n        const data = event.target.result;\n        processFile(data);\n    };\n    reader.readAsText(file);\n});",
+              "resources": [
+                {
+                  "title": "PDF.js Documentation",
+                  "url": "https://mozilla.github.io/pdf.js/"
+                }
+              ]
+            },
+            {
+              "id": 3,
+              "title": "Create Transaction Categorization System",
+              "description": "Build ML-powered transaction categorization",
+              "content": "Implement transaction categorization:\n\n```javascript\nconst categories = {\n    'Groceries': ['walmart', 'kroger', 'safeway', 'whole foods'],\n    'Dining': ['restaurant', 'mcdonalds', 'starbucks', 'uber eats'],\n    'Transportation': ['gas', 'uber', 'lyft', 'metro'],\n    'Entertainment': ['netflix', 'spotify', 'movie', 'concert'],\n    // ... more categories\n};\n\nfunction categorizeTransaction(description, amount) {\n    const desc = description.toLowerCase();\n    \n    // Simple keyword matching (upgrade to ML later)\n    for (const [category, keywords] of Object.entries(categories)) {\n        if (keywords.some(keyword => desc.includes(keyword))) {\n            return category;\n        }\n    }\n    \n    // Default category\n    return 'Uncategorized';\n}\n\n// ML-enhanced version (simplified)\nfunction categorizeWithML(description) {\n    // Use a simple scoring system\n    // In production, use a trained model\n    const scores = {};\n    \n    Object.keys(categories).forEach(cat => {\n        scores[cat] = calculateCategoryScore(description, cat);\n    });\n    \n    return Object.keys(scores).reduce((a, b) => \n        scores[a] > scores[b] ? a : b\n    );\n}\n```",
+              "codeSnippet": "function categorize(description) {\n    const desc = description.toLowerCase();\n    \n    if (desc.includes('grocery') || desc.includes('walmart')) {\n        return 'Groceries';\n    } else if (desc.includes('restaurant') || desc.includes('food')) {\n        return 'Dining';\n    }\n    \n    return 'Other';\n}",
+              "resources": []
+            },
+            {
+              "id": 4,
+              "title": "Set Up IndexedDB for Data Storage",
+              "description": "Store transactions locally in the browser",
+              "content": "Implement IndexedDB storage:\n\n```javascript\nconst DB_NAME = 'FinancialDashboard';\nconst DB_VERSION = 1;\nconst STORE_NAME = 'transactions';\n\nfunction openDB() {\n    return new Promise((resolve, reject) => {\n        const request = indexedDB.open(DB_NAME, DB_VERSION);\n        \n        request.onerror = () => reject(request.error);\n        request.onsuccess = () => resolve(request.result);\n        \n        request.onupgradeneeded = (e) => {\n            const db = e.target.result;\n            if (!db.objectStoreNames.contains(STORE_NAME)) {\n                const store = db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });\n                store.createIndex('date', 'date', { unique: false });\n                store.createIndex('category', 'category', { unique: false });\n            }\n        };\n    });\n}\n\nasync function saveTransaction(transaction) {\n    const db = await openDB();\n    const tx = db.transaction(STORE_NAME, 'readwrite');\n    const store = tx.objectStore(STORE_NAME);\n    return store.add(transaction);\n}\n\nasync function getAllTransactions() {\n    const db = await openDB();\n    const tx = db.transaction(STORE_NAME, 'readonly');\n    const store = tx.objectStore(STORE_NAME);\n    return store.getAll();\n}\n```",
+              "codeSnippet": "const request = indexedDB.open('FinanceDB', 1);\n\nrequest.onupgradeneeded = (e) => {\n    const db = e.target.result;\n    const store = db.createObjectStore('transactions', { keyPath: 'id' });\n};\n\nrequest.onsuccess = (e) => {\n    const db = e.target.result;\n    const tx = db.transaction('transactions', 'readwrite');\n    const store = tx.objectStore('transactions');\n    store.add({ id: 1, amount: 100, category: 'Groceries' });\n};",
+              "resources": [
+                {
+                  "title": "MDN - IndexedDB API",
+                  "url": "https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API"
+                }
+              ]
+            },
+            {
+              "id": 5,
+              "title": "Build Dashboard with Chart.js",
+              "description": "Create visualizations for income, expenses, and savings",
+              "content": "Create charts for financial data:\n\n```javascript\nfunction createExpenseChart(transactions) {\n    const ctx = document.getElementById('expenseChart').getContext('2d');\n    \n    // Group by category\n    const categoryTotals = {};\n    transactions.forEach(t => {\n        if (t.amount < 0) { // Expenses are negative\n            categoryTotals[t.category] = (categoryTotals[t.category] || 0) + Math.abs(t.amount);\n        }\n    });\n    \n    new Chart(ctx, {\n        type: 'doughnut',\n        data: {\n            labels: Object.keys(categoryTotals),\n            datasets: [{\n                data: Object.values(categoryTotals),\n                backgroundColor: [\n                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',\n                    '#9966FF', '#FF9F40'\n                ]\n            }]\n        },\n        options: {\n            responsive: true,\n            plugins: {\n                title: {\n                    display: true,\n                    text: 'Expenses by Category'\n                }\n            }\n        }\n    });\n}\n\nfunction createIncomeExpenseChart(transactions) {\n    // Create a line or bar chart showing income vs expenses over time\n    const monthlyData = groupByMonth(transactions);\n    \n    const ctx = document.getElementById('incomeExpenseChart').getContext('2d');\n    new Chart(ctx, {\n        type: 'bar',\n        data: {\n            labels: Object.keys(monthlyData),\n            datasets: [\n                {\n                    label: 'Income',\n                    data: Object.values(monthlyData).map(m => m.income),\n                    backgroundColor: 'rgba(75, 192, 192, 0.6)'\n                },\n                {\n                    label: 'Expenses',\n                    data: Object.values(monthlyData).map(m => m.expenses),\n                    backgroundColor: 'rgba(255, 99, 132, 0.6)'\n                }\n            ]\n        }\n    });\n}\n```",
+              "codeSnippet": "const ctx = document.getElementById('chart').getContext('2d');\n\nnew Chart(ctx, {\n    type: 'bar',\n    data: {\n        labels: ['Jan', 'Feb', 'Mar'],\n        datasets: [{\n            label: 'Expenses',\n            data: [100, 200, 150]\n        }]\n    }\n});",
+              "resources": []
+            },
+            {
+              "id": 6,
+              "title": "Implement Learning System",
+              "description": "Make the system learn from user corrections",
+              "content": "Build a learning system that remembers user categorizations:\n\n```javascript\n// Store user corrections in IndexedDB\nconst LEARNING_STORE = 'categoryLearning';\n\nasync function learnFromCorrection(description, correctCategory) {\n    const db = await openDB();\n    const tx = db.transaction(LEARNING_STORE, 'readwrite');\n    const store = tx.objectStore(LEARNING_STORE);\n    \n    // Store pattern\n    await store.put({\n        pattern: description.toLowerCase(),\n        category: correctCategory,\n        timestamp: Date.now()\n    });\n}\n\nasync function getLearnedCategory(description) {\n    const db = await openDB();\n    const tx = db.transaction(LEARNING_STORE, 'readonly');\n    const store = tx.objectStore(LEARNING_STORE);\n    const all = await store.getAll();\n    \n    // Find matching patterns\n    const desc = description.toLowerCase();\n    const matches = all.filter(item => desc.includes(item.pattern));\n    \n    if (matches.length > 0) {\n        // Return most recent match\n        return matches.sort((a, b) => b.timestamp - a.timestamp)[0].category;\n    }\n    \n    return null;\n}\n```",
+              "codeSnippet": "// Store user corrections\nlocalStorage.setItem('learned_categories', JSON.stringify({\n    'walmart': 'Groceries',\n    'starbucks': 'Dining'\n}));\n\n// Use learned categories\nfunction getCategory(description) {\n    const learned = JSON.parse(localStorage.getItem('learned_categories') || '{}');\n    const desc = description.toLowerCase();\n    \n    for (const [pattern, category] of Object.entries(learned)) {\n        if (desc.includes(pattern)) return category;\n    }\n    \n    return 'Other';\n}",
+              "resources": []
+            },
+            {
+              "id": 7,
+              "title": "Add Savings Optimizer",
+              "description": "Provide AI-powered savings recommendations",
+              "content": "Create a savings recommendation system:\n\n```javascript\nfunction generateSavingsRecommendations(transactions) {\n    const recommendations = [];\n    \n    // Analyze spending patterns\n    const monthlyExpenses = calculateMonthlyAverage(transactions);\n    const recurringSubscriptions = findRecurringPayments(transactions);\n    \n    // Recommendation 1: Cancel unused subscriptions\n    const unusedSubs = identifyUnusedSubscriptions(recurringSubscriptions);\n    if (unusedSubs.length > 0) {\n        recommendations.push({\n            type: 'subscription',\n            message: `Cancel ${unusedSubs.length} unused subscriptions to save $${calculateSavings(unusedSubs)}/month`,\n            impact: 'high'\n        });\n    }\n    \n    // Recommendation 2: Reduce dining out\n    const diningExpenses = getCategoryTotal(transactions, 'Dining');\n    if (diningExpenses > monthlyExpenses * 0.2) {\n        recommendations.push({\n            type: 'dining',\n            message: `Reduce dining out by 25% to save $${(diningExpenses * 0.25).toFixed(2)}/month`,\n            impact: 'medium'\n        });\n    }\n    \n    return recommendations;\n}\n```",
+              "codeSnippet": "function getRecommendations(transactions) {\n    const recommendations = [];\n    \n    const diningTotal = transactions\n        .filter(t => t.category === 'Dining')\n        .reduce((sum, t) => sum + Math.abs(t.amount), 0);\n    \n    if (diningTotal > 500) {\n        recommendations.push('Consider reducing dining out expenses');\n    }\n    \n    return recommendations;\n}",
+              "resources": []
+            },
+            {
+              "id": 8,
+              "title": "Export to Excel",
+              "description": "Allow users to export their data",
+              "content": "Implement Excel export using SheetJS:\n\n```javascript\n// Include SheetJS library\n// <script src=\"https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js\"></script>\n\nasync function exportToExcel() {\n    const transactions = await getAllTransactions();\n    \n    // Prepare data\n    const data = transactions.map(t => ({\n        Date: formatDate(t.date),\n        Description: t.description,\n        Amount: t.amount,\n        Category: t.category,\n        Type: t.amount > 0 ? 'Income' : 'Expense'\n    }));\n    \n    // Create workbook\n    const wb = XLSX.utils.book_new();\n    const ws = XLSX.utils.json_to_sheet(data);\n    \n    // Add worksheet to workbook\n    XLSX.utils.book_append_sheet(wb, ws, 'Transactions');\n    \n    // Generate summary sheet\n    const summary = generateSummary(transactions);\n    const summaryWs = XLSX.utils.json_to_sheet(summary);\n    XLSX.utils.book_append_sheet(wb, summaryWs, 'Summary');\n    \n    // Download\n    XLSX.writeFile(wb, 'financial_statement.xlsx');\n}\n```",
+              "codeSnippet": "// Using SheetJS\nconst wb = XLSX.utils.book_new();\nconst ws = XLSX.utils.json_to_sheet(data);\nXLSX.utils.book_append_sheet(wb, ws, 'Sheet1');\nXLSX.writeFile(wb, 'export.xlsx');",
+              "resources": [
+                {
+                  "title": "SheetJS Documentation",
+                  "url": "https://sheetjs.com/"
+                }
+              ]
+            },
+            {
+              "id": 9,
+              "title": "Add Privacy Features",
+              "description": "Ensure all processing happens client-side",
+              "content": "Verify and document client-side processing:\n\n```javascript\n// All data processing happens in the browser\n// No server calls for sensitive financial data\n\nfunction processLocally(file) {\n    // Process PDF/CSV entirely in browser\n    // Store in IndexedDB (local to user's browser)\n    // Never send to server\n    \n    console.log('Processing locally - no data leaves your device');\n}\n\n// Add privacy notice\nfunction showPrivacyNotice() {\n    return `\n        <div class=\"privacy-notice\">\n            <h3>🔒 100% Private</h3>\n            <p>All processing happens in your browser. Your financial data never leaves your device.</p>\n        </div>\n    `;\n}\n```",
+              "codeSnippet": "// Privacy: All processing client-side\nfunction processData(data) {\n    // Process entirely in browser\n    // No server requests\n    const result = analyzeLocally(data);\n    return result;\n}",
+              "resources": []
+            },
+            {
+              "id": 10,
+              "title": "Polish UI and Add Animations",
+              "description": "Create a professional, polished interface",
+              "content": "Add modern UI elements:\n\n```css\n.dashboard {\n    display: grid;\n    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));\n    gap: 2rem;\n    padding: 2rem;\n}\n\n.card {\n    background: white;\n    border-radius: 10px;\n    padding: 1.5rem;\n    box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n    transition: transform 0.2s;\n}\n\n.card:hover {\n    transform: translateY(-5px);\n    box-shadow: 0 4px 20px rgba(0,0,0,0.15);\n}\n```\n\n```javascript\n// Add smooth animations\nfunction animateValue(element, start, end, duration) {\n    let startTimestamp = null;\n    const step = (timestamp) => {\n        if (!startTimestamp) startTimestamp = timestamp;\n        const progress = Math.min((timestamp - startTimestamp) / duration, 1);\n        element.textContent = Math.floor(progress * (end - start) + start);\n        if (progress < 1) {\n            window.requestAnimationFrame(step);\n        }\n    };\n    window.requestAnimationFrame(step);\n}\n```",
+              "codeSnippet": ".card {\n    transition: transform 0.2s;\n}\n\n.card:hover {\n    transform: scale(1.05);\n}",
+              "resources": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ai-ml-engineer",
+      "title": "AI/ML Engineer",
+      "description": "Master artificial intelligence and machine learning. Build intelligent systems that learn from data and make predictions.",
+      "icon": "🤖",
+      "estimatedTime": "12-16 weeks",
+      "levels": [
+        {
+          "level": "easy",
+          "title": "Introduction to Machine Learning",
+          "description": "Learn the fundamentals of ML with simple Python projects. Build your first predictive model.",
+          "estimatedTime": "2-3 weeks",
+          "skills": ["Python", "scikit-learn", "Pandas", "Basic ML Concepts"],
+          "steps": [
+            {
+              "id": 1,
+              "title": "Set Up Python ML Environment",
+              "description": "Install Python and essential ML libraries",
+              "content": "Install the required packages:\n\n```bash\npip install numpy pandas scikit-learn matplotlib jupyter\n```\n\nVerify installation:\n\n```python\nimport numpy as np\nimport pandas as pd\nimport sklearn\nprint(f'NumPy: {np.__version__}')\nprint(f'Pandas: {pd.__version__}')\nprint(f'scikit-learn: {sklearn.__version__}')\n```",
+              "codeSnippet": "import numpy as np\nimport pandas as pd\nfrom sklearn.model_selection import train_test_split\nprint('ML environment ready!')",
+              "resources": [
+                {
+                  "title": "scikit-learn Documentation",
+                  "url": "https://scikit-learn.org/stable/"
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "title": "Load and Explore Your First Dataset",
+              "description": "Work with a classic ML dataset",
+              "content": "Use the famous Iris dataset:\n\n```python\nfrom sklearn.datasets import load_iris\nimport pandas as pd\n\n# Load dataset\niris = load_iris()\ndf = pd.DataFrame(iris.data, columns=iris.feature_names)\ndf['target'] = iris.target\n\n# Explore\nprint(df.head())\nprint(df.describe())\nprint(df['target'].value_counts())\n\n# Visualize\nimport matplotlib.pyplot as plt\n\nplt.scatter(df['sepal length (cm)'], df['sepal width (cm)'], \n            c=df['target'], cmap='viridis')\nplt.xlabel('Sepal Length')\nplt.ylabel('Sepal Width')\nplt.title('Iris Dataset')\nplt.show()\n```",
+              "codeSnippet": "from sklearn.datasets import load_iris\nimport pandas as pd\n\niris = load_iris()\ndf = pd.DataFrame(iris.data, columns=iris.feature_names)\nprint(df.head())",
+              "resources": [
+                {
+                  "title": "Iris Dataset Info",
+                  "url": "https://archive.ics.uci.edu/ml/datasets/iris"
+                }
+              ]
+            },
+            {
+              "id": 3,
+              "title": "Train Your First Model",
+              "description": "Build a simple classification model",
+              "content": "Train a decision tree classifier:\n\n```python\nfrom sklearn.tree import DecisionTreeClassifier\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.metrics import accuracy_score\n\n# Prepare data\nX = df.drop('target', axis=1)\ny = df['target']\n\n# Split data\nX_train, X_test, y_train, y_test = train_test_split(\n    X, y, test_size=0.2, random_state=42\n)\n\n# Train model\nmodel = DecisionTreeClassifier(random_state=42)\nmodel.fit(X_train, y_train)\n\n# Make predictions\npredictions = model.predict(X_test)\n\n# Evaluate\naccuracy = accuracy_score(y_test, predictions)\nprint(f'Accuracy: {accuracy:.2%}')\n```",
+              "codeSnippet": "from sklearn.tree import DecisionTreeClassifier\nfrom sklearn.model_selection import train_test_split\n\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)\n\nmodel = DecisionTreeClassifier()\nmodel.fit(X_train, y_train)\n\naccuracy = model.score(X_test, y_test)\nprint(f'Accuracy: {accuracy:.2%}')",
+              "resources": []
+            },
+            {
+              "id": 4,
+              "title": "Try Different Algorithms",
+              "description": "Compare multiple ML algorithms",
+              "content": "Test different models:\n\n```python\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.svm import SVC\nfrom sklearn.metrics import accuracy_score\n\nmodels = {\n    'Logistic Regression': LogisticRegression(),\n    'Random Forest': RandomForestClassifier(),\n    'SVM': SVC()\n}\n\nresults = {}\nfor name, model in models.items():\n    model.fit(X_train, y_train)\n    predictions = model.predict(X_test)\n    accuracy = accuracy_score(y_test, predictions)\n    results[name] = accuracy\n    print(f'{name}: {accuracy:.2%}')\n\n# Find best model\nbest_model = max(results, key=results.get)\nprint(f'\\nBest model: {best_model} ({results[best_model]:.2%})')\n```",
+              "codeSnippet": "from sklearn.ensemble import RandomForestClassifier\n\nmodels = {\n    'Decision Tree': DecisionTreeClassifier(),\n    'Random Forest': RandomForestClassifier()\n}\n\nfor name, model in models.items():\n    model.fit(X_train, y_train)\n    print(f'{name}: {model.score(X_test, y_test):.2%}')",
+              "resources": []
+            },
+            {
+              "id": 5,
+              "title": "Visualize Model Performance",
+              "description": "Create visualizations to understand your model",
+              "content": "Create visualizations:\n\n```python\nfrom sklearn.metrics import confusion_matrix, classification_report\nimport seaborn as sns\nimport matplotlib.pyplot as plt\n\n# Confusion matrix\ncm = confusion_matrix(y_test, predictions)\nsns.heatmap(cm, annot=True, fmt='d', cmap='Blues')\nplt.title('Confusion Matrix')\nplt.ylabel('True Label')\nplt.xlabel('Predicted Label')\nplt.show()\n\n# Feature importance (for tree-based models)\nif hasattr(model, 'feature_importances_'):\n    importances = pd.DataFrame({\n        'feature': X.columns,\n        'importance': model.feature_importances_\n    }).sort_values('importance', ascending=False)\n    \n    plt.barh(importances['feature'], importances['importance'])\n    plt.title('Feature Importance')\n    plt.show()\n```",
+              "codeSnippet": "from sklearn.metrics import confusion_matrix\nimport matplotlib.pyplot as plt\n\ncm = confusion_matrix(y_test, predictions)\nplt.imshow(cm, cmap='Blues')\nplt.colorbar()\nplt.show()",
+              "resources": []
+            }
+          ]
+        },
+        {
+          "level": "medium",
+          "title": "NLP and Text Classification",
+          "description": "Build a text classification system using natural language processing. Learn to work with text data and build sentiment analysis models.",
+          "estimatedTime": "3-4 weeks",
+          "skills": ["Python", "NLP", "Text Processing", "scikit-learn", "NLTK/spaCy"],
+          "steps": [
+            {
+              "id": 1,
+              "title": "Set Up NLP Libraries",
+              "description": "Install NLTK or spaCy",
+              "content": "Install NLP libraries:\n\n```bash\npip install nltk spacy scikit-learn\npython -m spacy download en_core_web_sm\n```\n\n```python\nimport nltk\nnltk.download('punkt')\nnltk.download('stopwords')\nnltk.download('wordnet')\n```",
+              "codeSnippet": "import nltk\nfrom nltk.corpus import stopwords\nfrom nltk.tokenize import word_tokenize\n\nnltk.download('punkt')\nnltk.download('stopwords')",
+              "resources": [
+                {
+                  "title": "NLTK Documentation",
+                  "url": "https://www.nltk.org/"
+                },
+                {
+                  "title": "spaCy Documentation",
+                  "url": "https://spacy.io/"
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "title": "Preprocess Text Data",
+              "description": "Clean and prepare text for ML",
+              "content": "Create a text preprocessing pipeline:\n\n```python\nimport re\nfrom nltk.corpus import stopwords\nfrom nltk.tokenize import word_tokenize\nfrom nltk.stem import WordNetLemmatizer\n\nlemmatizer = WordNetLemmatizer()\nstop_words = set(stopwords.words('english'))\n\ndef preprocess_text(text):\n    # Convert to lowercase\n    text = text.lower()\n    \n    # Remove special characters\n    text = re.sub(r'[^a-zA-Z\\s]', '', text)\n    \n    # Tokenize\n    tokens = word_tokenize(text)\n    \n    # Remove stopwords and lemmatize\n    tokens = [lemmatizer.lemmatize(token) for token in tokens \n              if token not in stop_words and len(token) > 2]\n    \n    return ' '.join(tokens)\n\n# Test\nsample_text = \"This is a sample text! It has punctuation and CAPITAL letters.\"\nprocessed = preprocess_text(sample_text)\nprint(processed)\n```",
+              "codeSnippet": "def preprocess(text):\n    text = text.lower()\n    text = re.sub(r'[^a-z\\s]', '', text)\n    tokens = word_tokenize(text)\n    return ' '.join(tokens)",
+              "resources": []
+            },
+            {
+              "id": 3,
+              "title": "Create Text Features",
+              "description": "Convert text to numerical features",
+              "content": "Use TF-IDF vectorization:\n\n```python\nfrom sklearn.feature_extraction.text import TfidfVectorizer\nfrom sklearn.model_selection import train_test_split\n\n# Sample data (replace with your dataset)\ntexts = ['I love this product', 'This is terrible', 'Great quality']\nlabels = [1, 0, 1]  # 1 = positive, 0 = negative\n\n# Preprocess\nprocessed_texts = [preprocess_text(text) for text in texts]\n\n# Create TF-IDF features\nvectorizer = TfidfVectorizer(max_features=1000, ngram_range=(1, 2))\nX = vectorizer.fit_transform(processed_texts)\n\n# Split data\nX_train, X_test, y_train, y_test = train_test_split(\n    X, labels, test_size=0.2, random_state=42\n)\n```",
+              "codeSnippet": "from sklearn.feature_extraction.text import TfidfVectorizer\n\nvectorizer = TfidfVectorizer()\nX = vectorizer.fit_transform(texts)\nprint(X.shape)",
+              "resources": []
+            },
+            {
+              "id": 4,
+              "title": "Train Sentiment Classifier",
+              "description": "Build a model to classify sentiment",
+              "content": "Train a sentiment analysis model:\n\n```python\nfrom sklearn.naive_bayes import MultinomialNB\nfrom sklearn.metrics import accuracy_score, classification_report\n\n# Train model\nmodel = MultinomialNB()\nmodel.fit(X_train, y_train)\n\n# Predict\npredictions = model.predict(X_test)\n\n# Evaluate\naccuracy = accuracy_score(y_test, predictions)\nprint(f'Accuracy: {accuracy:.2%}')\nprint(classification_report(y_test, predictions))\n\n# Test on new text\nnew_text = \"This product is amazing!\"\nprocessed = preprocess_text(new_text)\nnew_vector = vectorizer.transform([processed])\nprediction = model.predict(new_vector)[0]\nprint(f'Sentiment: {'Positive' if prediction == 1 else 'Negative'}')\n```",
+              "codeSnippet": "from sklearn.naive_bayes import MultinomialNB\n\nmodel = MultinomialNB()\nmodel.fit(X_train, y_train)\n\npredictions = model.predict(X_test)\naccuracy = model.score(X_test, y_test)\nprint(f'Accuracy: {accuracy:.2%}')",
+              "resources": []
+            },
+            {
+              "id": 5,
+              "title": "Build a Simple Chat Interface",
+              "description": "Create a web interface for your sentiment analyzer",
+              "content": "Build a simple web interface:\n\n```html\n<!DOCTYPE html>\n<html>\n<head>\n    <title>Sentiment Analyzer</title>\n</head>\n<body>\n    <h1>Sentiment Analysis Tool</h1>\n    <textarea id=\"textInput\" placeholder=\"Enter text to analyze...\"></textarea>\n    <button onclick=\"analyzeSentiment()\">Analyze</button>\n    <div id=\"result\"></div>\n    \n    <script>\n    async function analyzeSentiment() {\n        const text = document.getElementById('textInput').value;\n        // Send to your backend API\n        const response = await fetch('/api/analyze', {\n            method: 'POST',\n            headers: {'Content-Type': 'application/json'},\n            body: JSON.stringify({text: text})\n        });\n        const result = await response.json();\n        document.getElementById('result').textContent = \n            `Sentiment: ${result.sentiment} (${result.confidence}% confidence)`;\n    }\n    </script>\n</body>\n</html>\n```",
+              "codeSnippet": "<textarea id=\"input\"></textarea>\n<button onclick=\"analyze()\">Analyze</button>\n<div id=\"result\"></div>",
+              "resources": []
+            }
+          ]
+        },
+        {
+          "level": "hard",
+          "title": "Advanced ML: Transaction Categorization with Learning",
+          "description": "Build an intelligent transaction categorization system that learns from user feedback. This project combines ML with real-world application, similar to StatementProMax's categorization engine.",
+          "estimatedTime": "6-8 weeks",
+          "skills": ["Python", "Machine Learning", "NLP", "Feature Engineering", "Model Training", "Incremental Learning"],
+          "portfolioProjectId": 1,
+          "steps": [
+            {
+              "id": 1,
+              "title": "Design Feature Engineering Pipeline",
+              "description": "Create features from transaction descriptions",
+              "content": "Design features for transaction categorization:\n\n```python\nimport re\nimport numpy as np\nfrom sklearn.feature_extraction.text import TfidfVectorizer\n\nclass TransactionFeatureExtractor:\n    def __init__(self):\n        self.vectorizer = TfidfVectorizer(max_features=500, ngram_range=(1, 3))\n        \n    def extract_features(self, transactions):\n        features = []\n        \n        for txn in transactions:\n            feature_dict = {}\n            \n            # Text features\n            desc = txn['description'].lower()\n            feature_dict['length'] = len(desc)\n            feature_dict['word_count'] = len(desc.split())\n            \n            # Amount features\n            feature_dict['amount'] = abs(txn['amount'])\n            feature_dict['is_negative'] = 1 if txn['amount'] < 0 else 0\n            \n            # Pattern features\n            feature_dict['has_number'] = 1 if re.search(r'\\d', desc) else 0\n            feature_dict['has_dollar'] = 1 if '$' in desc else 0\n            \n            # Merchant name patterns\n            common_merchants = ['walmart', 'target', 'amazon', 'starbucks']\n            for merchant in common_merchants:\n                feature_dict[f'contains_{merchant}'] = 1 if merchant in desc else 0\n            \n            features.append(feature_dict)\n        \n        return pd.DataFrame(features)\n```",
+              "codeSnippet": "def extract_features(description, amount):\n    features = {\n        'length': len(description),\n        'word_count': len(description.split()),\n        'amount': abs(amount),\n        'has_number': 1 if any(c.isdigit() for c in description) else 0\n    }\n    return features",
+              "resources": []
+            },
+            {
+              "id": 2,
+              "title": "Build Initial Classification Model",
+              "description": "Train a baseline model with labeled data",
+              "content": "Create and train an initial model:\n\n```python\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.preprocessing import LabelEncoder\nimport pickle\n\n# Load your labeled transaction data\ndf = pd.read_csv('labeled_transactions.csv')\n\n# Extract features\nfeature_extractor = TransactionFeatureExtractor()\nX = feature_extractor.extract_features(df.to_dict('records'))\n\n# Encode categories\ny = df['category']\nlabel_encoder = LabelEncoder()\ny_encoded = label_encoder.fit_transform(y)\n\n# Split data\nX_train, X_test, y_train, y_test = train_test_split(\n    X, y_encoded, test_size=0.2, random_state=42\n)\n\n# Train model\nmodel = RandomForestClassifier(n_estimators=100, random_state=42)\nmodel.fit(X_train, y_train)\n\n# Evaluate\naccuracy = model.score(X_test, y_test)\nprint(f'Initial accuracy: {accuracy:.2%}')\n\n# Save model\nwith open('transaction_model.pkl', 'wb') as f:\n    pickle.dump(model, f)\nwith open('label_encoder.pkl', 'wb') as f:\n    pickle.dump(label_encoder, f)\n```",
+              "codeSnippet": "from sklearn.ensemble import RandomForestClassifier\n\nmodel = RandomForestClassifier(n_estimators=100)\nmodel.fit(X_train, y_train)\n\naccuracy = model.score(X_test, y_test)\nprint(f'Accuracy: {accuracy:.2%}')",
+              "resources": []
+            },
+            {
+              "id": 3,
+              "title": "Implement Learning from User Feedback",
+              "description": "Create a system that learns from corrections",
+              "content": "Build an incremental learning system:\n\n```python\nimport json\nfrom datetime import datetime\n\nclass LearningSystem:\n    def __init__(self, model, label_encoder):\n        self.model = model\n        self.label_encoder = label_encoder\n        self.corrections = []\n        self.learned_patterns = {}\n        \n    def save_correction(self, transaction, predicted_category, correct_category):\n        correction = {\n            'transaction': transaction,\n            'predicted': predicted_category,\n            'correct': correct_category,\n            'timestamp': datetime.now().isoformat()\n        }\n        self.corrections.append(correction)\n        \n        # Update learned patterns\n        desc = transaction['description'].lower()\n        if correct_category not in self.learned_patterns:\n            self.learned_patterns[correct_category] = []\n        self.learned_patterns[correct_category].append(desc)\n        \n        # Save to file\n        self.persist_corrections()\n    \n    def get_learned_category(self, description):\n        desc = description.lower()\n        \n        # Check learned patterns\n        for category, patterns in self.learned_patterns.items():\n            for pattern in patterns:\n                if pattern in desc or desc in pattern:\n                    return category\n        \n        return None\n    \n    def persist_corrections(self):\n        with open('corrections.json', 'w') as f:\n            json.dump(self.corrections, f, indent=2)\n        \n        with open('learned_patterns.json', 'w') as f:\n            json.dump(self.learned_patterns, f, indent=2)\n    \n    def retrain_model(self, new_data):\n        # Retrain with new corrections\n        # This is a simplified version - in production, use incremental learning\n        feature_extractor = TransactionFeatureExtractor()\n        X_new = feature_extractor.extract_features(new_data)\n        \n        # Combine with existing training data and retrain\n        # ... implementation here\n```",
+              "codeSnippet": "class LearningSystem:\n    def __init__(self):\n        self.learned = {}\n    \n    def learn(self, description, category):\n        self.learned[description.lower()] = category\n    \n    def predict(self, description):\n        return self.learned.get(description.lower(), None)",
+              "resources": []
+            },
+            {
+              "id": 4,
+              "title": "Add Confidence Scoring",
+              "description": "Provide confidence scores for predictions",
+              "content": "Add confidence scoring to predictions:\n\n```python\ndef predict_with_confidence(self, transaction):\n    # Extract features\n    features = self.feature_extractor.extract_features([transaction])\n    \n    # Get prediction probabilities\n    probabilities = self.model.predict_proba(features)[0]\n    \n    # Get predicted class\n    predicted_idx = np.argmax(probabilities)\n    predicted_category = self.label_encoder.inverse_transform([predicted_idx])[0]\n    confidence = probabilities[predicted_idx]\n    \n    # Check learned patterns for higher confidence\n    learned_cat = self.learning_system.get_learned_category(transaction['description'])\n    if learned_cat:\n        # Boost confidence if we have a learned pattern\n        confidence = min(confidence + 0.2, 1.0)\n    \n    return {\n        'category': predicted_category,\n        'confidence': confidence,\n        'all_probabilities': dict(zip(\n            self.label_encoder.classes_,\n            probabilities\n        ))\n    }\n```",
+              "codeSnippet": "def predict_with_confidence(model, features):\n    probabilities = model.predict_proba([features])[0]\n    predicted_idx = np.argmax(probabilities)\n    confidence = probabilities[predicted_idx]\n    \n    return predicted_idx, confidence",
+              "resources": []
+            },
+            {
+              "id": 5,
+              "title": "Create User Interface for Corrections",
+              "description": "Build UI for users to correct categorizations",
+              "content": "Create a web interface for corrections:\n\n```html\n<div class=\"transaction-item\">\n    <div class=\"transaction-details\">\n        <p><strong>Description:</strong> {{ description }}</p>\n        <p><strong>Amount:</strong> ${{ amount }}</p>\n        <p><strong>Predicted Category:</strong> {{ predicted_category }} ({{ confidence }}% confidence)</p>\n    </div>\n    <div class=\"correction-section\">\n        <label>Correct Category:</label>\n        <select id=\"correctCategory\">\n            <option value=\"Groceries\">Groceries</option>\n            <option value=\"Dining\">Dining</option>\n            <option value=\"Transportation\">Transportation</option>\n            <!-- more options -->\n        </select>\n        <button onclick=\"saveCorrection()\">Save Correction</button>\n    </div>\n</div>\n\n<script>\nfunction saveCorrection(transactionId, correctCategory) {\n    fetch('/api/correct', {\n        method: 'POST',\n        headers: {'Content-Type': 'application/json'},\n        body: JSON.stringify({\n            transaction_id: transactionId,\n            correct_category: correctCategory\n        })\n    }).then(() => {\n        alert('Correction saved! The system will learn from this.');\n    });\n}\n</script>\n```",
+              "codeSnippet": "<div class=\"transaction\">\n    <p>{{ description }}</p>\n    <p>Predicted: {{ category }} ({{ confidence }}%)</p>\n    <select id=\"correct\">\n        <option>Groceries</option>\n        <option>Dining</option>\n    </select>\n    <button onclick=\"save()\">Save</button>\n</div>",
+              "resources": []
+            },
+            {
+              "id": 6,
+              "title": "Implement Batch Retraining",
+              "description": "Retrain model periodically with new corrections",
+              "content": "Create a retraining pipeline:\n\n```python\ndef retrain_with_corrections(self):\n    # Load all corrections\n    with open('corrections.json', 'r') as f:\n        corrections = json.load(f)\n    \n    if len(corrections) < 10:  # Need minimum corrections\n        print('Not enough corrections to retrain')\n        return\n    \n    # Prepare new training data\n    new_data = []\n    new_labels = []\n    \n    for correction in corrections:\n        txn = correction['transaction']\n        correct_cat = correction['correct']\n        \n        new_data.append(txn)\n        new_labels.append(correct_cat)\n    \n    # Extract features\n    feature_extractor = TransactionFeatureExtractor()\n    X_new = feature_extractor.extract_features(new_data)\n    \n    # Encode labels\n    y_new = self.label_encoder.transform(new_labels)\n    \n    # Combine with original training data\n    X_combined = pd.concat([self.X_train, X_new])\n    y_combined = np.concatenate([self.y_train, y_new])\n    \n    # Retrain model\n    self.model.fit(X_combined, y_combined)\n    \n    # Save updated model\n    with open('transaction_model.pkl', 'wb') as f:\n        pickle.dump(self.model, f)\n    \n    print('Model retrained successfully!')\n```",
+              "codeSnippet": "def retrain(model, new_data, new_labels):\n    # Combine with existing data\n    X_combined = np.vstack([X_train, new_data])\n    y_combined = np.concatenate([y_train, new_labels])\n    \n    # Retrain\n    model.fit(X_combined, y_combined)\n    return model",
+              "resources": []
+            },
+            {
+              "id": 7,
+              "title": "Add Performance Metrics Dashboard",
+              "description": "Track model performance over time",
+              "content": "Create a dashboard to track performance:\n\n```python\nimport matplotlib.pyplot as plt\nfrom datetime import datetime, timedelta\n\ndef track_performance():\n    metrics = {\n        'date': [],\n        'accuracy': [],\n        'corrections_count': [],\n        'confidence_avg': []\n    }\n    \n    # Load historical data\n    # ... load from database or files\n    \n    # Create visualization\n    fig, axes = plt.subplots(2, 2, figsize=(12, 10))\n    \n    # Accuracy over time\n    axes[0, 0].plot(metrics['date'], metrics['accuracy'])\n    axes[0, 0].set_title('Accuracy Over Time')\n    axes[0, 0].set_ylabel('Accuracy')\n    \n    # Corrections count\n    axes[0, 1].bar(metrics['date'], metrics['corrections_count'])\n    axes[0, 1].set_title('User Corrections')\n    \n    # Average confidence\n    axes[1, 0].plot(metrics['date'], metrics['confidence_avg'])\n    axes[1, 0].set_title('Average Confidence')\n    \n    plt.tight_layout()\n    plt.savefig('performance_dashboard.png')\n```",
+              "codeSnippet": "import matplotlib.pyplot as plt\n\n# Track metrics\nplt.plot(dates, accuracies)\nplt.title('Model Accuracy Over Time')\nplt.show()",
+              "resources": []
+            },
+            {
+              "id": 8,
+              "title": "Optimize for Production",
+              "description": "Deploy and optimize your model",
+              "content": "Prepare for production deployment:\n\n```python\n# Create a prediction API\nfrom flask import Flask, request, jsonify\nimport pickle\n\napp = Flask(__name__)\n\n# Load model\nwith open('transaction_model.pkl', 'rb') as f:\n    model = pickle.load(f)\nwith open('label_encoder.pkl', 'rb') as f:\n    label_encoder = pickle.load(f)\n\n@app.route('/api/predict', methods=['POST'])\ndef predict():\n    data = request.json\n    transaction = data['transaction']\n    \n    # Extract features\n    features = feature_extractor.extract_features([transaction])\n    \n    # Predict\n    prediction = model.predict(features)[0]\n    category = label_encoder.inverse_transform([prediction])[0]\n    confidence = model.predict_proba(features)[0][prediction]\n    \n    return jsonify({\n        'category': category,\n        'confidence': float(confidence)\n    })\n\nif __name__ == '__main__':\n    app.run(debug=True)\n```",
+              "codeSnippet": "from flask import Flask, request, jsonify\n\napp = Flask(__name__)\n\n@app.route('/predict', methods=['POST'])\ndef predict():\n    data = request.json\n    result = model.predict(data)\n    return jsonify({'category': result})\n\napp.run()",
+              "resources": [
+                {
+                  "title": "Flask Documentation",
+                  "url": "https://flask.palletsprojects.com/"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

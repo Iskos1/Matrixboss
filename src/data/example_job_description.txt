@@ -1,0 +1,48 @@
+Senior Business Analyst - Cloud Solutions
+Company: Amazon Web Services (AWS)
+Location: Remote
+
+About the Role:
+We are seeking a Senior Business Analyst to join our Cloud Solutions team. In this role, you will work at the intersection of business strategy and cloud technology, helping enterprise clients optimize their cloud infrastructure and drive digital transformation.
+
+Key Responsibilities:
+• Analyze business requirements and translate them into technical solutions using AWS services
+• Partner with sales teams to develop custom cloud migration strategies for enterprise clients
+• Create financial models and ROI analyses for cloud adoption initiatives
+• Build dashboards and reports using Tableau and Python to track key performance metrics
+• Conduct data analysis to identify optimization opportunities in client cloud environments
+• Lead client presentations and workshops on cloud best practices
+• Collaborate with technical teams to design secure, scalable cloud architectures
+• Document business processes and create implementation roadmaps
+
+Required Qualifications:
+• Bachelor's degree in Business, Information Systems, Computer Science, or related field
+• 3+ years of experience in business analysis, consulting, or technical sales
+• Strong understanding of cloud computing concepts (AWS, Azure, or GCP)
+• Proficiency in data analysis tools: Python (Pandas), SQL, Excel, Tableau
+• Experience with CRM systems (Salesforce preferred)
+• Excellent communication and presentation skills
+• Ability to translate complex technical concepts for non-technical audiences
+
+Preferred Qualifications:
+• AWS certifications (Solutions Architect, Cloud Practitioner)
+• Experience with financial modeling and business case development
+• Background in consulting or client-facing roles
+• Knowledge of network security and infrastructure concepts
+• Experience with agile methodologies and project management
+
+Technical Skills:
+• Cloud Platforms: AWS (EC2, S3, VPC, Lambda), Azure
+• Analytics: Python, Pandas, SQL, Tableau, Excel (Pivot Tables, VBA)
+• CRM: Salesforce, HubSpot
+• Tools: JIRA, Confluence, Git
+• Security: IAM, Network Security fundamentals
+
+What We Offer:
+• Competitive salary and equity compensation
+• Remote-first work environment
+• Professional development and AWS certification support
+• Collaborative team culture
+• Opportunity to work with Fortune 500 clients
+
+Amazon is an equal opportunity employer committed to diversity and inclusion.

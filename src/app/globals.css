@@ -3,25 +3,114 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #f8fafc; /* slate-50 */
+  --foreground: #0f172a; /* slate-900 */
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection color */
+::selection {
+  background-color: #cbd5e1; /* slate-300 */
+  color: #0f172a;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+  
+  /* Gradient Animation */
+  @keyframes gradient {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+  
+  .animate-gradient {
+    animation: gradient 6s ease infinite;
+  }
+  
+  /* Marquee Animation */
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  
+  .animate-marquee {
+    animation: marquee 40s linear infinite;
+  }
+  
+  .animate-marquee:hover {
+    animation-play-state: paused;
+  }
+}
+
+/* ─── Skill Builder Code Blocks ─── */
+.skill-builder pre {
+  tab-size: 2;
+}
+
+.skill-builder pre code {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+  font-size: 0.8125rem;
+  line-height: 1.7;
+}
+
+/* Syntax highlighting hints for code blocks */
+.skill-builder pre code .keyword {
+  color: #c792ea;
+}
+.skill-builder pre code .string {
+  color: #c3e88d;
+}
+.skill-builder pre code .comment {
+  color: #546e7a;
+}
+
+/* Scrollbar styling for code blocks */
+.skill-builder pre::-webkit-scrollbar {
+  height: 6px;
+}
+.skill-builder pre::-webkit-scrollbar-track {
+  background: #1e293b;
+  border-radius: 3px;
+}
+.skill-builder pre::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 3px;
+}
+.skill-builder pre::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Line clamp utility */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }

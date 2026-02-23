@@ -1,0 +1,64 @@
+{
+  "applications": [
+    {
+      "id": "job_1771850624063",
+      "savedAt": "2026-02-23T12:43:44.063Z",
+      "company": "Satair (Airbus)",
+      "role": "Business Analyst (Contract)",
+      "applicationStatus": "not_applied",
+      "notes": "",
+      "jobDescription": "Job Description:\n\nSatair is looking for a Business Analyst (Contract)  to join our Commercial Analytics Team based in Herndon, VA.\n\nIn this role you will drive back-end activities internally that supports the broader Commercial community to use big data for decision making and strategic purposes; contributing to business competitiveness and customer satisfaction\n\nYour Working Environment:\n\nThe Washington, D.C. metro area is home to multiple Airbus offices: In our nation’s capital you will find the Airbus Experience Center, a collection of interactive, multimedia exhibitions highlighting the extensive role the company plays in the aviation, aerospace and defense industries in the U.S. and around the world. The D.C. area is also home to our regional corporate headquarters – located adjacent to Washington Dulles International Airport (IAD) - it makes flying in a breeze!\n\nYour Challenges:\n\nOperational Analytics:     70 %\n\nPrepare business and pipeline reports for team and management meetings\n\nDevelop and maintain databases, including data model design, data collection and data cleaning\n\nApply basic coding to merge, compare, analyze data sets\n\nIdentify and interpret patterns and trends in data sets, providing analytical support and insights to the commercial team\n\nCommunications:     25 %\n\nMaintain dialogue and work closely with other functions including Commercial & Support, Product Management and Operations teams to understand the business as well as developments and trends in the market\n\nProviding data and administrative support to adhoc projects\n\nAdditional Responsibilities: \n\nOther duties as assigned:     5%  \n\nOther administrative tasks or duties reasonably required from time to time by the Company\n\n\n \n\nYour Boarding Pass:\n\nRequired:\n\nDiploma in Business Management, Business Administration, Finance or related field.\n\n0-2 years data analytics experience \n\nUp to 5% Domestic Travel involved (to join sales team quarterly meetings, only if required)\n\nAble to work in US without current or future need for visa sponsorship\n\nAnalytical skills with the ability to analyze complex data sets and derive actionable insights\n\nFluency in English and ability to communicate clearly to stakeholders\n\nKnowledge of Google Suite, Microsoft Office or other relevant tools used for data analytics and visualisation\n\nPreferred:\n\nBasic coding proficiency in Python, R etc\n\nStrong presentation skills and be able to communicate professionally\n\nUnderstanding enterprise planning systems like SAP; advanced knowledge of MS Excel\n\nPhysical Requirements:\n\nOnsite or remote:  60% onsite\n\nVision: Daily be able to see and read computer screen and other electronic equipment with screens, able to read documents, reports and engineering drawings.\n\nHearing: Daily able to hear to participate in conversations in person and via teleconference or phone and to hear sounds on production floor including safety warnings or alarms.\n\nSpeaking:  Daily able to speak in conversations and meetings, deliver information and participate in communications.\n\nEquipment Operation (personal computer, telephone, copies, fax machine, and related office equipment and using electronic identification card to enter building floors and internal doors): Daily able to operate most office and personal electronic equipment.\n\nCarrying: Daily able to carry documents, tools, drawings, electronic equipment up to 30lbs/14kgs.\n\nLifting:  Daily able to lift documents, tools, drawings, electronic equipment up to 30lbs/14kgs.\n\nPushing / Pulling:  Daily able to push and pull small office furniture and some equipment and tools.\n\nSitting: Daily able to sit for long periods of time in meetings, working on computer.\n\nSquatting / Kneeling: Daily able to squat or kneel to retrieve or replace items stored on low shelving.\n\nStanding: Daily able to stand for discussions in offices or on production floor.\n\nTravel:  Twice a year able to travel independently and at short notice.\n\nWalking (include routine walking such as to a shared printer to retrieve documents): Daily able to walk through office and production areas including uneven surfaces.\n\nPersonal Protective Equipment required:  Required PPE includes, but is not limited to, Safety Shoes, Safety Glasses, Hearing Protection, Respirators/Masks, and/or Protective Gloves as required by site and/or customer site\n\nAdministrative position only PPE required: Steel-toed shoes are required for all shop floor visit, appropriate hearing/eye protection may also be required when visiting the shop floor.\n\nAbility to work in the US without current, or future, need of visa sponsorship/work authorization is required for this position.\n\nThis position is a temporary (contract) position with no specific time period but could be extended or shortened as needed. Contractors are employed by a 3rd party vendor and placed on assignment to Airbus in America.\n\nTake your career to a new level and apply online now!\n\nA full job description will be provided to candidates who progress to the interview stage or any candidate upon request.\n\nThis job requires an awareness of any potential compliance risks and a commitment to act with integrity, as the foundation for the Company’s success, reputation and sustainable growth.\n\nCompany:\n\nSatair USA, Inc.\nEmployment Type:\n\nAgency / Temporary\nExperience Level:\n\nEntry Level\nRemote Type:\n\nOn-site\nJob Family:\n\nDigital <JF-IM-DI>\n------\n\nJob Posting End Date: 03.13.2026\n------\n\nAirbus provides equal opportunities to all individuals seeking assignment with Airbus without regard to race, color, religion, sex, sexual orientation, gender identity, national origin, age, disability, genetics, pregnancy, marital status, veteran status or other legally protected status. In addition to federal law requirements, Airbus complies with applicable state and local laws governing nondiscrimination in every location in which the company has facilities.   Airbus expressly prohibits any form of workplace harassment based on race, color, religion, sex, sexual orientation, gender identity, national origin, age, disability, genetics, pregnancy, marital status, veteran status or other legally protected status.  This assignment description does not constitute a written or implied contract of employment.\n",
+      "resumeFilename": "tailored_resume_2026_02_23T12_4.pdf",
+      "coverLetterFilename": "tailored_cover_letter_2026_02_23T12_4.pdf",
+      "compatibilityScore": 88,
+      "analysis": {
+        "compatibilityScore": 88,
+        "compatibilityLabel": "Strong Match",
+        "industry": "Aerospace & Defense",
+        "roleType": "Business Analysis & Data Analytics",
+        "seniorityLevel": "Entry Level",
+        "presentSkills": [
+          "Python",
+          "R",
+          "Data Analytics",
+          "MS Excel",
+          "Business Analysis",
+          "Data cleaning",
+          "SQL",
+          "Communication",
+          "Data Model Design"
+        ],
+        "missingSkills": [
+          {
+            "skill": "SAP",
+            "importance": "nice-to-have",
+            "reason": "Listed as a preferred skill; crucial for understanding enterprise planning and commercial supply chain operations at companies like Airbus/Satair."
+          },
+          {
+            "skill": "Production Database Maintenance",
+            "importance": "important",
+            "reason": "The JD requires developing and maintaining databases. While you have SQL and AWS/Azure architecture projects, you lack corporate experience managing live, internal operational databases."
+          }
+        ],
+        "experienceGaps": [
+          "No direct aviation, aerospace, or supply chain analytics experience.",
+          "Lacks hands-on operational experience with enterprise ERP systems (like SAP) in a corporate commercial environment."
+        ],
+        "criticalVerdict": "You are a top-tier candidate for this entry-level contract role. Your blend of client-facing B2B commercial experience at Apple, combined with your demonstrated coding proficiency in Python and R, hits both the operational and communication pillars of this job perfectly. Furthermore, your previous location in Tysons, VA makes the 60% onsite requirement in Herndon a massive logistical advantage. The only minor ding is your lack of enterprise ERP (SAP) exposure, but your technical foundation makes you highly trainable.",
+        "improvementPlan": [
+          "Familiarize yourself with SAP ERP and supply chain management concepts via quick online overviews or certifications to mitigate the missing preferred skill.",
+          "Make sure your resume prominently highlights your geographic proximity to Herndon, VA and your readiness for a 60% onsite role.",
+          "Frame your Apple B2B inventory analysis and process improvement experience specifically as 'Commercial Analytics' to match the JD's exact terminology."
+        ],
+        "marketSkillsToLearn": [
+          "SAP / Enterprise ERP Systems",
+          "Supply Chain Analytics",
+          "Relational Database Administration (DBA basics)",
+          "Commercial Forecasting"
+        ],
+        "summary": "The candidate is a highly competitive fit for this entry-level Business Analyst role. Their combination of Python/R technical abilities, local proximity to the Herndon office, and client-facing business acumen aligns beautifully with the job's operational and communication requirements."
+      },
+      "updatedAt": "2026-02-23T13:05:31.290Z"
+    }
+  ]
+}

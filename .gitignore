@@ -34,3 +34,41 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# AI Resume Tailoring - Generated Files
+tailored_resume_*
+tailored_cover_letter_*
+temp_job_*.txt
+temp_process_*.txt
+*.aux
+*.log
+*.out
+
+# LinkedIn OAuth Data
+linkedin_oauth.json
+linkedin_jobs.json
+temp_coursework/
+
+# Python virtual environment
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Generated resume outputs (AI-generated, not source code)
+generated_resumes/
+generated/
+
+# Resume build artifacts
+resume_template.pdf
+resume_template.aux
+resume_template.log
+resume_template.out
+
+# Test/scratch files
+reddit_test.json
+
+# npm cache
+.npm/

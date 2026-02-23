@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Handshake lime green background (bright chartreuse) -->
+  <rect width="200" height="200" rx="45" fill="#D4F600"/>
+  
+  <!-- Dark teal "H" forming handshake symbol -->
+  <g transform="translate(100, 100)" fill="#0A3D3D">
+    <!-- Left vertical bar of H -->
+    <path d="M-45,-55 L-45,55 L-20,55 L-20,10 L-20,-55 Z" transform="skewX(-8)"/>
+    
+    <!-- Right vertical bar of H -->
+    <path d="M20,-55 L20,55 L45,55 L45,10 L45,-55 Z" transform="skewX(-8)"/>
+    
+    <!-- Middle connecting bar (handshake) -->
+    <path d="M-20,-5 L-20,20 L20,20 L20,-5 Z" transform="skewX(-8)"/>
+  </g>
+</svg>

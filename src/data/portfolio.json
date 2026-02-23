@@ -1,0 +1,445 @@
+{
+  "profile": {
+    "name": "Jawad Iskandar",
+    "role": "AI Training Specialist & Business Intelligence Analyst",
+    "tagline": "Building bridges between business strategy and technology through data-driven solutions.",
+    "bio": "Business and Information Systems professional with expertise in AI model training, data analytics, and cloud computing. Experienced in driving business growth through technology solutions, developing data pipelines, and implementing strategic initiatives. Passionate about leveraging cutting-edge AI and data science to solve complex business problems.",
+    "email": "Jawad.iskandar@outlook.com",
+    "location": "Northern Virginia",
+    "availability": "Open to opportunities"
+  },
+  "skills": [
+    {
+      "id": 1,
+      "name": "Python",
+      "category": "technical"
+    },
+    {
+      "id": 2,
+      "name": "R",
+      "category": "technical"
+    },
+    {
+      "id": 3,
+      "name": "SQL",
+      "category": "technical"
+    },
+    {
+      "id": 4,
+      "name": "JavaScript",
+      "category": "technical"
+    },
+    {
+      "id": 5,
+      "name": "Pandas",
+      "category": "technical"
+    },
+    {
+      "id": 6,
+      "name": "NumPy",
+      "category": "technical"
+    },
+    {
+      "id": 7,
+      "name": "Machine Learning",
+      "category": "technical"
+    },
+    {
+      "id": 8,
+      "name": "NLP & LLMs",
+      "category": "technical"
+    },
+    {
+      "id": 9,
+      "name": "AWS (EC2, VPC, S3)",
+      "category": "technical"
+    },
+    {
+      "id": 10,
+      "name": "Azure",
+      "category": "technical"
+    },
+    {
+      "id": 11,
+      "name": "HTML/CSS",
+      "category": "technical"
+    },
+    {
+      "id": 12,
+      "name": "scikit-learn",
+      "category": "technical"
+    },
+    {
+      "id": 13,
+      "name": "Data Mining & ETL",
+      "category": "technical"
+    },
+    {
+      "id": 14,
+      "name": "Business Analysis",
+      "category": "business"
+    },
+    {
+      "id": 15,
+      "name": "Strategy & Consulting",
+      "category": "business"
+    },
+    {
+      "id": 16,
+      "name": "Data Analytics",
+      "category": "business"
+    },
+    {
+      "id": 17,
+      "name": "CRM & Salesforce",
+      "category": "business"
+    },
+    {
+      "id": 18,
+      "name": "AI Model Training",
+      "category": "business"
+    },
+    {
+      "id": 19,
+      "name": "Business Intelligence",
+      "category": "business"
+    },
+    {
+      "id": 20,
+      "name": "Process Optimization",
+      "category": "business"
+    },
+    {
+      "id": 21,
+      "name": "Tableau",
+      "category": "tools"
+    },
+    {
+      "id": 22,
+      "name": "Power BI",
+      "category": "tools"
+    },
+    {
+      "id": 23,
+      "name": "Git/GitHub",
+      "category": "tools"
+    },
+    {
+      "id": 24,
+      "name": "Excel & Google Analytics",
+      "category": "tools"
+    },
+    {
+      "id": 25,
+      "name": "Figma",
+      "category": "tools"
+    },
+    {
+      "id": 26,
+      "name": "Jupyter",
+      "category": "tools"
+    },
+    {
+      "id": 27,
+      "name": "Shopify (Liquid)",
+      "category": "tools"
+    }
+  ],
+  "experience": [
+    {
+      "id": 1,
+      "company": "Handshake AI",
+      "logo": "/companies/handshake-logo.svg",
+      "website": "https://www.joinhandshake.com",
+      "location": "Remote",
+      "positions": [
+        {
+          "role": "Generative AI Fellow",
+          "period": "Dec 2025 — Present",
+          "description": "Training multimodal AI systems across voice and vision domains through hands-on model evaluation and refinement. Execute voice AI training by recording dialogue scripts with 100% accuracy requirements, contributing to natural language processing model development through quality-reviewed voice samples. Evaluate computer vision models for generative image editing, analyzing multiple AI-generated outputs to select optimal results based on technical accuracy and visual coherence. Develop detailed prompt engineering strategies to regenerate original images from AI-edited versions, demonstrating advanced understanding of model behavior and output optimization. Conduct rigorous quality assessment of AI outputs across modalities, providing critical feedback to improve model performance. Collaborate with global expert community (100K+ contributors) to establish AI training standards and best practices.",
+          "tags": [
+            "AI Model Training",
+            "Prompt Engineering",
+            "Computer Vision",
+            "Voice AI",
+            "Quality Assessment",
+            "Generative AI",
+            "Multimodal AI"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "company": "Apple",
+      "logo": "/companies/apple-logo.svg",
+      "website": "https://www.apple.com",
+      "location": "Tysons, VA",
+      "positions": [
+        {
+          "role": "Business Specialist",
+          "period": "Sep 2021 — Jun 2024",
+          "description": "Promoted to Business Specialist after demonstrating exceptional performance. Architected enterprise technology solutions for 50+ B2B clients, driving process improvement and operational efficiency through strategic Apple ecosystem integration and Mobile Device Management (MDM) implementations. Conducted in-depth inventory analysis to identify opportunities for enterprise integration, converting retail interactions into long-term business partnerships. Led Apple Vision Pro early adoption program, creating innovative implementation strategies that emphasized workflow enhancement over simple transaction volume. Streamlined client operations through customized technology workshops and solution-driven recommendations. Collaborated cross-functionally with technical teams to deliver comprehensive client solutions spanning device management, security protocols, and business financing options.",
+          "tags": [
+            "Enterprise Sales",
+            "B2B Solutions",
+            "MDM Implementation",
+            "Business Development",
+            "Client Relations",
+            "Consultative Selling",
+            "Product Training"
+          ],
+          "technicalDetails": "Transformed from seasonal hire to permanent team member within 3 months by consistently demonstrating operational excellence. Focused on process improvement within the service environment through mastery of Apple's service methodology (Approach, Probe, Present, Listen, Extend). Maintained 95%+ Net Promoter Score (NPS) by delivering personalized technical consultations that prioritized accurate inventory analysis and needs assessment. Provided comprehensive technical support spanning iOS troubleshooting, iCloud backup solutions, diagnostics using Apple's proprietary tools, and device setup optimization. Identified key business efficiencies for clients by proactively consulting with business owners on their technology infrastructure. Excelled in fast-paced environment while maintaining focus on technical excellence and operational precision."
+        }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "title": "StatementProMax — Financial Intelligence Platform",
+      "description": "Built comprehensive financial intelligence platform to master personal finances for future homeownership, guided by the principle 'Money Saved is Money Made.' \n\nEngineered full-stack solution that transforms bank statement PDFs into actionable insights through automated Excel conversion and ML-powered transaction categorization achieving 70-95% confidence scores. Implemented intelligent learning system using IndexedDB that recognizes spending patterns over time, reducing manual categorization work by 80%.\n\nArchitected 100% client-side processing for complete financial privacy—zero server storage, zero data sharing. Built interactive dashboard with Chart.js visualizations tracking income, expenses, savings rate, and recurring payments across 19 smart expense categories.\n\nDeveloped AI-powered savings optimizer delivering personalized recommendations, recurring subscription detection, and professional multi-sheet Excel exports with pre-formatted charts. Platform actively drives financial decision-making for personal wealth building while powering financial operations for consulting business.",
+      "tags": [
+        "JavaScript ES6",
+        "Machine Learning",
+        "Chart.js",
+        "IndexedDB",
+        "SheetJS",
+        "ExcelJS",
+        "API Integration",
+        "Financial Analytics",
+        "Data Visualization"
+      ],
+      "link": "https://iskos1.github.io/StatementProMax/index.html",
+      "featured": true,
+      "images": [
+        "/projects/1770760593430-Screenshot_2026-02-10_at_4.52.48_PM.png"
+      ],
+      "hasLiveDemo": true,
+      "attachments": [],
+      "technicalDetails": "• **Architecture:** 100% Client-side application using Vanilla JavaScript (ES6 Modules), HTML5, and CSS3. Designed for privacy with no server-side file storage.\n• **Data Pipeline:** Utilizes ConvertAPI for initial PDF-to-XLSX conversion via Base64. Data is then processed using SheetJS (parsing) and ExcelJS (cleaning, formatting, styling).\n• **ML & Categorization:** features a custom local machine learning algorithm utilizing string similarity matching for merchant names. It calculates confidence scores (70%-95%) and improves accuracy over time by storing user-verified patterns in IndexedDB.\n• **State Management & Storage:** leverage IndexedDB for persistent storage of transaction patterns and file history (~50MB+), LocalStorage for settings, and SessionStorage for temporary file transfer.\n• **Auth & Viz:** InstantDB handles user authentication; Chart.js powers the data visualization (Income vs. Expenses, Category Breakdown).\n• **Performance:** Average conversion speed of ~3 seconds with 99.9% extraction accuracy."
+    },
+    {
+      "id": 7,
+      "title": "Multi-Cloud Infrastructure Architecture: Hybrid Connectivity, Network Security, and Object Storage Implementation",
+      "description": "In the modern landscape of enterprise IT, establishing secure, scalable, and interconnected cloud environments is a critical challenge. Organizations require robust mechanisms to bridge on-premise networks with cloud resources while maintaining strict security postures and reliable data storage strategies. This project addressed these needs by designing and deploying a comprehensive multi-cloud infrastructure leveraging both Amazon Web Services (AWS) and Microsoft Azure. The primary objective was to engineer a functional hybrid network, implement defense-in-depth security layers, and provision high-availability object storage systems across distinct cloud providers.\n\nThe solution involved a multi-faceted technical approach. On the networking front, I architected an AWS Virtual Private Cloud (VPC) environment, establishing a secure Site-to-Site VPN connection using Customer Gateways (CGW) and Virtual Private Gateways (VGW) configured with IKEv1 protocols to simulate enterprise hybrid connectivity. To secure compute resources, I implemented a layered security model for EC2 instances, utilizing both stateless Network Access Control Lists (NACLs) for subnet-level traffic filtering and stateful Security Groups for granular instance-level access control (specifically targeting TCP protocols 3389 for RDP and 22 for SSH). Furthermore, the project expanded into storage architecture by deploying AWS S3 buckets with custom JSON-based access policies to manage public/private object visibility, alongside Azure Storage Accounts where I configured Blob containers and managed file versioning via snapshots.\n\nThe result was a fully operational, secure cloud ecosystem that demonstrated seamless interoperability between network components and storage solutions. By successfully troubleshooting access denials through policy adjustments and verifying network traffic flows via specific route table configurations, the project validated the integrity of the security architecture. This implementation showcased a deep proficiency in cloud resource orchestration, affirming the ability to manage complex identity and access management (IAM) roles, network routing, and multi-cloud data lifecycles effectively.",
+      "tags": [
+        "AWS",
+        "Microsoft Azure",
+        "Network Security",
+        "VPC Architecture",
+        "Site-to-Site VPN",
+        "Cloud Storage",
+        "AWS S3",
+        "Azure Blob Storage",
+        "NACLs & Security Groups",
+        "IAM Policies",
+        "EC2",
+        "TCP/IP Networking"
+      ],
+      "link": "/coursework/1771370123839-annotated-Home_Project_5-1.docx.pdf",
+      "featured": false,
+      "images": [],
+      "hasLiveDemo": true,
+      "key_features": [
+        "**Hybrid Network Connectivity:** Engineered a Site-to-Site VPN tunnel utilizing AWS Virtual Private Gateways and Customer Gateways with IKEv1 configuration.",
+        "**Layered Security Architecture:** Implemented Defense-in-Depth strategies using stateless NACLs for subnet filtering and stateful Security Groups for EC2 instance protection.",
+        "**Multi-Cloud Storage Solutions:** Provisioned and managed object storage across AWS S3 and Azure Blob Storage, including bucket policy creation and snapshot versioning.",
+        "**Access Control Management:** Configured granular permissions and JSON-based resource policies to resolve access errors and enforce 'Least Privilege' principles.",
+        "**Protocol Optimization:** Configured specific TCP routing for remote administration via RDP (3389) and SSH (22) while maintaining strict inbound/outbound traffic rules."
+      ],
+      "attachments": [
+        "/coursework/1771370123839-annotated-Home_Project_5-1.docx.pdf",
+        "/coursework/1771370123842-Project_6-2.docx.pdf",
+        "/coursework/1771370123844-Project_8-1.docx.pdf",
+        "/coursework/1771370123845-Project_8-2.docx.pdf"
+      ],
+      "technicalDetails": "**Hybrid Network Connectivity:** Engineered a Site-to-Site VPN tunnel utilizing AWS Virtual Private Gateways and Customer Gateways with IKEv1 configuration.\n**Layered Security Architecture:** Implemented Defense-in-Depth strategies using stateless NACLs for subnet filtering and stateful Security Groups for EC2 instance protection.\n**Multi-Cloud Storage Solutions:** Provisioned and managed object storage across AWS S3 and Azure Blob Storage, including bucket policy creation and snapshot versioning.\n**Access Control Management:** Configured granular permissions and JSON-based resource policies to resolve access errors and enforce 'Least Privilege' principles.\n**Protocol Optimization:** Configured specific TCP routing for remote administration via RDP (3389) and SSH (22) while maintaining strict inbound/outbound traffic rules."
+    },
+    {
+      "id": 7,
+      "title": "Data-Driven Retail Strategy: Predicting Customer Conversion with Machine Learning",
+      "description": "In response to stagnant in-store revenue growth at PrimeStop Convenience, this project functioned as a strategic consultancy engagement designed to analyze customer behavior across the Mid-Atlantic region. The core business challenge was to identify the specific factors that drive the conversion of low-margin 'fuel-only' customers into higher-margin 'convenience shoppers.' Leveraging a dataset comprising customer demographics, transactional history, and store amenities, the objective was to replace intuition with rigorous predictive modeling to optimize marketing spend and operational strategy.\n\nThe technical methodology was executed using R and the `tidymodels` framework. The workflow initiated with a comprehensive Exploratory Data Analysis (EDA) to evaluate variables such as income levels, store formats, and visit frequency. Subsequently, a robust machine learning pipeline was engineered, featuring data splitting, stratified sampling, and feature engineering recipes (including Yeo-Johnson transformations and dummy variable encoding). The project trained and evaluated three distinct classification algorithms—Logistic Regression, Linear Discriminant Analysis (LDA), and a hyperparameter-tuned Random Forest—alongside a linear regression model designed to forecast downstream visit volume for converted users.\n\nThe analysis identified the tuned Random Forest as the superior model based on F1-score performance. Variable Importance Plots (VIP) revealed that loyalty program enrollment and fuel visit frequency were the most significant predictors of conversion, validating early EDA hypotheses. These technical insights were synthesized into an executive-level report with actionable recommendations, such as restructuring the loyalty acquisition funnel and targeting high-frequency fuel visitors with cross-sell incentives. The project demonstrated the ability to translate complex data science workflows into tangible business strategies that directly address revenue goals.",
+      "tags": [
+        "R Programming",
+        "Machine Learning",
+        "Tidymodels",
+        "Predictive Analytics",
+        "Random Forest",
+        "Business Intelligence",
+        "Exploratory Data Analysis",
+        "Feature Engineering",
+        "Strategic Consulting"
+      ],
+      "link": "/coursework/1771370561621-MIS431_-_Guidelines_Grading_and_Expectations_from_Final_Project_Report.pdf",
+      "featured": false,
+      "images": [],
+      "hasLiveDemo": true,
+      "key_features": [
+        "Comparative analysis of three classification models (Logistic Regression, LDA, and Tuned Random Forest) to predict customer conversion.",
+        "Implementation of a rigorous machine learning workflow including 5-fold cross-validation and hyperparameter tuning.",
+        "Development of a linear regression model to forecast 'Total Convenience Visits' for engaged customers.",
+        "Executive-style business reporting that translates technical metrics (RMSE, F1 Score, AUC-ROC) into strategic action items.",
+        "Advanced feature engineering using the `recipes` package, applying normalization and zero-variance removal."
+      ],
+      "attachments": [
+        "/coursework/1771370561621-MIS431_-_Guidelines_Grading_and_Expectations_from_Final_Project_Report.pdf",
+        "/coursework/1771370561622-Primestop_-_Case_Details.pdf",
+        "/coursework/1771370561623-annotated-file_show-4.docx.pdf"
+      ],
+      "technicalDetails": "Comparative analysis of three classification models (Logistic Regression, LDA, and Tuned Random Forest) to predict customer conversion.\nImplementation of a rigorous machine learning workflow including 5-fold cross-validation and hyperparameter tuning.\nDevelopment of a linear regression model to forecast 'Total Convenience Visits' for engaged customers.\nExecutive-style business reporting that translates technical metrics (RMSE, F1 Score, AUC-ROC) into strategic action items.\nAdvanced feature engineering using the `recipes` package, applying normalization and zero-variance removal."
+    },
+    {
+      "id": 7,
+      "title": "Deere Urban AgTech: Strategic Feasibility Study for AI-Driven Vertical Farming",
+      "description": "Developed for the George Mason University Business Capstone, this strategic consulting report addresses the critical global challenge of ensuring food security for a population projected to grow by nearly 50% by 2050, despite shrinking arable land. Recognizing the saturation and cyclical nature of traditional agricultural machinery markets, the project analyzes the feasibility of Deere & Company diversifying into the high-growth Smart Urban Agriculture sector. The analysis identifies a gap in the market where Deere’s proprietary precision technology could solve inefficiencies in vertical farming operations.\n\nThe solution proposes the creation of a new division, \"Deere Urban AgTech,\" designed to integrate AI, IoT robotics, and data analytics into modular indoor farming systems. The methodology utilized a rigorous suite of strategic management frameworks: PESTEL analysis to evaluate external macro-economic drivers, Porter’s Five Forces to assess industry attractiveness, and VRIO analysis to confirm Deere's internal competitive advantages in software and automation. The strategy pivots the business model from purely hardware sales to a \"Hardware-as-a-Service\" (HaaS) and subscription-based analytics model via the FarmOS platform.\n\nThe resulting feasibility study presents a comprehensive three-phase execution roadmap—from pilot capability building to global integration. Financial projections indicate that this strategic diversification would generate $300–$350 million in annual revenue by year three, expand operating margins from 14% to 17%, and reduce cyclical revenue dependency. Furthermore, the initiative aligns with ESG goals by targeting a 20% reduction in CO2 emissions, positioning Deere & Company not just as a machinery manufacturer, but as a dominant technology provider for sustainable urban food production.",
+      "tags": [
+        "Strategic Management",
+        "Business Consulting",
+        "AgTech",
+        "Market Analysis",
+        "Financial Forecasting",
+        "PESTEL Analysis",
+        "Porter's 5 Forces",
+        "Product Diversification",
+        "Artificial Intelligence Strategy",
+        "Sustainability"
+      ],
+      "link": "/coursework/1771378694625-Strategy_Development_Consulting_Report_FL2025-1.pdf",
+      "featured": false,
+      "images": [],
+      "hasLiveDemo": true,
+      "key_features": [
+        "**New Venture Formulation:** Detailed proposal for 'Deere Urban AgTech,' a new division leveraging existing R&D to capture the $30B smart-farming market.",
+        "**Analytical Rigor:** Applied advanced strategic frameworks (VRIO, PESTEL, Porter's Five Forces) to validate market entry and competitive advantage.",
+        "**Economic Logic & Modeling:** Projected a 15% ROI increase and margin expansion through recurring digital revenue streams and subscription analytics.",
+        "**Implementation Roadmap:** Designed a phased 5-year execution strategy covering pilot programs, commercial scale-up, and global integration.",
+        "**Sustainability Integration:** Aligned business objectives with environmental goals, targeting a 20% reduction in carbon footprint via renewable energy microgrids."
+      ],
+      "attachments": [
+        "/coursework/1771378694625-Strategy_Development_Consulting_Report_FL2025-1.pdf",
+        "/coursework/1771378694626-annotated-Strategy_Development_Consulting_Report.docx.pdf"
+      ],
+      "technicalDetails": "**New Venture Formulation:** Detailed proposal for 'Deere Urban AgTech,' a new division leveraging existing R&D to capture the $30B smart-farming market.\n**Analytical Rigor:** Applied advanced strategic frameworks (VRIO, PESTEL, Porter's Five Forces) to validate market entry and competitive advantage.\n**Economic Logic & Modeling:** Projected a 15% ROI increase and margin expansion through recurring digital revenue streams and subscription analytics.\n**Implementation Roadmap:** Designed a phased 5-year execution strategy covering pilot programs, commercial scale-up, and global integration.\n**Sustainability Integration:** Aligned business objectives with environmental goals, targeting a 20% reduction in carbon footprint via renewable energy microgrids."
+    },
+    {
+      "id": 8,
+      "title": "Dispomode: Data-Driven E-Commerce Architecture & Strategic SEO Optimization",
+      "description": "This project addressed the unique challenges of penetrating the highly regulated electronic vaporizer market, where traditional advertising channels (TV, social media ads) are legally restricted. The primary objective was to engineer a high-traffic, compliant e-commerce platform capable of generating organic growth without reliance on paid media. The core challenge involved identifying market inefficiencies—specifically high-volume, low-difficulty keywords—and constructing a digital infrastructure that bridged logistical supply chains with aggressive Search Engine Optimization (SEO) requirements.\n\nLeveraging a tech stack comprising Shopify, HTML, and JavaScript, I led the full-cycle development of a custom-optimized storefront. This involved designing high-fidelity UI/UX prototypes in Figma to enhance user engagement and coding responsive, fast-loading product pages to minimize bounce rates. I conducted extensive market research using Ahrefs to execute a precision SEO strategy, optimizing technical elements such as URL structures and content hierarchy. Additionally, I managed the backend business logic, integrating QuickBooks for financial oversight, establishing inventory tracking systems, and ensuring strict adherence to evolving legal and tax regulations.\n\nThe platform achieved remarkable success, scaling to approximately 100,000 monthly visitors and generating an average of $1,000 in daily revenue. Through the implementation of strategic conversion rate optimization (CRO) techniques, including automated email marketing funnels and dynamic upselling algorithms, the project successfully converted organic traffic into sustained sales. This initiative demonstrated the power of combining technical web development with data-driven market analysis to build a profitable, scalable online business in a competitive sector.",
+      "tags": [
+        "HTML5",
+        "JavaScript",
+        "Shopify Development",
+        "UI/UX Design",
+        "Technical SEO",
+        "Ahrefs",
+        "Figma",
+        "Conversion Rate Optimization",
+        "QuickBooks",
+        "Inventory Management"
+      ],
+      "link": "#",
+      "featured": false,
+      "images": [],
+      "hasLiveDemo": false,
+      "key_features": [
+        "Custom-coded frontend architecture using HTML and JavaScript to ensure high performance and superior mobile responsiveness.",
+        "Advanced SEO strategy utilizing keyword gap analysis and technical optimization to capture high-volume organic traffic.",
+        "Integrated backend operations including automated inventory tracking, financial auditing via QuickBooks, and regulatory compliance monitoring.",
+        "Strategic Conversion Rate Optimization (CRO) implementing dynamic upselling funnels and automated email retention campaigns."
+      ],
+      "attachments": [],
+      "technicalDetails": "Custom-coded frontend architecture using HTML and JavaScript to ensure high performance and superior mobile responsiveness.\nAdvanced SEO strategy utilizing keyword gap analysis and technical optimization to capture high-volume organic traffic.\nIntegrated backend operations including automated inventory tracking, financial auditing via QuickBooks, and regulatory compliance monitoring.\nStrategic Conversion Rate Optimization (CRO) implementing dynamic upselling funnels and automated email retention campaigns."
+    }
+  ],
+  "socialLinks": [
+    {
+      "id": 1,
+      "label": "GitHub",
+      "url": "https://github.com/Iskos1",
+      "icon": "github"
+    },
+    {
+      "id": 2,
+      "label": "LinkedIn",
+      "url": "https://linkedin.com/in/jawad-iskandar",
+      "icon": "linkedin"
+    },
+    {
+      "id": 3,
+      "label": "Email",
+      "url": "mailto:Jawad.iskandar@outlook.com",
+      "icon": "mail"
+    }
+  ],
+  "navItems": [
+    {
+      "label": "About",
+      "href": "/#about"
+    },
+    {
+      "label": "Skills",
+      "href": "/#skills"
+    },
+    {
+      "label": "Experience",
+      "href": "/#experience"
+    },
+    {
+      "label": "Projects",
+      "href": "/#projects"
+    },
+    {
+      "label": "Skill Builder",
+      "href": "/skill-builder"
+    },
+    {
+      "label": "Contact",
+      "href": "/#contact"
+    },
+    {
+      "label": "Newsletter",
+      "href": "/newsletter"
+    },
+    {
+      "label": "Settings",
+      "href": "/admin"
+    }
+  ],
+  "certifications": [
+    {
+      "id": 1,
+      "name": " Introduction to Programming Using Python",
+      "issuer": "DataCamp",
+      "year": "2025"
+    },
+    {
+      "id": 2,
+      "name": " Data Manipulation with Tidyverse",
+      "issuer": "Data Camp",
+      "year": "2025"
+    },
+    {
+      "id": 3,
+      "name": " Google Data Analytics Specialization",
+      "issuer": "Google",
+      "year": "2025"
+    },
+    {
+      "id": 1771770373375,
+      "name": " Analyzing Big Data with R",
+      "issuer": "Datacamp",
+      "year": "2026"
+    },
+    {
+      "id": 1771770396867,
+      "name": " Google Business Intelligence Specialization",
+      "issuer": "Google",
+      "year": "2026"
+    }
+  ],
+  "siteMetadata": {
+    "title": "Jawad Iskandar — Portfolio",
+    "description": "Portfolio of Jawad Iskandar - AI Training Specialist & Business Intelligence Analyst. Bridging strategy and technology through data-driven solutions."
+  }
+}

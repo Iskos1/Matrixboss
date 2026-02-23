@@ -1,0 +1,187 @@
+{
+  "personal_info": {
+    "name": "Jawad Mousa Iskandar",
+    "email": "Jawad.iskandar@outlook.com",
+    "phone": "571-269-8465",
+    "github": {
+      "url": "https://github.com/Iskos1",
+      "display": "github.com/Iskos1"
+    },
+    "linkedin": {
+      "url": "https://linkedin.com/in/jawad-iskandar/",
+      "display": "linkedin.com/in/jawad-iskandar/"
+    }
+  },
+  "professional_summary": "MIS graduate focused on helping businesses use data to work better. U.S. Citizen eligible for Security Clearance. Experience building tools and AI dashboards that make processes faster and more accurate. Skilled at figuring out exactly what a project needs, making clear step-by-step guides, and checking large amounts of work for mistakes. Able to turn confusing information into simple plans that help teams reach their goals.",
+  "skills": {
+    "Business Analysis": {
+      "items": ["Python (Pandas)", "Tableau", "Excel (Pivot Tables)", "Salesforce CRM", "Google Analytics"],
+      "keywords": ["data analysis", "business intelligence", "CRM", "analytics", "visualization", "reporting"]
+    },
+    "Cloud Infrastructure": {
+      "items": ["AWS (VPC, S3)", "Azure", "Jamf Pro", "Network Security"],
+      "keywords": ["cloud", "AWS", "Azure", "infrastructure", "security", "networking", "DevOps"]
+    },
+    "Languages & AI": {
+      "items": ["HTML/CSS", "JavaScript", "LLM Training", "Prompt Engineering"],
+      "keywords": ["programming", "web development", "AI", "machine learning", "LLM", "prompt engineering"]
+    }
+  },
+  "projects": [
+    {
+      "id": "project_1",
+      "title": "Dispomode.com | E-commerce Website",
+      "date": "2023",
+      "bullets": [
+        {
+          "id": "p1_b1",
+          "text": "Scaled online storefront to 90,000 monthly visitors and $1,000 daily sales within six months via SEO optimization.",
+          "keywords": ["e-commerce", "SEO", "digital marketing", "growth", "sales", "web traffic", "customer acquisition"],
+          "metrics": ["90,000 monthly visitors", "$1,000 daily sales", "six months"],
+          "skills": ["SEO", "digital marketing", "analytics", "business growth"]
+        },
+        {
+          "id": "p1_b2",
+          "text": "Engineered a custom website using HTML and JavaScript that improved page speed and increased customer retention by 25%.",
+          "keywords": ["web development", "HTML", "JavaScript", "performance optimization", "customer retention", "UX"],
+          "metrics": ["25% increase in retention"],
+          "skills": ["HTML", "JavaScript", "web development", "performance optimization"]
+        }
+      ],
+      "relevance_areas": ["web development", "e-commerce", "digital marketing", "entrepreneurship", "sales"]
+    },
+    {
+      "id": "project_2",
+      "title": "Strategic Consulting Capstone | John Deere AgTech Expansion",
+      "date": "2025",
+      "bullets": [
+        {
+          "id": "p2_b1",
+          "text": "Formulated a business strategy for John Deere's entry into the $49B vertical farming market.",
+          "keywords": ["business strategy", "market analysis", "consulting", "strategic planning", "market entry"],
+          "metrics": ["$49B market"],
+          "skills": ["strategic planning", "market research", "business analysis", "consulting"]
+        },
+        {
+          "id": "p2_b2",
+          "text": "Developed a financial model predicting $350M in annual revenue and proposed a three-step implementation plan to boost ROI by 15% through digital subscription services.",
+          "keywords": ["financial modeling", "revenue projection", "ROI", "implementation planning", "digital services", "subscription model"],
+          "metrics": ["$350M annual revenue", "15% ROI increase"],
+          "skills": ["financial modeling", "business planning", "data analysis", "strategic consulting"]
+        }
+      ],
+      "relevance_areas": ["business strategy", "consulting", "financial analysis", "strategic planning"]
+    },
+    {
+      "id": "project_3",
+      "title": "Secure Multi-Cloud Architecture",
+      "date": "2025",
+      "bullets": [
+        {
+          "id": "p3_b1",
+          "text": "Designed secure cloud systems across AWS and Azure, improving system reliability by 35–100% via custom network topologies.",
+          "keywords": ["cloud architecture", "AWS", "Azure", "multi-cloud", "system reliability", "network design", "infrastructure"],
+          "metrics": ["35-100% reliability improvement"],
+          "skills": ["AWS", "Azure", "cloud architecture", "network design", "infrastructure"]
+        },
+        {
+          "id": "p3_b2",
+          "text": "Reduced security vulnerabilities by 50% and deployment errors by 90% through strict IAM policies and automated backup protocols.",
+          "keywords": ["security", "IAM", "automation", "deployment", "backup", "risk mitigation", "DevOps"],
+          "metrics": ["50% reduction in vulnerabilities", "90% reduction in deployment errors"],
+          "skills": ["security", "IAM", "automation", "cloud security", "DevOps"]
+        }
+      ],
+      "relevance_areas": ["cloud computing", "security", "infrastructure", "DevOps", "AWS", "Azure"]
+    }
+  ],
+  "work_experience": [
+    {
+      "id": "job_1",
+      "company": "Handshake",
+      "location": "Remote",
+      "title": "Generative AI Fellow",
+      "date": "Dec 2025 – Present",
+      "bullets": [
+        {
+          "id": "j1_b1",
+          "text": "Improved AI model accuracy by reviewing and rewriting 500+ complex prompts per week, ensuring logic and facts were correct to support high-quality model training.",
+          "keywords": ["AI", "machine learning", "prompt engineering", "model training", "LLM", "quality assurance", "data annotation"],
+          "metrics": ["500+ prompts per week"],
+          "skills": ["prompt engineering", "AI", "quality assurance", "critical thinking", "attention to detail"]
+        },
+        {
+          "id": "j1_b2",
+          "text": "Reduced AI error rates by 15% by strictly fact-checking answers against trusted sources and identifying critical safety issues in sensitive topics.",
+          "keywords": ["quality assurance", "fact-checking", "AI safety", "accuracy", "risk mitigation", "validation"],
+          "metrics": ["15% error reduction"],
+          "skills": ["quality assurance", "research", "critical thinking", "AI safety"]
+        },
+        {
+          "id": "j1_b3",
+          "text": "Sped up the training process by maintaining a 98% accuracy score on data tasks, ensuring engineering teams received clean, ready-to-use data for immediate updates.",
+          "keywords": ["data quality", "accuracy", "efficiency", "team collaboration", "process improvement", "data preparation"],
+          "metrics": ["98% accuracy score"],
+          "skills": ["data quality", "attention to detail", "process efficiency", "team collaboration"]
+        }
+      ],
+      "relevance_areas": ["AI", "machine learning", "data annotation", "quality assurance", "prompt engineering"]
+    },
+    {
+      "id": "job_2",
+      "company": "Apple Inc.",
+      "location": "Fairfax,VA",
+      "title": "Business Specialist",
+      "date": "Sept 2021 – June 2024",
+      "bullets": [
+        {
+          "id": "j2_b1",
+          "text": "Optimized inventory management and business processes for clients by converting retail interactions into long-term partnerships, creating custom technology plans that improved operational efficiency.",
+          "keywords": ["inventory management", "process improvement", "client relationship", "consultative selling", "business development", "operational efficiency"],
+          "metrics": ["Improved operational efficiency"],
+          "skills": ["inventory management", "process improvement", "consultative selling", "business development"]
+        },
+        {
+          "id": "j2_b2",
+          "text": "Resolved complex inventory discrepancies and technical issues through empathetic consultation, converting critical challenges into streamlined operations for 50+ SMB clients.",
+          "keywords": ["problem solving", "inventory analysis", "client retention", "SMB", "operations", "relationship building"],
+          "metrics": ["50+ SMB clients"],
+          "skills": ["inventory analysis", "problem solving", "operations management", "relationship management"]
+        },
+        {
+          "id": "j2_b3",
+          "text": "Improved workflow efficiency by 30% for clients by facilitating adoption of management tools like Jamf and Apple Business Manager to streamline device organization and inventory tracking.",
+          "keywords": ["workflow optimization", "Jamf", "MDM", "process improvement", "inventory tracking", "technology adoption"],
+          "metrics": ["30% efficiency improvement"],
+          "skills": ["process improvement", "Jamf", "inventory management", "technology consulting"]
+        },
+        {
+          "id": "j2_b4",
+          "text": "Enhanced inventory forecasting accuracy by 25% by utilizing Salesforce and Apple CRM to track client lifecycle data and optimize stock levels based on predictive analysis.",
+          "keywords": ["Salesforce", "CRM", "data analysis", "inventory forecasting", "predictive analysis", "business intelligence"],
+          "metrics": ["25% accuracy improvement"],
+          "skills": ["Salesforce", "CRM", "data analysis", "inventory forecasting", "predictive analysis"]
+        }
+      ],
+      "relevance_areas": ["sales", "B2B", "CRM", "customer service", "business development", "technology consulting"]
+    }
+  ],
+  "education": {
+    "institution": "George Mason University",
+    "location": "Fairfax, VA",
+    "degree": "B.S. in Business and Information Systems",
+    "graduation_date": "Dec 2025",
+    "coursework": [
+      "Cloud Computing Essentials",
+      "Data Mining for Business Applications",
+      "Information Systems Audit and Control",
+      "Systems Analysis and Design",
+      "Programming for Analytics"
+    ]
+  },
+  "certifications": [
+    { "name": "AWS Certified Cloud Practitioner", "year": "2025" },
+    { "name": "CompTIA Security+", "year": "2025" },
+    { "name": "Google Analytics Individual Qualification (GAIQ)", "year": "2024" }
+  ]
+}

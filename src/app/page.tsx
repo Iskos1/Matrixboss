@@ -1,101 +1,65 @@
-import Image from "next/image";
+import Header from "@/components/Header";
+import Hero from "@/components/Hero";
+import Skills from "@/components/Skills";
+import Experience from "@/components/Experience";
+import Projects from "@/components/Projects";
+import Contact from "@/components/Contact";
+import Footer from "@/components/Footer";
+import AdminButton from "@/components/AdminButton";
+import PortfolioChat from "@/components/PortfolioChat";
+import NewsletterButton from "@/components/NewsletterButton";
+import { readJsonFile, joinPath } from "@/lib/utils/file-utils";
+import { PATHS } from "@/lib/constants";
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+// Force dynamic rendering to ensure fresh data on each request
+export const dynamic = "force-dynamic";
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+async function getPortfolioData() {
+  try {
+    const dataPath = joinPath(PATHS.PORTFOLIO_DATA);
+    return readJsonFile(dataPath);
+  } catch (error) {
+    console.error("Failed to load portfolio data:", error);
+    // Return null to indicate failure, which we can handle in the component
+    return null;
+  }
+}
+
+export default async function Home() {
+  const data = await getPortfolioData();
+
+  // If data loading fails, we can either:
+  // 1. Show an error message (useful for debugging)
+  // 2. Fall back to static data (current behavior, but might show stale content)
+  // Let's try to be helpful if data is missing, especially in dev/admin context
+  if (!data && process.env.NODE_ENV === 'development') {
+      return (
+        <div className="p-10 text-center">
+            <h1 className="text-2xl font-bold text-red-600 mb-4">Error Loading Portfolio Data</h1>
+            <p className="text-slate-600 mb-4">Could not read portfolio data from {PATHS.PORTFOLIO_DATA}.</p>
+            <p className="text-sm text-slate-500">Check server console for details.</p>
         </div>
+      );
+  }
+
+  // Fallback to empty object if data is null (will trigger default props in components)
+  // This ensures the site doesn't crash in production if something goes wrong
+  const safeData = data || {};
+
+  return (
+    <>
+      <Header profile={safeData.profile} socialLinks={safeData.socialLinks} />
+      <main>
+        <Hero profile={safeData.profile} />
+        <Skills skills={safeData.skills} />
+        <Experience experience={safeData.experience} />
+        <Projects projects={safeData.projects} />
+        <Contact profile={safeData.profile} socialLinks={safeData.socialLinks} />
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      <Footer profile={safeData.profile} />
+      <AdminButton />
+      <NewsletterButton />
+      <PortfolioChat />
+    </>
   );
 }
