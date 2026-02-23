@@ -5,6 +5,15 @@ import Link from "next/link";
 import { Lock, Save, Eye, RefreshCw, FileText, Download, Sparkles, Bot, GraduationCap, ShieldCheck, ShieldAlert, Activity, Terminal, KeyRound, CheckCircle2, XCircle, AlertTriangle, Briefcase, TrendingUp, TrendingDown, Target, BarChart2, Trash2, ChevronDown, ChevronUp, Brain } from "lucide-react";
 import PortfolioChat from "@/components/PortfolioChat";
 import NewsletterButton from "@/components/NewsletterButton";
+import portfolioDataFallback from "@/data/portfolio.json";
+import {
+  isStaticDeployment,
+  getPublicApiKey,
+  testApiKey,
+  browserAnalyzeJob,
+  browserProcessData,
+  browserAnalyzeCoursework,
+} from "@/lib/utils/gemini-browser";
 // Add custom styles for scrollbar + admin mobile polish
 const scrollbarStyles = `
   .scrollbar-hide::-webkit-scrollbar {
@@ -143,6 +152,33 @@ export default function AdminDashboard() {
   const checkApiKeyHealth = async () => {
     setCheckingApiKey(true);
     setApiKeyStatus('checking');
+
+    // On static deployments (GitHub Pages) there is no server-side diagnose endpoint.
+    // Test the public API key directly from the browser instead.
+    if (isStaticDeployment()) {
+      const publicKey = getPublicApiKey();
+      const result = await testApiKey();
+      setApiKeyStatus(result.ok ? 'valid' : 'invalid');
+      setApiKeyDiag({
+        gemini_test: {
+          ok: result.ok,
+          status: result.ok ? 200 : 0,
+          error_message: result.error || null,
+        },
+        key_diagnostics: {
+          exists: !!publicKey,
+          raw_length: publicKey.length,
+          starts_with_AIza: publicKey.startsWith('AIza'),
+        },
+        env_source_clues: {
+          likely_source: 'NEXT_PUBLIC_GEMINI_API_KEY (GitHub Actions secret)',
+          loaded_from_env_local: false,
+        },
+      });
+      setCheckingApiKey(false);
+      return;
+    }
+
     try {
       // Add timestamp to prevent caching
       const res = await fetch(`/api/resume/diagnose?t=${Date.now()}`, {
@@ -227,25 +263,48 @@ export default function AdminDashboard() {
   }, [authenticated]);
 
   const fetchPortfolioData = async () => {
+    // On GitHub Pages static deployment, API routes don't exist.
+    // Fall back to the bundled JSON immediately so the dashboard loads.
+    if (isStaticDeployment()) {
+      setPortfolioData(portfolioDataFallback);
+      return;
+    }
     try {
       const response = await fetch("/api/portfolio");
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
       setPortfolioData(data);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching data, using bundled fallback:", error);
+      // Fallback to bundled JSON so the dashboard doesn't hang forever
+      setPortfolioData(portfolioDataFallback);
     }
   };
 
   // ── Job Tracker Functions ──────────────────────────────────────────────────
 
+  // On static deployments use localStorage for job tracker persistence
+  const JOBS_STORAGE_KEY = 'jawad_portfolio_jobs';
+
   const fetchSavedApplications = async () => {
     setLoadingApplications(true);
     try {
-      const res = await fetch('/api/jobs');
-      const data = await res.json();
-      setSavedApplications(data.applications || []);
+      if (isStaticDeployment()) {
+        // Use localStorage on GitHub Pages
+        const stored = localStorage.getItem(JOBS_STORAGE_KEY);
+        setSavedApplications(stored ? JSON.parse(stored) : []);
+      } else {
+        const res = await fetch('/api/jobs');
+        const data = await res.json();
+        setSavedApplications(data.applications || []);
+      }
     } catch (e) {
       console.error('Error loading applications:', e);
+      // Fallback to localStorage even on server deployments
+      try {
+        const stored = localStorage.getItem(JOBS_STORAGE_KEY);
+        setSavedApplications(stored ? JSON.parse(stored) : []);
+      } catch {}
     } finally {
       setLoadingApplications(false);
     }
@@ -261,30 +320,59 @@ export default function AdminDashboard() {
     setJobAnalysisError(null);
 
     try {
-      const res = await fetch('/api/jobs/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jobDescription: jobTrackerJD }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Analysis failed');
-      setJobAnalysisResult(data.analysis);
+      let analysis: any;
+
+      if (isStaticDeployment()) {
+        // Use client-side Gemini on GitHub Pages
+        analysis = await browserAnalyzeJob(jobTrackerJD, portfolioData);
+      } else {
+        const res = await fetch('/api/jobs/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ jobDescription: jobTrackerJD }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Analysis failed');
+        analysis = data.analysis;
+      }
+
+      setJobAnalysisResult(analysis);
 
       if (saveAfter) {
         setSavingApplication(true);
-        await fetch('/api/jobs', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            company: jobTrackerCompany || 'Unknown Company',
-            role: jobTrackerRole || 'Unknown Role',
-            jobDescription: jobTrackerJD,
-            compatibilityScore: data.analysis.compatibilityScore,
-            analysis: data.analysis,
-          }),
-        });
+        const newApp = {
+          id: `app_${Date.now()}`,
+          company: jobTrackerCompany || 'Unknown Company',
+          role: jobTrackerRole || 'Unknown Role',
+          jobDescription: jobTrackerJD,
+          compatibilityScore: analysis.compatibilityScore,
+          analysis,
+          createdAt: new Date().toISOString(),
+        };
+
+        if (isStaticDeployment()) {
+          // Persist to localStorage on GitHub Pages
+          const stored = localStorage.getItem(JOBS_STORAGE_KEY);
+          const apps = stored ? JSON.parse(stored) : [];
+          apps.unshift(newApp);
+          localStorage.setItem(JOBS_STORAGE_KEY, JSON.stringify(apps));
+          setSavedApplications(apps);
+        } else {
+          await fetch('/api/jobs', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              company: jobTrackerCompany || 'Unknown Company',
+              role: jobTrackerRole || 'Unknown Role',
+              jobDescription: jobTrackerJD,
+              compatibilityScore: analysis.compatibilityScore,
+              analysis,
+            }),
+          });
+          fetchSavedApplications();
+        }
+
         setSavingApplication(false);
-        fetchSavedApplications();
         setJobTrackerJD('');
         setJobTrackerCompany('');
         setJobTrackerRole('');
@@ -300,8 +388,16 @@ export default function AdminDashboard() {
   const handleDeleteApplication = async (id: string) => {
     if (!confirm('Delete this saved application?')) return;
     try {
-      await fetch(`/api/jobs?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
-      fetchSavedApplications();
+      if (isStaticDeployment()) {
+        const stored = localStorage.getItem(JOBS_STORAGE_KEY);
+        const apps = stored ? JSON.parse(stored) : [];
+        const updated = apps.filter((a: any) => a.id !== id);
+        localStorage.setItem(JOBS_STORAGE_KEY, JSON.stringify(updated));
+        setSavedApplications(updated);
+      } else {
+        await fetch(`/api/jobs?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+        fetchSavedApplications();
+      }
       if (expandedAppId === id) setExpandedAppId(null);
     } catch (e) {
       console.error('Delete failed:', e);
@@ -310,16 +406,25 @@ export default function AdminDashboard() {
 
   const handleUpdateApplication = async (id: string, updates: Record<string, any>) => {
     try {
-      const res = await fetch('/api/jobs', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, ...updates }),
-      });
-      if (res.ok) {
-        // Optimistically update local state
-        setSavedApplications(prev =>
-          prev.map(app => app.id === id ? { ...app, ...updates, updatedAt: new Date().toISOString() } : app)
+      if (isStaticDeployment()) {
+        const stored = localStorage.getItem(JOBS_STORAGE_KEY);
+        const apps = stored ? JSON.parse(stored) : [];
+        const updated = apps.map((a: any) =>
+          a.id === id ? { ...a, ...updates, updatedAt: new Date().toISOString() } : a
         );
+        localStorage.setItem(JOBS_STORAGE_KEY, JSON.stringify(updated));
+        setSavedApplications(updated);
+      } else {
+        const res = await fetch('/api/jobs', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, ...updates }),
+        });
+        if (res.ok) {
+          setSavedApplications(prev =>
+            prev.map(app => app.id === id ? { ...app, ...updates, updatedAt: new Date().toISOString() } : app)
+          );
+        }
       }
     } catch (e) {
       console.error('Update failed:', e);
@@ -340,6 +445,21 @@ export default function AdminDashboard() {
   const handleSave = async () => {
     setLoading(true);
     setSaveStatus("Saving...");
+
+    // On static GitHub Pages, there's no writable server – save to localStorage
+    // so changes persist during this session, and inform the user.
+    if (isStaticDeployment()) {
+      try {
+        localStorage.setItem('jawad_portfolio_data', JSON.stringify(portfolioData));
+        setSaveStatus("✓ Saved to browser (commit to repo to persist)");
+        setTimeout(() => setSaveStatus(""), 5000);
+      } catch (e) {
+        setSaveStatus("✗ Could not save locally");
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
     
     try {
       const response = await fetch("/api/portfolio", {
@@ -656,29 +776,44 @@ export default function AdminDashboard() {
     setAnalysisResult(null);
 
     try {
-      const formData = new FormData();
-      courseworkFiles.forEach((file) => {
-        formData.append("file", file);
-      });
-      
-      if (courseworkText.trim()) {
-        formData.append("text", courseworkText.trim());
+      if (isStaticDeployment()) {
+        // On GitHub Pages, use client-side Gemini with text input only
+        // (File reading in browser is text-based; PDF parsing needs server)
+        let textToAnalyze = courseworkText.trim();
+
+        if (!textToAnalyze && courseworkFiles.length > 0) {
+          alert("On GitHub Pages, please paste the coursework text directly into the text field — file uploads require the full server deployment.");
+          setAnalyzingCoursework(false);
+          return;
+        }
+
+        const result = await browserAnalyzeCoursework(textToAnalyze);
+        setAnalysisResult(result);
+      } else {
+        const formData = new FormData();
+        courseworkFiles.forEach((file) => {
+          formData.append("file", file);
+        });
+        
+        if (courseworkText.trim()) {
+          formData.append("text", courseworkText.trim());
+        }
+
+        const response = await fetch("/api/coursework/analyze", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to analyze coursework");
+        }
+
+        const result = await response.json();
+        setAnalysisResult(result);
       }
-
-      const response = await fetch("/api/coursework/analyze", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to analyze coursework");
-      }
-
-      const result = await response.json();
-      setAnalysisResult(result);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Analysis error:", error);
-      alert("Failed to analyze coursework");
+      alert("Failed to analyze coursework: " + (error.message || "Unknown error"));
     } finally {
       setAnalyzingCoursework(false);
     }
@@ -838,6 +973,15 @@ export default function AdminDashboard() {
       return;
     }
 
+    // Resume tailoring requires LaTeX + server-side processing — not available on GitHub Pages
+    if (isStaticDeployment()) {
+      setTailoringError(
+        "Resume tailoring requires the full server deployment (LaTeX PDF compilation is server-only). " +
+        "To use this feature, run the app locally with `npm run dev`, or deploy it to a platform like Vercel or Railway that supports API routes."
+      );
+      return;
+    }
+
     setTailoringInProgress(true);
     setTailoringResult(null);
     setTailoringError(null);
@@ -933,25 +1077,31 @@ export default function AdminDashboard() {
     setProcessorResult(null);
 
     try {
-      const response = await fetch("/api/portfolio/process", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          text: processorInput,
-          category: processorCategory
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setProcessorResult(data.data);
+      if (isStaticDeployment()) {
+        // Use client-side Gemini on GitHub Pages
+        const result = await browserProcessData(processorInput, processorCategory);
+        setProcessorResult(result);
       } else {
-        alert(`Error: ${data.error || "Failed to process data"}`);
+        const response = await fetch("/api/portfolio/process", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            text: processorInput,
+            category: processorCategory
+          }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          setProcessorResult(data.data);
+        } else {
+          alert(`Error: ${data.error || "Failed to process data"}`);
+        }
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error processing data:", error);
-      alert("Failed to process data");
+      alert("Failed to process data: " + (error.message || "Unknown error"));
     } finally {
       setProcessing(false);
     }

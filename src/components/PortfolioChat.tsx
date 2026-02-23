@@ -3,6 +3,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, Loader2, Paperclip, Mic, MicOff, X, MessageSquare, Maximize2, Minimize2 } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { isStaticDeployment, browserChat } from '@/lib/utils/gemini-browser';
+import portfolioDataFallback from '@/data/portfolio.json';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -14,6 +16,7 @@ interface PortfolioChatProps {
     isOpen?: boolean;
     onClose?: () => void;
     embedded?: boolean; // For when used inside the Admin Dashboard
+    portfolioData?: any; // Optional: pass portfolio data from parent
 }
 
 // Add global type definition for SpeechRecognition
@@ -24,7 +27,7 @@ declare global {
   }
 }
 
-export default function PortfolioChat({ isOpen: initialIsOpen, onClose, embedded = false }: PortfolioChatProps) {
+export default function PortfolioChat({ isOpen: initialIsOpen, onClose, embedded = false, portfolioData: portfolioDataProp }: PortfolioChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -176,31 +179,40 @@ export default function PortfolioChat({ isOpen: initialIsOpen, onClose, embedded
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: userMessage,
-          image: userImage,
-          history: messages.map(m => ({
-            role: m.role === 'user' ? 'user' : 'model',
-            content: m.content
-          }))
-        }),
-      });
+      let responseText: string;
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error('API Error:', errorData);
-        throw new Error(errorData.details || errorData.error || 'Failed to get response');
+      if (isStaticDeployment()) {
+        // Use client-side Gemini directly (no API route needed)
+        const pData = portfolioDataProp || portfolioDataFallback;
+        responseText = await browserChat(userMessage, messages, pData, userImage || undefined);
+      } else {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: userMessage,
+            image: userImage,
+            history: messages.map(m => ({
+              role: m.role === 'user' ? 'user' : 'model',
+              content: m.content
+            }))
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          console.error('API Error:', errorData);
+          throw new Error(errorData.details || errorData.error || 'Failed to get response');
+        }
+
+        const data = await response.json();
+        responseText = data.response;
       }
-
-      const data = await response.json();
       
       // Handle navigation commands in response
-      const displayContent = handleNavigation(data.response);
+      const displayContent = handleNavigation(responseText);
       
       setMessages((prev) => [...prev, { role: 'assistant', content: displayContent }]);
     } catch (error: any) {

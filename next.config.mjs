@@ -5,6 +5,10 @@ const nextConfig = {
   output: isGithubPages ? 'export' : undefined,
   basePath: isGithubPages ? '/Matrixboss' : '',
   assetPrefix: isGithubPages ? '/Matrixboss/' : '',
+  // Expose GitHub Pages flag to the browser bundle
+  env: {
+    NEXT_PUBLIC_GITHUB_PAGES: isGithubPages ? 'true' : '',
+  },
   trailingSlash: true,
   images: {
     unoptimized: true,
