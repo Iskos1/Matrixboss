@@ -11,9 +11,6 @@ import NewsletterButton from "@/components/NewsletterButton";
 import { readJsonFile, joinPath } from "@/lib/utils/file-utils";
 import { PATHS } from "@/lib/constants";
 
-// Force dynamic rendering to ensure fresh data on each request
-export const dynamic = "force-dynamic";
-
 async function getPortfolioData() {
   try {
     const dataPath = joinPath(PATHS.PORTFOLIO_DATA);
