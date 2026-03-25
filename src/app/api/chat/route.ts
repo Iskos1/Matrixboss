@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
           let userMessage = 'Sorry, the AI is temporarily unavailable. Please try again in a moment.';
 
           if (err instanceof AIAuthError) {
-            userMessage = 'AI configuration error: API key is invalid. Please contact the administrator.';
+            userMessage = 'AI is not configured on this deployment. To enable it, add ANTHROPIC_API_KEY to your environment variables (Vercel → Settings → Environment Variables).';
           } else if (err instanceof AIQuotaError) {
             userMessage = 'AI quota exceeded. Please try again later.';
           } else if (err instanceof AIModelError || (err?.message ?? '').includes('unavailable')) {

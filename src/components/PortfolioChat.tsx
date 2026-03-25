@@ -109,9 +109,14 @@ export default function PortfolioChat({
 
     try {
       if (isStaticDeployment()) {
-        const pData = portfolioDataProp || portfolioDataFallback;
-        const resp  = await browserChat(userMsg, messages, pData, userImage || undefined);
-        setMessages(p => [...p, { role: 'assistant', content: handleNavigation(resp) }]);
+        // Static deployment (GitHub Pages) — no server-side API available.
+        // Show a helpful message instead of crashing.
+        setMessages(p => [...p, {
+          role: 'assistant',
+          content: "Hi! 👋 The AI chat requires the full server version of this portfolio. You're viewing the static (GitHub Pages) build — head to the Vercel deployment or run `npm run dev` locally to use the AI features.",
+        }]);
+        setIsLoading(false);
+        return;
       } else {
         const response = await fetch('/api/chat', {
           method: 'POST',

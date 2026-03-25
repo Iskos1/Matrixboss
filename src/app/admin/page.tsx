@@ -640,7 +640,7 @@ export default function AdminDashboard() {
           profile: { ...prev.profile, avatar: result.path },
         }));
         setAvatarStatus("success");
-        setTimeout(() => setAvatarStatus(""), 3000);
+        setTimeout(() => setAvatarStatus(""), 8000);
       } else {
         alert(result.error || "Upload failed");
         setAvatarStatus("error");
@@ -1185,19 +1185,36 @@ export default function AdminDashboard() {
 
       if (response.ok) {
         const result = await response.json();
-        
-        // Reload template data and force PDF refresh
         await loadTemplateData();
         setPdfKey(Date.now());
-        
         alert(`✓ ${result.message}\n\nPDF Size: ${(result.size / 1024).toFixed(2)} KB`);
       } else {
-        const error = await response.json();
-        alert(`Failed to compile: ${error.details || error.error}`);
+        const errorData = await response.json().catch(() => ({}));
+        // Handle missing xelatex gracefully — offer .tex download instead
+        try {
+          const details = JSON.parse(errorData.details || "{}");
+          if (details.xelatexMissing) {
+            const msg =
+              "⚠️ PDF compilation requires xelatex, which isn't installed on this server.\n\n" +
+              "Your resume LaTeX file is ready to compile locally:\n" +
+              "1. Install TeX Live: https://tug.org/texlive/\n" +
+              "2. Run: xelatex resume_template.tex\n\n" +
+              "Would you like to download the .tex file now?";
+            if (confirm(msg) && details.texContent) {
+              const blob = new Blob([details.texContent], { type: "text/plain" });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url; a.download = "resume_template.tex"; a.click();
+              URL.revokeObjectURL(url);
+            }
+            return;
+          }
+        } catch { /* not a xelatex error */ }
+        alert(`Failed to compile: ${errorData.details || errorData.error || "Unknown error"}`);
       }
     } catch (error) {
       console.error("Error compiling template:", error);
-      alert("Failed to compile template");
+      alert("Failed to compile template. Make sure you're running this locally with xelatex installed.");
     } finally {
       setCompilingTemplate(false);
     }
@@ -1222,6 +1239,24 @@ export default function AdminDashboard() {
       });
       const data = await res.json();
       if (!res.ok || !data.success) {
+        // Handle missing xelatex — show download option instead of a crash
+        try {
+          const details = JSON.parse(data.details || '{}');
+          if (details.xelatexMissing) {
+            setRecompileError(
+              'PDF compilation requires xelatex (not installed on this server). ' +
+              'Run locally with TeX Live installed, or download the .tex file below.'
+            );
+            if (details.texContent) {
+              const blob = new Blob([details.texContent], { type: 'text/plain' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url; a.download = (filename || 'resume') + '.tex'; a.click();
+              URL.revokeObjectURL(url);
+            }
+            return;
+          }
+        } catch { /* not a xelatex error */ }
         throw new Error(data.details || data.error || 'Compilation failed');
       }
       // Update the tailoring result with the new PDF filename (same name but freshly compiled)
@@ -2209,10 +2244,15 @@ export default function AdminDashboard() {
                     )}
 
                     {avatarStatus === "success" && (
-                      <p className="mt-2 text-xs text-emerald-600 font-medium flex items-center gap-1">
-                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                        Photo uploaded successfully!
-                      </p>
+                      <div className="mt-2 rounded-lg bg-emerald-50 border border-emerald-200 px-3 py-2">
+                        <p className="text-xs text-emerald-700 font-medium flex items-center gap-1">
+                          <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                          Photo saved locally!
+                        </p>
+                        <p className="text-xs text-emerald-600 mt-0.5">
+                          Push to GitHub to deploy the new photo to the live site.
+                        </p>
+                      </div>
                     )}
                   </div>
                 </div>

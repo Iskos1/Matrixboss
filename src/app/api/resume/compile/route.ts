@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server';
+import { execSync } from 'child_process';
 import { compileLatex } from '@/lib/utils/latex-utils';
 import { fileExists, getFileStats, joinPath, readFile } from '@/lib/utils/file-utils';
 import { PATHS, LATEX_CONFIG } from '@/lib/constants';
@@ -6,8 +7,41 @@ import { handleError, notFound, json, error as errorResponse } from '@/lib/api/r
 import path from 'path';
 import fs from 'fs';
 
+/** Returns true if xelatex is available on this machine/server */
+function isXelatexAvailable(): boolean {
+  try {
+    execSync('xelatex --version', { timeout: 5000, stdio: 'ignore' });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
+    // Check xelatex before doing anything else — gives a clear error on cloud servers
+    if (!isXelatexAvailable()) {
+      // Still read/save the .tex content so the user can download it
+      const body = await request.json();
+      const { latexContent, filename } = body;
+      let texContent = latexContent;
+      if (!texContent) {
+        const templatePath = joinPath(PATHS.RESUME_TEMPLATE);
+        if (fileExists(templatePath)) texContent = readFile(templatePath);
+      }
+      return errorResponse(
+        'PDF compilation requires xelatex, which is not installed on this server.',
+        503,
+        JSON.stringify({
+          xelatexMissing: true,
+          texContent: texContent || null,
+          instructions:
+            'Install TeX Live locally (https://tug.org/texlive/) then run: ' +
+            'xelatex -interaction=nonstopmode resume_template.tex',
+        })
+      );
+    }
+
     const body = await request.json();
     const { filename, latexContent } = body;
 
