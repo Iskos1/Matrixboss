@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import {
   CheckCircle2,
   Circle,
@@ -226,12 +225,7 @@ export default function ProjectGuide({
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="min-h-screen bg-slate-50"
-    >
+    <div className="min-h-screen bg-slate-50">
       {/* Fixed Header */}
       <div className="bg-white border-b border-slate-200 sticky top-16 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
@@ -285,11 +279,9 @@ export default function ProjectGuide({
           {/* Progress Bar */}
           <div className="flex items-center gap-3">
             <div className="flex-1 bg-slate-100 rounded-full h-2">
-              <motion.div
+              <div
                 className={`bg-gradient-to-r ${config.gradient} h-2 rounded-full`}
-                initial={{ width: 0 }}
-                animate={{ width: `${progress}%` }}
-                transition={{ duration: 0.5 }}
+                style={{ width: `${progress}%` }}
               />
             </div>
             <span className="text-xs font-semibold text-slate-500 whitespace-nowrap">
@@ -300,46 +292,38 @@ export default function ProjectGuide({
       </div>
 
       {/* Shortcuts Modal */}
-      <AnimatePresence>
-        {showShortcuts && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
-            onClick={() => setShowShortcuts(false)}
+      {showShortcuts && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/80 p-4"
+          onClick={() => setShowShortcuts(false)}
+        >
+          <div
+            className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
           >
-            <motion.div
-              initial={{ scale: 0.95 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.95 }}
-              className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-                <Keyboard className="w-5 h-5 text-purple-600" />
-                Keyboard Shortcuts
-              </h3>
-              <div className="space-y-3">
-                {[
-                  ["← / K", "Previous step"],
-                  ["→ / J", "Next step"],
-                  ["C", "Toggle step complete"],
-                  ["N", "Toggle notes"],
-                  ["?", "Show shortcuts"],
-                ].map(([key, desc]) => (
-                  <div key={key} className="flex items-center justify-between">
-                    <span className="text-sm text-slate-600">{desc}</span>
-                    <kbd className="px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-200 text-xs font-mono text-slate-700">
-                      {key}
-                    </kbd>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+              <Keyboard className="w-5 h-5 text-purple-600" />
+              Keyboard Shortcuts
+            </h3>
+            <div className="space-y-3">
+              {[
+                ["← / K", "Previous step"],
+                ["→ / J", "Next step"],
+                ["C", "Toggle step complete"],
+                ["N", "Toggle notes"],
+                ["?", "Show shortcuts"],
+              ].map(([key, desc]) => (
+                <div key={key} className="flex items-center justify-between">
+                  <span className="text-sm text-slate-600">{desc}</span>
+                  <kbd className="px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-200 text-xs font-mono text-slate-700">
+                    {key}
+                  </kbd>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Main Content Area */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
@@ -460,283 +444,259 @@ export default function ProjectGuide({
               </details>
             </div>
 
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentStepIndex}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-              >
-                {/* Step Card */}
-                <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                  {/* Step Header */}
-                  <div className="px-6 py-5 border-b border-slate-100">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <p className="text-xs text-slate-400 font-medium mb-1">
-                          Step {currentStepIndex + 1} of {steps.length}
-                        </p>
-                        <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
-                          {currentStep.title}
-                        </h2>
-                        <p className="text-slate-500 mt-1 text-sm">
-                          {currentStep.description}
-                        </p>
-                      </div>
-                      <button
-                        onClick={() => onStepToggle(currentStep.id)}
-                        className={`shrink-0 p-2.5 rounded-xl transition-all duration-200 ${
-                          completedStepIds.includes(currentStep.id)
-                            ? "bg-green-100 text-green-600 hover:bg-green-200 ring-2 ring-green-200"
-                            : "bg-slate-100 text-slate-400 hover:bg-purple-100 hover:text-purple-600"
-                        }`}
-                        title={
-                          completedStepIds.includes(currentStep.id)
-                            ? "Mark as incomplete (C)"
-                            : "Mark as complete (C)"
-                        }
-                      >
-                        <CheckCircle2 className="w-5 h-5" />
-                      </button>
+            <div key={currentStepIndex}>
+              {/* Step Card */}
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                {/* Step Header */}
+                <div className="px-6 py-5 border-b border-slate-100">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-xs text-slate-400 font-medium mb-1">
+                        Step {currentStepIndex + 1} of {steps.length}
+                      </p>
+                      <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+                        {currentStep.title}
+                      </h2>
+                      <p className="text-slate-500 mt-1 text-sm">
+                        {currentStep.description}
+                      </p>
                     </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="px-6 py-5">
-                    {/* Instructions */}
-                    <div className="mb-6">
-                      <div className="flex items-center gap-2 mb-3">
-                        <BookOpen className="w-4 h-4 text-purple-600" />
-                        <span className="text-sm font-semibold text-slate-900">
-                          Instructions
-                        </span>
-                      </div>
-                      <div className="bg-slate-50 rounded-xl p-5 border border-slate-100">
-                        <div className="text-sm text-slate-700 leading-relaxed">
-                          {formatContent(currentStep.content)}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Code Snippet */}
-                    {currentStep.codeSnippet && (
-                      <div className="mb-6">
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex items-center gap-2">
-                            <Code className="w-4 h-4 text-purple-600" />
-                            <span className="text-sm font-semibold text-slate-900">
-                              Quick Reference Code
-                            </span>
-                          </div>
-                          <button
-                            onClick={() =>
-                              copyToClipboard(currentStep.codeSnippet || "")
-                            }
-                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 text-xs font-medium text-slate-600 hover:bg-slate-200 transition-colors"
-                          >
-                            {copiedSnippet ? (
-                              <>
-                                <Check className="w-3.5 h-3.5 text-green-600" />
-                                Copied!
-                              </>
-                            ) : (
-                              <>
-                                <Copy className="w-3.5 h-3.5" />
-                                Copy
-                              </>
-                            )}
-                          </button>
-                        </div>
-                        <div className="rounded-xl overflow-hidden border border-slate-800">
-                          <pre className="bg-slate-900 text-slate-100 p-5 overflow-x-auto text-sm leading-relaxed">
-                            <code>{currentStep.codeSnippet}</code>
-                          </pre>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Resources */}
-                    {currentStep.resources && currentStep.resources.length > 0 && (
-                      <div className="mb-6">
-                        <h3 className="text-sm font-semibold text-slate-900 mb-3 flex items-center gap-2">
-                          <ExternalLink className="w-4 h-4 text-purple-600" />
-                          Resources
-                        </h3>
-                        <div className="grid sm:grid-cols-2 gap-2">
-                          {currentStep.resources.map((resource, idx) => (
-                            <a
-                              key={idx}
-                              href={resource.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 hover:border-purple-300 hover:bg-purple-50/50 transition-all group"
-                            >
-                              <div className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center shrink-0">
-                                <ExternalLink className="w-4 h-4 text-purple-600" />
-                              </div>
-                              <span className="text-sm text-slate-700 font-medium group-hover:text-purple-700 transition-colors truncate">
-                                {resource.title}
-                              </span>
-                            </a>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Notes */}
-                    <AnimatePresence>
-                      {showNotes && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          className="overflow-hidden"
-                        >
-                          <div className="mb-6">
-                            <h3 className="text-sm font-semibold text-slate-900 mb-3 flex items-center gap-2">
-                              <StickyNote className="w-4 h-4 text-yellow-600" />
-                              Your Notes
-                            </h3>
-                            <textarea
-                              value={notes[currentStep.id] || ""}
-                              onChange={(e) =>
-                                setNotes((prev) => ({
-                                  ...prev,
-                                  [currentStep.id]: e.target.value,
-                                }))
-                              }
-                              placeholder="Write your notes, observations, or reminders here..."
-                              className="w-full p-4 rounded-xl border border-yellow-200 bg-yellow-50/50 text-sm text-slate-700 placeholder:text-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent min-h-[120px]"
-                            />
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-
-                  {/* Navigation Footer */}
-                  <div className="px-6 py-4 border-t border-slate-100 bg-slate-50/50">
-                    <div className="flex items-center justify-between">
-                      <button
-                        onClick={() =>
-                          setCurrentStepIndex(Math.max(0, currentStepIndex - 1))
-                        }
-                        disabled={currentStepIndex === 0}
-                        className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                      >
-                        <ChevronLeft className="w-4 h-4" />
-                        <span className="hidden sm:inline">Previous</span>
-                      </button>
-
-                      {/* Step dots (mini) */}
-                      <div className="hidden sm:flex items-center gap-1">
-                        {steps.map((step, idx) => (
-                          <button
-                            key={step.id}
-                            onClick={() => setCurrentStepIndex(idx)}
-                            className={`w-2 h-2 rounded-full transition-all ${
-                              idx === currentStepIndex
-                                ? "w-6 bg-purple-600"
-                                : completedStepIds.includes(step.id)
-                                ? "bg-green-400"
-                                : "bg-slate-300 hover:bg-slate-400"
-                            }`}
-                            title={`Step ${idx + 1}: ${step.title}`}
-                          />
-                        ))}
-                      </div>
-
-                      {currentStepIndex < steps.length - 1 ? (
-                        <button
-                          onClick={() => {
-                            // Auto-mark current step as complete when moving forward
-                            if (!completedStepIds.includes(currentStep.id)) {
-                              onStepToggle(currentStep.id);
-                            }
-                            setCurrentStepIndex(
-                              Math.min(steps.length - 1, currentStepIndex + 1)
-                            );
-                          }}
-                          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-purple-600 text-white text-sm font-semibold hover:bg-purple-700 transition-colors shadow-sm"
-                        >
-                          <span>Next</span>
-                          <ChevronRight className="w-4 h-4" />
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => {
-                            if (!completedStepIds.includes(currentStep.id)) {
-                              onStepToggle(currentStep.id);
-                            }
-                            if (allStepsCompleted || completedStepIds.length === steps.length - 1) {
-                              onComplete();
-                            }
-                          }}
-                          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-sm ${
-                            allStepsCompleted || completedStepIds.length >= steps.length - 1
-                              ? "bg-green-600 text-white hover:bg-green-700"
-                              : "bg-slate-200 text-slate-500 cursor-not-allowed"
-                          }`}
-                          disabled={
-                            !allStepsCompleted &&
-                            completedStepIds.length < steps.length - 1
-                          }
-                        >
-                          <Trophy className="w-4 h-4" />
-                          <span>Complete Project</span>
-                        </button>
-                      )}
-                    </div>
+                    <button
+                      onClick={() => onStepToggle(currentStep.id)}
+                      className={`shrink-0 p-2.5 rounded-xl transition-all duration-200 ${
+                        completedStepIds.includes(currentStep.id)
+                          ? "bg-green-100 text-green-600 hover:bg-green-200 ring-2 ring-green-200"
+                          : "bg-slate-100 text-slate-400 hover:bg-purple-100 hover:text-purple-600"
+                      }`}
+                      title={
+                        completedStepIds.includes(currentStep.id)
+                          ? "Mark as incomplete (C)"
+                          : "Mark as complete (C)"
+                      }
+                    >
+                      <CheckCircle2 className="w-5 h-5" />
+                    </button>
                   </div>
                 </div>
 
-                {/* Completion Celebration */}
-                {allStepsCompleted && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.3 }}
-                    className="mt-6 bg-gradient-to-br from-green-500 via-emerald-500 to-teal-500 rounded-2xl p-8 text-white text-center shadow-lg shadow-green-200"
-                  >
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
-                    >
-                      <Trophy className="w-16 h-16 mx-auto mb-4 drop-shadow-lg" />
-                    </motion.div>
-                    <h3 className="text-2xl font-bold mb-2">
-                      🎉 Amazing Work!
-                    </h3>
-                    <p className="text-green-100 mb-2">
-                      You&apos;ve completed all {steps.length} steps in this project!
-                    </p>
-                    {skills.length > 0 && (
-                      <div className="flex flex-wrap justify-center gap-2 mb-4">
-                        {skills.map((skill) => (
-                          <span
-                            key={skill}
-                            className="px-3 py-1 rounded-full bg-white/20 text-white text-xs font-medium"
-                          >
-                            ✓ {skill}
+                {/* Content */}
+                <div className="px-6 py-5">
+                  {/* Instructions */}
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <BookOpen className="w-4 h-4 text-purple-600" />
+                      <span className="text-sm font-semibold text-slate-900">
+                        Instructions
+                      </span>
+                    </div>
+                    <div className="bg-slate-50 rounded-xl p-5 border border-slate-100">
+                      <div className="text-sm text-slate-700 leading-relaxed">
+                        {formatContent(currentStep.content)}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Code Snippet */}
+                  {currentStep.codeSnippet && (
+                    <div className="mb-6">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                          <Code className="w-4 h-4 text-purple-600" />
+                          <span className="text-sm font-semibold text-slate-900">
+                            Quick Reference Code
                           </span>
+                        </div>
+                        <button
+                          onClick={() =>
+                            copyToClipboard(currentStep.codeSnippet || "")
+                          }
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 text-xs font-medium text-slate-600 hover:bg-slate-200 transition-colors"
+                        >
+                          {copiedSnippet ? (
+                            <>
+                              <Check className="w-3.5 h-3.5 text-green-600" />
+                              Copied!
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-3.5 h-3.5" />
+                              Copy
+                            </>
+                          )}
+                        </button>
+                      </div>
+                      <div className="rounded-xl overflow-hidden border border-slate-800">
+                        <pre className="bg-slate-900 text-slate-100 p-5 overflow-x-auto text-sm leading-relaxed">
+                          <code>{currentStep.codeSnippet}</code>
+                        </pre>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Resources */}
+                  {currentStep.resources && currentStep.resources.length > 0 && (
+                    <div className="mb-6">
+                      <h3 className="text-sm font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                        <ExternalLink className="w-4 h-4 text-purple-600" />
+                        Resources
+                      </h3>
+                      <div className="grid sm:grid-cols-2 gap-2">
+                        {currentStep.resources.map((resource, idx) => (
+                          <a
+                            key={idx}
+                            href={resource.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 hover:border-purple-300 hover:bg-purple-50/50 transition-all group"
+                          >
+                            <div className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center shrink-0">
+                              <ExternalLink className="w-4 h-4 text-purple-600" />
+                            </div>
+                            <span className="text-sm text-slate-700 font-medium group-hover:text-purple-700 transition-colors truncate">
+                              {resource.title}
+                            </span>
+                          </a>
                         ))}
                       </div>
-                    )}
+                    </div>
+                  )}
+
+                  {/* Notes */}
+                  {showNotes && (
+                    <div className="overflow-hidden">
+                      <div className="mb-6">
+                        <h3 className="text-sm font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                          <StickyNote className="w-4 h-4 text-yellow-600" />
+                          Your Notes
+                        </h3>
+                        <textarea
+                          value={notes[currentStep.id] || ""}
+                          onChange={(e) =>
+                            setNotes((prev) => ({
+                              ...prev,
+                              [currentStep.id]: e.target.value,
+                            }))
+                          }
+                          placeholder="Write your notes, observations, or reminders here..."
+                          className="w-full p-4 rounded-xl border border-yellow-200 bg-yellow-50/50 text-sm text-slate-700 placeholder:text-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent min-h-[120px]"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Navigation Footer */}
+                <div className="px-6 py-4 border-t border-slate-100 bg-slate-50/50">
+                  <div className="flex items-center justify-between">
                     <button
-                      onClick={onComplete}
-                      className="px-8 py-3 bg-white text-green-600 rounded-xl font-bold hover:bg-green-50 transition-colors shadow-lg"
+                      onClick={() =>
+                        setCurrentStepIndex(Math.max(0, currentStepIndex - 1))
+                      }
+                      disabled={currentStepIndex === 0}
+                      className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                     >
-                      Mark Project Complete →
+                      <ChevronLeft className="w-4 h-4" />
+                      <span className="hidden sm:inline">Previous</span>
                     </button>
-                  </motion.div>
-                )}
-              </motion.div>
-            </AnimatePresence>
+
+                    {/* Step dots (mini) */}
+                    <div className="hidden sm:flex items-center gap-1">
+                      {steps.map((step, idx) => (
+                        <button
+                          key={step.id}
+                          onClick={() => setCurrentStepIndex(idx)}
+                          className={`w-2 h-2 rounded-full transition-all ${
+                            idx === currentStepIndex
+                              ? "w-6 bg-purple-600"
+                              : completedStepIds.includes(step.id)
+                              ? "bg-green-400"
+                              : "bg-slate-300 hover:bg-slate-400"
+                          }`}
+                          title={`Step ${idx + 1}: ${step.title}`}
+                        />
+                      ))}
+                    </div>
+
+                    {currentStepIndex < steps.length - 1 ? (
+                      <button
+                        onClick={() => {
+                          // Auto-mark current step as complete when moving forward
+                          if (!completedStepIds.includes(currentStep.id)) {
+                            onStepToggle(currentStep.id);
+                          }
+                          setCurrentStepIndex(
+                            Math.min(steps.length - 1, currentStepIndex + 1)
+                          );
+                        }}
+                        className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-purple-600 text-white text-sm font-semibold hover:bg-purple-700 transition-colors shadow-sm"
+                      >
+                        <span>Next</span>
+                        <ChevronRight className="w-4 h-4" />
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          if (!completedStepIds.includes(currentStep.id)) {
+                            onStepToggle(currentStep.id);
+                          }
+                          if (allStepsCompleted || completedStepIds.length === steps.length - 1) {
+                            onComplete();
+                          }
+                        }}
+                        className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-sm ${
+                          allStepsCompleted || completedStepIds.length >= steps.length - 1
+                            ? "bg-green-600 text-white hover:bg-green-700"
+                            : "bg-slate-200 text-slate-500 cursor-not-allowed"
+                        }`}
+                        disabled={
+                          !allStepsCompleted &&
+                          completedStepIds.length < steps.length - 1
+                        }
+                      >
+                        <Trophy className="w-4 h-4" />
+                        <span>Complete Project</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Completion Celebration */}
+              {allStepsCompleted && (
+                <div className="mt-6 bg-gradient-to-br from-green-500 via-emerald-500 to-teal-500 rounded-2xl p-8 text-white text-center shadow-lg shadow-green-200">
+                  <div>
+                    <Trophy className="w-16 h-16 mx-auto mb-4 drop-shadow-lg" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-2">
+                    🎉 Amazing Work!
+                  </h3>
+                  <p className="text-green-100 mb-2">
+                    You&apos;ve completed all {steps.length} steps in this project!
+                  </p>
+                  {skills.length > 0 && (
+                    <div className="flex flex-wrap justify-center gap-2 mb-4">
+                      {skills.map((skill) => (
+                        <span
+                          key={skill}
+                          className="px-3 py-1 rounded-full bg-white/20 text-white text-xs font-medium"
+                        >
+                          ✓ {skill}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <button
+                    onClick={onComplete}
+                    className="px-8 py-3 bg-white text-green-600 rounded-xl font-bold hover:bg-green-50 transition-colors shadow-lg"
+                  >
+                    Mark Project Complete →
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

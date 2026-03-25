@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { motion, AnimatePresence } from "framer-motion";
 import { Newspaper, TrendingUp, Cpu, Globe, ArrowRight, Loader2, Briefcase, Zap, Sparkles, X, ExternalLink, Bot } from "lucide-react";
 
 interface NewsItem {
@@ -86,11 +85,7 @@ export default function NewsletterPage() {
           
           {/* Header Section */}
           <div className="text-center space-y-4">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
+            <div>
               <div className="flex items-center justify-center gap-2 mb-4">
                 <span className="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium text-purple-600 bg-purple-100 rounded-full">
                   <Sparkles className="w-3 h-3" />
@@ -107,7 +102,7 @@ export default function NewsletterPage() {
                 Stay updated with the latest trends in technology, AI, and business. 
                 Curated by AI based on my professional interests and expertise.
               </p>
-            </motion.div>
+            </div>
           </div>
 
           {/* Category Filter */}
@@ -138,14 +133,9 @@ export default function NewsletterPage() {
             </div>
           ) : news.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <AnimatePresence>
                 {news.map((item, index) => (
-                  <motion.article
+                  <article
                     key={item.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.3, delay: index * 0.05 }}
                     className={`bg-white rounded-2xl overflow-hidden border shadow-sm hover:shadow-md transition-all flex flex-col h-full group cursor-pointer ${
                       item.relevanceScore && item.relevanceScore >= 8 
                         ? 'border-purple-200 ring-1 ring-purple-100' 
@@ -238,9 +228,8 @@ export default function NewsletterPage() {
                         )}
                       </div>
                     </div>
-                  </motion.article>
+                  </article>
                 ))}
-              </AnimatePresence>
             </div>
           ) : (
             <div className="text-center py-20 bg-white rounded-2xl border border-slate-200">
@@ -253,19 +242,12 @@ export default function NewsletterPage() {
       </main>
 
       {/* Analysis Modal */}
-      <AnimatePresence>
         {selectedArticle && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+          <div
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
             onClick={() => setSelectedArticle(null)}
           >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+            <div
               onClick={(e) => e.stopPropagation()}
               className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[85vh] overflow-y-auto relative flex flex-col"
             >
@@ -390,10 +372,9 @@ export default function NewsletterPage() {
                   </div>
                 </div>
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         )}
-      </AnimatePresence>
 
       <Footer />
     </>

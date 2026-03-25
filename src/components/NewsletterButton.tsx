@@ -2,31 +2,18 @@
 
 import Link from "next/link";
 import { Newspaper } from "lucide-react";
-import { motion } from "framer-motion";
 
 export default function NewsletterButton() {
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: 0.5 }}
-      className="fixed bottom-6 right-24 z-40"
+    <Link
+      href="/newsletter"
+      title="Tech News"
+      className="fixed bottom-[5.75rem] right-5 z-40 group w-10 h-10 rounded-full bg-white border border-slate-200 shadow-sm hover:shadow-md hover:border-slate-300 flex items-center justify-center text-slate-500 hover:text-slate-700 transition-all duration-200"
     >
-      <Link href="/newsletter" passHref>
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          className="p-4 rounded-full bg-white text-slate-700 shadow-lg border border-slate-200 hover:text-purple-600 hover:border-purple-200 transition-colors flex items-center justify-center group relative"
-          aria-label="Latest News"
-        >
-          <Newspaper size={24} />
-          
-          {/* Tooltip */}
-          <span className="absolute bottom-full mb-2 right-1/2 translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-            Latest News
-          </span>
-        </motion.button>
-      </Link>
-    </motion.div>
+      <Newspaper size={17} />
+      <span className="pointer-events-none absolute right-full mr-2.5 top-1/2 -translate-y-1/2 whitespace-nowrap bg-slate-900 text-white text-xs font-medium px-2.5 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+        Tech News Feed
+      </span>
+    </Link>
   );
 }

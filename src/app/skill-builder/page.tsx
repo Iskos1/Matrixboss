@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import PathSelector from "@/components/SkillBuilder/PathSelector";
 import ProjectRoadmap from "@/components/SkillBuilder/ProjectRoadmap";
@@ -361,12 +360,8 @@ export default function SkillBuilderPage() {
           </div>
 
           {/* Search bar (expandable) */}
-          <AnimatePresence>
             {showSearch && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
+              <div
                 className="overflow-hidden pb-3"
               >
                 <div className="relative">
@@ -388,17 +383,14 @@ export default function SkillBuilderPage() {
                     </button>
                   )}
                 </div>
-              </motion.div>
+              </div>
             )}
-          </AnimatePresence>
         </div>
       </header>
 
       {/* Quick Stats Bar */}
       {currentView === "paths" && (
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
+        <div
           className="bg-white border-b border-slate-100"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
@@ -447,23 +439,16 @@ export default function SkillBuilderPage() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       )}
 
       {/* Reset Confirmation Modal */}
-      <AnimatePresence>
         {showResetConfirm && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+          <div
             className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
             onClick={() => setShowResetConfirm(false)}
           >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
+            <div
               className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
@@ -493,14 +478,12 @@ export default function SkillBuilderPage() {
                   </button>
                 </div>
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         )}
-      </AnimatePresence>
 
       {/* Main Content */}
       <main className="pb-16">
-        <AnimatePresence mode="wait">
           {currentView === "paths" && (
             <PathSelector
               key="paths"
@@ -573,7 +556,6 @@ export default function SkillBuilderPage() {
               onSelectPath={handleSelectPath}
             />
           )}
-        </AnimatePresence>
       </main>
     </div>
   );

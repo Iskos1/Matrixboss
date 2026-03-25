@@ -13,7 +13,8 @@ import {
   browserAnalyzeJob,
   browserProcessData,
   browserAnalyzeCoursework,
-} from "@/lib/utils/gemini-browser";
+  browserInterviewPrep,
+} from "@/lib/utils/anthropic-browser";
 // Add custom styles for scrollbar + admin mobile polish
 const scrollbarStyles = `
   .scrollbar-hide::-webkit-scrollbar {
@@ -82,6 +83,11 @@ export default function AdminDashboard() {
   const [portfolioData, setPortfolioData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [saveStatus, setSaveStatus] = useState("");
+
+  // Avatar upload state
+  const [avatarUploading, setAvatarUploading] = useState(false);
+  const [avatarDragOver, setAvatarDragOver] = useState(false);
+  const [avatarStatus, setAvatarStatus] = useState<"" | "success" | "error">("");
   
   // Resume tailoring state
   const [jobDescription, setJobDescription] = useState("");
@@ -91,6 +97,25 @@ export default function AdminDashboard() {
   const [resumeFileName, setResumeFileName] = useState("");
   const [tailorCompany, setTailorCompany] = useState("");
   const [tailorRole, setTailorRole] = useState("");
+  const [tailoredSavedEntry, setTailoredSavedEntry] = useState<any>(null);
+  const [tailoredSaveError, setTailoredSaveError] = useState<string | null>(null);
+
+  // Inline LaTeX editor state (resume output editing)
+  const [latexEditorOpen, setLatexEditorOpen] = useState(false);
+  const [latexEditorContent, setLatexEditorContent] = useState("");
+  const [latexEditorTarget, setLatexEditorTarget] = useState<'resume' | 'coverletter'>('resume');
+  const [recompiling, setRecompiling] = useState(false);
+  const [recompileError, setRecompileError] = useState<string | null>(null);
+  const [recompileSuccess, setRecompileSuccess] = useState(false);
+
+  // AI Resume Chat (refine via natural language)
+  const [refineChatOpen, setRefineChatOpen] = useState(false);
+  const [refineInput, setRefineInput] = useState("");
+  const [refineLoading, setRefineLoading] = useState(false);
+  const [refineError, setRefineError] = useState<string | null>(null);
+  const [refineChatHistory, setRefineChatHistory] = useState<
+    Array<{ role: 'user' | 'assistant'; content: string; summary?: string; pdfUpdated?: boolean }>
+  >([]);
   
   // Template viewer state
   const [templateData, setTemplateData] = useState<any>(null);
@@ -135,6 +160,13 @@ export default function AdminDashboard() {
   const [expandedAppId, setExpandedAppId] = useState<string | null>(null);
   const [appStatusFilter, setAppStatusFilter] = useState<string>('all');
   const [jdOpenId, setJdOpenId] = useState<string | null>(null);
+  const [runningCompatibilityId, setRunningCompatibilityId] = useState<string | null>(null);
+  // 'appId:resume' or 'appId:coverletter' — tracks which inline PDF preview is open
+  const [appPdfPreview, setAppPdfPreview] = useState<string | null>(null);
+
+  // Application Q&A state
+  const [qaInputs, setQaInputs] = useState<Record<string, string>>({});
+  const [qaLoadingId, setQaLoadingId] = useState<string | null>(null);
 
   // Mobile navigation state
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -160,7 +192,7 @@ export default function AdminDashboard() {
       const result = await testApiKey();
       setApiKeyStatus(result.ok ? 'valid' : 'invalid');
       setApiKeyDiag({
-        gemini_test: {
+        anthropic_test: {
           ok: result.ok,
           status: result.ok ? 200 : 0,
           error_message: result.error || null,
@@ -168,10 +200,10 @@ export default function AdminDashboard() {
         key_diagnostics: {
           exists: !!publicKey,
           raw_length: publicKey.length,
-          starts_with_AIza: publicKey.startsWith('AIza'),
+          starts_with_sk_ant: publicKey.startsWith('sk-ant-'),
         },
         env_source_clues: {
-          likely_source: 'NEXT_PUBLIC_GEMINI_API_KEY (GitHub Actions secret)',
+          likely_source: 'ANTHROPIC_API_KEY (server-side only)',
           loaded_from_env_local: false,
         },
       });
@@ -192,23 +224,23 @@ export default function AdminDashboard() {
       
       const data = await res.json();
       setApiKeyDiag(data);
-      setApiKeyStatus(data.gemini_test?.ok === true ? 'valid' : 'invalid');
+      setApiKeyStatus(data.anthropic_test?.ok === true ? 'valid' : 'invalid');
     } catch (e: any) {
       console.error("Diagnostic check failed:", e);
       setApiKeyStatus('invalid');
       
       // Fallback diagnostic data so the UI explains the failure
       setApiKeyDiag({
-        gemini_test: {
+        anthropic_test: {
           ok: false,
           status: 0,
-          error_code: 'CLIENT_FETCH_ERROR',
+          error_type: 'CLIENT_FETCH_ERROR',
           error_message: e.message || 'Failed to connect to diagnostic endpoint',
         },
         key_diagnostics: {
           exists: false,
           raw_length: 0,
-          starts_with_AIza: false
+          starts_with_sk_ant: false
         },
         env_source_clues: {
           likely_source: 'Unknown (Check Failed)',
@@ -243,7 +275,7 @@ export default function AdminDashboard() {
       // Ctrl/Cmd + 1-9 for tab navigation
       if ((e.ctrlKey || e.metaKey) && e.key >= '1' && e.key <= '9') {
         e.preventDefault();
-        const tabs = ["profile", "experience", "projects", "skills", "social", "resume", "coursework", "chat", "skillbuilder"];
+        const tabs = ["profile", "experience", "projects", "skills", "certifications", "social", "resume", "coursework", "chat", "skillbuilder"];
         const index = parseInt(e.key) - 1;
         if (index < tabs.length) {
           setActiveTab(tabs[index]);
@@ -323,7 +355,7 @@ export default function AdminDashboard() {
       let analysis: any;
 
       if (isStaticDeployment()) {
-        // Use client-side Gemini on GitHub Pages
+        // On GitHub Pages, route through API proxy
         analysis = await browserAnalyzeJob(jobTrackerJD, portfolioData);
       } else {
         const res = await fetch('/api/jobs/analyze', {
@@ -404,6 +436,27 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleClearAllApplications = async () => {
+    if (!confirm(`Remove all ${savedApplications.length} application${savedApplications.length !== 1 ? 's' : ''} from the pipeline? This cannot be undone.`)) return;
+    try {
+      if (isStaticDeployment()) {
+        localStorage.setItem(JOBS_STORAGE_KEY, JSON.stringify([]));
+        setSavedApplications([]);
+      } else {
+        // Delete each application via the API
+        await Promise.all(
+          savedApplications.map((app: any) =>
+            fetch(`/api/jobs?id=${encodeURIComponent(app.id)}`, { method: 'DELETE' })
+          )
+        );
+        fetchSavedApplications();
+      }
+      setExpandedAppId(null);
+    } catch (e) {
+      console.error('Clear all failed:', e);
+    }
+  };
+
   const handleUpdateApplication = async (id: string, updates: Record<string, any>) => {
     try {
       if (isStaticDeployment()) {
@@ -428,6 +481,86 @@ export default function AdminDashboard() {
       }
     } catch (e) {
       console.error('Update failed:', e);
+    }
+  };
+
+  const handleRunCompatibilityTest = async (app: any) => {
+    if (!app.jobDescription?.trim()) {
+      alert('No job description saved for this application.');
+      return;
+    }
+    setRunningCompatibilityId(app.id);
+    try {
+      let analysis: any;
+      if (isStaticDeployment()) {
+        analysis = await browserAnalyzeJob(app.jobDescription, portfolioData);
+      } else {
+        const res = await fetch('/api/jobs/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ jobDescription: app.jobDescription }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Analysis failed');
+        analysis = data.analysis;
+      }
+      await handleUpdateApplication(app.id, {
+        compatibilityScore: analysis.compatibilityScore,
+        analysis,
+      });
+    } catch (err: any) {
+      alert(`Compatibility test failed: ${err.message}`);
+    } finally {
+      setRunningCompatibilityId(null);
+    }
+  };
+
+  const handleGenerateApplicationResponse = async (app: any) => {
+    const question = qaInputs[app.id]?.trim();
+    if (!question) return;
+
+    setQaLoadingId(app.id);
+    try {
+      let answer: string;
+
+      if (isStaticDeployment()) {
+        answer = await browserInterviewPrep(
+          question,
+          app.jobDescription,
+          app.company,
+          app.role,
+          app.analysis,
+          portfolioData
+        );
+      } else {
+        const res = await fetch('/api/jobs/interview-prep', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            question,
+            jobDescription: app.jobDescription,
+            company: app.company,
+            role: app.role,
+            analysis: app.analysis,
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to generate response');
+        answer = data.answer;
+      }
+
+      // Append to this app's Q&A history and persist it
+      const existingHistory: any[] = app.qaHistory || [];
+      const newEntry = { q: question, a: answer, createdAt: new Date().toISOString() };
+      const updatedHistory = [newEntry, ...existingHistory];
+      await handleUpdateApplication(app.id, { qaHistory: updatedHistory });
+
+      // Clear the input
+      setQaInputs(prev => ({ ...prev, [app.id]: '' }));
+    } catch (err: any) {
+      alert(`Failed to generate response: ${err.message}`);
+    } finally {
+      setQaLoadingId(null);
     }
   };
 
@@ -487,6 +620,78 @@ export default function AdminDashboard() {
       ...portfolioData,
       profile: { ...portfolioData.profile, [field]: value },
     });
+  };
+
+  const handleAvatarUpload = async (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      alert("Please select an image file (JPG, PNG, WebP, or GIF).");
+      return;
+    }
+    setAvatarUploading(true);
+    setAvatarStatus("");
+    try {
+      const form = new FormData();
+      form.append("file", file);
+      const res = await fetch("/api/avatar", { method: "POST", body: form });
+      const result = await res.json();
+      if (result.success) {
+        setPortfolioData((prev: any) => ({
+          ...prev,
+          profile: { ...prev.profile, avatar: result.path },
+        }));
+        setAvatarStatus("success");
+        setTimeout(() => setAvatarStatus(""), 3000);
+      } else {
+        alert(result.error || "Upload failed");
+        setAvatarStatus("error");
+      }
+    } catch {
+      alert("Upload failed — please try again.");
+      setAvatarStatus("error");
+    } finally {
+      setAvatarUploading(false);
+    }
+  };
+
+  const handleAvatarRemove = async () => {
+    if (!confirm("Remove your profile photo?")) return;
+    try {
+      await fetch("/api/avatar", { method: "DELETE" });
+      setPortfolioData((prev: any) => ({
+        ...prev,
+        profile: { ...prev.profile, avatar: "" },
+      }));
+    } catch {
+      alert("Failed to remove photo — please try again.");
+    }
+  };
+
+  // Helper to automatically add new tags to the global skills list
+  const syncTagsToSkills = (currentData: any, newTags: string[]) => {
+    if (!newTags || newTags.length === 0) return currentData;
+    
+    const existingSkills = currentData.skills || [];
+    const existingSkillNames = existingSkills.map((s: any) => s.name.toLowerCase());
+    
+    let addedAny = false;
+    const updatedSkills = [...existingSkills];
+
+    newTags.forEach(tag => {
+      const cleanTag = tag.trim();
+      if (cleanTag && !existingSkillNames.includes(cleanTag.toLowerCase())) {
+        updatedSkills.push({
+          id: Date.now() + Math.random(), // Unique ID
+          name: cleanTag,
+          category: "technical" // Default to technical, admin can categorize later
+        });
+        addedAny = true;
+      }
+    });
+
+    if (addedAny) {
+      return { ...currentData, skills: updatedSkills };
+    }
+    return currentData;
   };
 
   const updateSkill = (index: number, field: string, value: string) => {
@@ -604,11 +809,21 @@ export default function AdminDashboard() {
   };
 
   const updatePosition = (expIndex: number, posIndex: number, field: string, value: any) => {
-    const newExperience = [...portfolioData.experience];
+    let newData = { ...portfolioData };
+    const newExperience = [...newData.experience];
     const positions = [...(newExperience[expIndex].positions || [])];
+    
     positions[posIndex] = { ...positions[posIndex], [field]: value };
     newExperience[expIndex] = { ...newExperience[expIndex], positions };
-    setPortfolioData({ ...portfolioData, experience: newExperience });
+    
+    newData.experience = newExperience;
+
+    // Trigger auto-sync if we are updating tags
+    if (field === "tags" && Array.isArray(value)) {
+      newData = syncTagsToSkills(newData, value);
+    }
+    
+    setPortfolioData(newData);
   };
 
   const deletePosition = (expIndex: number, posIndex: number) => {
@@ -620,9 +835,18 @@ export default function AdminDashboard() {
   };
 
   const updateProject = (index: number, field: string, value: any) => {
-    const newProjects = [...portfolioData.projects];
+    let newData = { ...portfolioData };
+    const newProjects = [...newData.projects];
+    
     newProjects[index] = { ...newProjects[index], [field]: value };
-    setPortfolioData({ ...portfolioData, projects: newProjects });
+    newData.projects = newProjects;
+
+    // Trigger auto-sync if we are updating tags
+    if (field === "tags" && Array.isArray(value)) {
+      newData = syncTagsToSkills(newData, value);
+    }
+
+    setPortfolioData(newData);
   };
 
   const addProject = () => {
@@ -777,9 +1001,9 @@ export default function AdminDashboard() {
 
     try {
       if (isStaticDeployment()) {
-        // On GitHub Pages, use client-side Gemini with text input only
+        // On GitHub Pages, AI features require server support
         // (File reading in browser is text-based; PDF parsing needs server)
-        let textToAnalyze = courseworkText.trim();
+        const textToAnalyze = courseworkText.trim();
 
         if (!textToAnalyze && courseworkFiles.length > 0) {
           alert("On GitHub Pages, please paste the coursework text directly into the text field — file uploads require the full server deployment.");
@@ -834,14 +1058,27 @@ export default function AdminDashboard() {
       key_features: analysisResult.key_features || [],
       attachments: analysisResult.attachments || []
     };
+
+    // Auto-merge tags into global Skills section (deduplicated)
+    const incomingTags: string[] = analysisResult.tags || [];
+    const existingSkillNames = portfolioData.skills.map((s: any) => s.name.toLowerCase());
+    const newSkills = incomingTags
+      .filter((tag: string) => !existingSkillNames.includes(tag.toLowerCase()))
+      .map((tag: string, i: number) => ({
+        id: portfolioData.skills.length + i + 1,
+        name: tag,
+        category: "technical"
+      }));
     
     setPortfolioData({
       ...portfolioData,
       projects: [...portfolioData.projects, newProject],
+      skills: [...portfolioData.skills, ...newSkills],
     });
     
     setActiveTab("projects");
-    alert("Project added! You can now edit it in the Projects tab.");
+    const addedCount = newSkills.length;
+    alert(`Project added! ${addedCount > 0 ? `Also added ${addedCount} new skill${addedCount > 1 ? 's' : ''} to your Skills section.` : 'All skills already existed in your Skills section.'} You can now edit it in the Projects tab.`);
   };
 
   // Template functions
@@ -966,6 +1203,131 @@ export default function AdminDashboard() {
     }
   };
 
+  // Recompile an edited LaTeX file and refresh the PDF preview
+  const handleRecompile = async () => {
+    if (!tailoringResult) return;
+    const isResume = latexEditorTarget === 'resume';
+    const filename = isResume ? tailoringResult.filename : tailoringResult.coverLetterFilename;
+    if (!filename || !latexEditorContent.trim()) return;
+
+    setRecompiling(true);
+    setRecompileError(null);
+    setRecompileSuccess(false);
+
+    try {
+      const res = await fetch('/api/resume/compile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filename, latexContent: latexEditorContent }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.details || data.error || 'Compilation failed');
+      }
+      // Update the tailoring result with the new PDF filename (same name but freshly compiled)
+      const pdfFilename = data.filename;
+      if (isResume) {
+        setTailoringResult((prev: any) => ({ ...prev, pdfFilename, pdfCompiled: true }));
+      } else {
+        setTailoringResult((prev: any) => ({ ...prev, coverLetterPdfFilename: pdfFilename, coverLetterPdfCompiled: true }));
+      }
+      setRecompileSuccess(true);
+      setPdfKey(Date.now()); // force iframe refresh
+      setTimeout(() => setRecompileSuccess(false), 4000);
+    } catch (err: any) {
+      setRecompileError(err.message || 'Unknown error during recompilation');
+    } finally {
+      setRecompiling(false);
+    }
+  };
+
+  // Send a natural-language instruction to the AI to refine the current resume LaTeX
+  const handleRefine = async () => {
+    if (!refineInput.trim() || !tailoringResult || !latexEditorContent.trim()) return;
+    const instruction = refineInput.trim();
+    const filename = latexEditorTarget === 'resume'
+      ? tailoringResult.filename
+      : tailoringResult.coverLetterFilename;
+    if (!filename) return;
+
+    setRefineLoading(true);
+    setRefineError(null);
+
+    // Add user message immediately
+    const userMsg = { role: 'user' as const, content: instruction };
+    setRefineChatHistory(prev => [...prev, userMsg]);
+    setRefineInput("");
+
+    // Build API-compatible history (just role + content, excluding extra fields)
+    const apiHistory = refineChatHistory.map(m => ({ role: m.role, content: m.content }));
+
+    try {
+      const res = await fetch('/api/resume/refine', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          latexContent: latexEditorContent,
+          instruction,
+          filename,
+          history: apiHistory,
+        }),
+      });
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || data.details || 'Refine request failed');
+      }
+
+      // Update the editor with the new LaTeX
+      setLatexEditorContent(data.updatedLatex);
+
+      // If PDF was recompiled, update the preview
+      if (data.pdfCompiled && data.pdfFilename) {
+        if (latexEditorTarget === 'resume') {
+          setTailoringResult((prev: any) => ({ ...prev, pdfFilename: data.pdfFilename, pdfCompiled: true }));
+        } else {
+          setTailoringResult((prev: any) => ({ ...prev, coverLetterPdfFilename: data.pdfFilename, coverLetterPdfCompiled: true }));
+        }
+        setPdfKey(Date.now());
+      }
+
+      // Add assistant acknowledgement
+      const assistantSummary = data.pdfCompiled
+        ? `✅ Changes applied and PDF recompiled successfully.${data.compileError ? '' : ''}`
+        : `✏️ Changes applied to LaTeX.${data.compileError ? ` (Compile warning: ${data.compileError})` : ' PDF not recompiled — check for LaTeX errors.'}`;
+
+      setRefineChatHistory(prev => [
+        ...prev,
+        { role: 'assistant' as const, content: assistantSummary, pdfUpdated: data.pdfCompiled },
+      ]);
+
+    } catch (err: any) {
+      setRefineError(err.message || 'Unknown error');
+      // Remove the user message on error so they can retry
+      setRefineChatHistory(prev => prev.slice(0, -1));
+      setRefineInput(instruction);
+    } finally {
+      setRefineLoading(false);
+    }
+  };
+
+  // Load LaTeX source for a given file into the editor
+  const loadLatexForEditing = async (filename: string, target: 'resume' | 'coverletter') => {
+    try {
+      const res = await fetch(`/api/resume/download?file=${encodeURIComponent(filename)}`);
+      if (res.ok) {
+        const text = await res.text();
+        setLatexEditorContent(text);
+        setLatexEditorTarget(target);
+        setLatexEditorOpen(true);
+        setRecompileError(null);
+        setRecompileSuccess(false);
+      }
+    } catch {
+      setLatexEditorContent('');
+    }
+  };
+
   // Resume tailoring functions
   const handleTailorResume = async () => {
     if (!jobDescription.trim()) {
@@ -985,6 +1347,8 @@ export default function AdminDashboard() {
     setTailoringInProgress(true);
     setTailoringResult(null);
     setTailoringError(null);
+    setTailoredSavedEntry(null);
+    setTailoredSaveError(null);
 
     try {
       const response = await fetch("/api/resume/tailor", {
@@ -993,6 +1357,8 @@ export default function AdminDashboard() {
         body: JSON.stringify({
           jobDescription,
           fileName: resumeFileName || undefined,
+          company: tailorCompany || undefined,
+          role: tailorRole || undefined,
         }),
       });
 
@@ -1007,10 +1373,32 @@ export default function AdminDashboard() {
       console.log("PDF Compiled:", result.pdfCompiled); // Debug log
       console.log("PDF Filename:", result.pdfFilename); // Debug log
       setTailoringResult(result);
+      setTailoredSavedEntry(null);
+      setTailoredSaveError(null);
+      setLatexEditorOpen(false);
+      setRecompileError(null);
+      setRecompileSuccess(false);
 
-      // Auto-save to Job Tracker (fire-and-forget — don't block the UI)
+      // Auto-fetch the LaTeX source so it's ready to edit
+      if (result.filename) {
+        try {
+          const texRes = await fetch(`/api/resume/download?file=${encodeURIComponent(result.filename)}`);
+          if (texRes.ok) {
+            const texText = await texRes.text();
+            setLatexEditorContent(texText);
+          }
+        } catch {
+          // Non-fatal — editor just starts empty
+        }
+      }
+      if (result.coverLetterFilename) {
+        // Pre-fetch cover letter too but only set if resume fetch is done
+        // (Cover letter editor target is toggled via UI)
+      }
+
+      // Auto-save to Job Tracker
       try {
-        // Run critical analysis in the background
+        // Run compatibility analysis in parallel with saving
         const analyzeRes = await fetch('/api/jobs/analyze', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -1018,7 +1406,7 @@ export default function AdminDashboard() {
         });
         const analyzeData = analyzeRes.ok ? await analyzeRes.json() : null;
 
-        await fetch('/api/jobs', {
+        const saveRes = await fetch('/api/jobs', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -1033,9 +1421,21 @@ export default function AdminDashboard() {
             notes: '',
           }),
         });
-        console.log('[JobTracker] Application auto-saved to tracker.');
-      } catch (trackErr) {
-        console.warn('[JobTracker] Auto-save failed (non-blocking):', trackErr);
+
+        if (saveRes.ok) {
+          const saveData = await saveRes.json();
+          const savedApp = saveData.application;
+          setTailoredSavedEntry(savedApp);
+          // Immediately add to savedApplications so job tracker refreshes without needing tab switch
+          setSavedApplications(prev => [savedApp, ...prev]);
+          console.log('[JobTracker] Application saved to tracker:', savedApp.id);
+        } else {
+          const errData = await saveRes.json().catch(() => ({}));
+          throw new Error(errData.error || `Save failed (HTTP ${saveRes.status})`);
+        }
+      } catch (trackErr: any) {
+        console.error('[JobTracker] Save failed:', trackErr);
+        setTailoredSaveError(trackErr.message || 'Failed to save to job tracker');
       }
 
       // Clear job description for next use
@@ -1078,7 +1478,7 @@ export default function AdminDashboard() {
 
     try {
       if (isStaticDeployment()) {
-        // Use client-side Gemini on GitHub Pages
+        // On GitHub Pages, route through API proxy
         const result = await browserProcessData(processorInput, processorCategory);
         setProcessorResult(result);
       } else {
@@ -1165,6 +1565,20 @@ export default function AdminDashboard() {
     // Add to portfolio data
     const newData = { ...portfolioData };
 
+    // Helper to merge tags into global skills (deduplicated)
+    const mergeTagsToSkills = (tags: string[]) => {
+      const existingNames = newData.skills.map((s: any) => s.name.toLowerCase());
+      const fresh = tags
+        .filter((t: string) => !existingNames.includes(t.toLowerCase()))
+        .map((t: string, i: number) => ({
+          id: newData.skills.length + i + 1,
+          name: t,
+          category: "technical"
+        }));
+      newData.skills = [...newData.skills, ...fresh];
+      return fresh.length;
+    };
+
     if (category === "experience") {
       // Add ID if missing
       const newEntry = {
@@ -1174,7 +1588,18 @@ export default function AdminDashboard() {
         website: processorResult.website || ""
       };
       newData.experience.push(newEntry);
-      alert("Added to Experience!");
+
+      // Auto-merge skills from all positions
+      const allTags: string[] = [];
+      if (processorResult.positions) {
+        processorResult.positions.forEach((p: any) => {
+          if (p.tags) allTags.push(...p.tags);
+        });
+      } else if (processorResult.tags) {
+        allTags.push(...processorResult.tags);
+      }
+      const added = mergeTagsToSkills(allTags);
+      alert(`Added to Experience! ${added > 0 ? `Also added ${added} new skill${added > 1 ? 's' : ''} to your Skills section.` : 'All skills already existed in your Skills section.'}`);
     } else if (category === "project") {
       const newEntry = {
         ...processorResult,
@@ -1184,7 +1609,11 @@ export default function AdminDashboard() {
         attachments: processorResult.attachments || []
       };
       newData.projects.push(newEntry);
-      alert("Added to Projects!");
+
+      // Auto-merge tags into global skills
+      const tags: string[] = processorResult.tags || [];
+      const added = mergeTagsToSkills(tags);
+      alert(`Added to Projects! ${added > 0 ? `Also added ${added} new skill${added > 1 ? 's' : ''} to your Skills section.` : 'All skills already existed in your Skills section.'}`);
     } else if (category === "skill") {
       const newEntry = {
         ...processorResult,
@@ -1673,6 +2102,123 @@ export default function AdminDashboard() {
               </div>
             </div>
 
+            {/* ── Profile Photo Upload ── */}
+            <div className="bg-white rounded-2xl shadow-sm border border-purple-100 overflow-hidden admin-card">
+              <div className="bg-gradient-to-r from-purple-50 to-indigo-50 px-4 md:px-6 py-4 border-b border-purple-100">
+                <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                  <span className="w-7 h-7 bg-purple-100 rounded-lg flex items-center justify-center text-sm">🖼️</span>
+                  Profile Photo
+                </h3>
+                <p className="text-xs text-slate-500 mt-1">Shown in the hero banner on your portfolio</p>
+              </div>
+              <div className="p-4 md:p-6">
+                <div className="flex flex-col sm:flex-row items-center gap-6">
+
+                  {/* Current photo preview */}
+                  <div className="flex-shrink-0 relative">
+                    <div
+                      className="w-28 h-28 rounded-full overflow-hidden flex items-center justify-center border-4"
+                      style={{
+                        borderImage: "linear-gradient(135deg,#7c3aed,#2563eb) 1",
+                        borderRadius: "9999px",
+                        borderStyle: "solid",
+                      }}
+                    >
+                      {portfolioData.profile.avatar ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={`${portfolioData.profile.avatar}?t=${Date.now()}`}
+                          alt="Profile"
+                          className="w-full h-full object-cover"
+                          onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                        />
+                      ) : (
+                        <div
+                          className="w-full h-full flex flex-col items-center justify-center"
+                          style={{ background: "linear-gradient(135deg,#dbeafe,#ede9fe)" }}
+                        >
+                          <span className="text-3xl font-extrabold" style={{ background: "linear-gradient(125deg,#2563eb,#7c3aed)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+                            {portfolioData.profile.name?.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase() || "?"}
+                          </span>
+                          <span className="text-[9px] text-slate-400 tracking-widest uppercase mt-0.5">No photo</span>
+                        </div>
+                      )}
+                    </div>
+                    {/* Status dot */}
+                    {avatarStatus === "success" && (
+                      <span className="absolute bottom-1 right-1 w-5 h-5 bg-emerald-500 rounded-full border-2 border-white flex items-center justify-center">
+                        <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Upload zone */}
+                  <div className="flex-1 w-full">
+                    <label
+                      className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-xl cursor-pointer transition-all duration-200 ${
+                        avatarDragOver
+                          ? "border-purple-500 bg-purple-50 scale-[1.01]"
+                          : "border-slate-300 bg-slate-50 hover:border-purple-400 hover:bg-purple-50/50"
+                      }`}
+                      onDragOver={(e) => { e.preventDefault(); setAvatarDragOver(true); }}
+                      onDragLeave={() => setAvatarDragOver(false)}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        setAvatarDragOver(false);
+                        const file = e.dataTransfer.files[0];
+                        if (file) handleAvatarUpload(file);
+                      }}
+                    >
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp,image/gif"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) handleAvatarUpload(file);
+                          e.target.value = "";
+                        }}
+                      />
+                      {avatarUploading ? (
+                        <div className="flex flex-col items-center gap-2">
+                          <div className="w-6 h-6 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
+                          <span className="text-sm text-purple-600 font-medium">Uploading…</span>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center gap-2 text-center px-4">
+                          <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center text-xl">📷</div>
+                          <div>
+                            <p className="text-sm font-semibold text-slate-700">
+                              Drop your photo here, or <span className="text-purple-600">browse</span>
+                            </p>
+                            <p className="text-xs text-slate-400 mt-0.5">JPG, PNG, WebP or GIF · Max 5 MB</p>
+                          </div>
+                        </div>
+                      )}
+                    </label>
+
+                    {/* Remove button */}
+                    {portfolioData.profile.avatar && (
+                      <button
+                        onClick={handleAvatarRemove}
+                        className="mt-2.5 text-xs text-red-500 hover:text-red-700 font-medium flex items-center gap-1 transition-colors"
+                      >
+                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                        Remove photo
+                      </button>
+                    )}
+
+                    {avatarStatus === "success" && (
+                      <p className="mt-2 text-xs text-emerald-600 font-medium flex items-center gap-1">
+                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                        Photo uploaded successfully!
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Basic Information */}
             <div className="bg-white rounded-2xl shadow-sm border border-purple-100 overflow-hidden admin-card">
               <div className="bg-gradient-to-r from-purple-50 to-indigo-50 px-4 md:px-6 py-4 border-b border-purple-100">
@@ -1960,6 +2506,7 @@ export default function AdminDashboard() {
           </div>
         )}
 
+
         {/* Experience Tab */}
         {activeTab === "experience" && (
           <div className="space-y-5">
@@ -2150,8 +2697,8 @@ export default function AdminDashboard() {
                                   <textarea
                                     value={position.description}
                                     onChange={(e) => updatePosition(expIndex, posIndex, "description", e.target.value)}
-                                    rows={4}
-                                    className="w-full px-3 py-2.5 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-none text-base"
+                                    rows={6}
+                                    className="w-full px-3 py-2.5 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-y min-h-[120px] text-base"
                                     placeholder="Describe your responsibilities and achievements..."
                                   />
                                 </div>
@@ -2164,8 +2711,8 @@ export default function AdminDashboard() {
                                   <textarea
                                     value={position.technicalDetails || ""}
                                     onChange={(e) => updatePosition(expIndex, posIndex, "technicalDetails", e.target.value)}
-                                    rows={3}
-                                    className="w-full px-3 py-2.5 border-2 border-purple-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-purple-50/30 resize-none text-base"
+                                    rows={4}
+                                    className="w-full px-3 py-2.5 border-2 border-purple-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-purple-50/30 resize-y min-h-[100px] text-base"
                                     placeholder="Technical details for AI context (not public)"
                                   />
                                 </div>
@@ -2334,42 +2881,25 @@ export default function AdminDashboard() {
                       <textarea
                         value={project.description}
                         onChange={(e) => updateProject(index, "description", e.target.value)}
-                        rows={4}
-                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none"
+                        rows={6}
+                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-y min-h-[120px]"
                         placeholder="Describe what this project does and why it matters..."
                       />
                     </div>
 
                     {/* Technical Details (Hidden) */}
                     <div>
-                      <div className="flex items-center justify-between mb-2">
+                      <div className="mb-2">
                         <label className="block text-sm font-bold text-slate-700 flex items-center gap-2">
                           <span className="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs uppercase font-bold tracking-wide">Hidden from Public</span>
                           Technical / AI Context
                         </label>
-                        <button
-                          onClick={() => {
-                            // Pre-fill the processor with current details if empty
-                            if (!processorInput && project.technicalDetails) {
-                              setProcessorInput(project.technicalDetails);
-                              setProcessorCategory("project");
-                            }
-                            // Set target specifically for this project
-                            setProcessorTarget({ index, mode: 'update' });
-                            // Scroll to top where processor is
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                          }}
-                          className="text-xs flex items-center gap-1 text-purple-600 hover:text-purple-800 font-semibold"
-                        >
-                          <Sparkles className="w-3 h-3" />
-                          Process with AI
-                        </button>
                       </div>
                       <textarea
                         value={project.technicalDetails || ""}
                         onChange={(e) => updateProject(index, "technicalDetails", e.target.value)}
-                        rows={3}
-                        className="w-full px-4 py-3 border-2 border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-purple-50/30 resize-none"
+                        rows={4}
+                        className="w-full px-4 py-3 border-2 border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-purple-50/30 resize-y min-h-[100px]"
                         placeholder="Add implementation details, architecture notes, or AI training context..."
                       />
                     </div>
@@ -2665,7 +3195,7 @@ export default function AdminDashboard() {
               </p>
               <div className="mt-4 bg-blue-500/30 rounded-lg p-3 text-sm">
                 <p className="font-semibold mb-1">💡 Tip: You can select multiple files at once!</p>
-                <p className="text-blue-50">Hold Ctrl (Windows/Linux) or Cmd (Mac) to select multiple files, or click "Add More Files" after selecting.</p>
+                <p className="text-blue-50">Hold Ctrl (Windows/Linux) or Cmd (Mac) to select multiple files, or click &quot;Add More Files&quot; after selecting.</p>
               </div>
             </div>
 
@@ -3121,7 +3651,10 @@ export default function AdminDashboard() {
                   {tailoringInProgress ? (
                     <>
                       <RefreshCw className="w-5 h-5 animate-spin" />
-                      AI is tailoring your resume...
+                        <span className="flex flex-col items-start leading-tight text-left">
+                        <span className="font-bold">AI is working...</span>
+                        <span className="text-xs font-normal opacity-80">Analyze job → Select content → Write bullets → Quality check → Generate PDF</span>
+                      </span>
                     </>
                   ) : (
                     <>
@@ -3172,40 +3705,414 @@ export default function AdminDashboard() {
                   </p>
                 </div>
 
-                {/* Job Analysis */}
-                {tailoringResult.job_analysis && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div className="bg-slate-50 rounded-xl p-3 border border-slate-200">
-                      <h4 className="font-bold text-slate-700 mb-1 text-xs uppercase tracking-wide">Primary Focus</h4>
-                      <p className="text-slate-700 text-sm">{tailoringResult.job_analysis.primary_focus}</p>
-                    </div>
-                    <div className="bg-slate-50 rounded-xl p-3 border border-slate-200">
-                      <h4 className="font-bold text-slate-700 mb-1 text-xs uppercase tracking-wide">Seniority Level</h4>
-                      <p className="text-slate-700 text-sm capitalize">{tailoringResult.job_analysis.seniority_level}</p>
-                    </div>
-                    <div className="bg-slate-50 rounded-xl p-3 border border-slate-200">
-                      <h4 className="font-bold text-slate-700 mb-1.5 text-xs uppercase tracking-wide">Key Skills Matched</h4>
-                      <div className="flex flex-wrap gap-1">
-                        {tailoringResult.job_analysis.technical_skills?.slice(0, 5).map((skill: string, idx: number) => (
-                          <span key={idx} className="bg-purple-100 text-purple-700 px-2 py-0.5 rounded text-xs">
-                            {skill}
+                {/* ── AI Intelligence Cards ── */}
+
+                {/* Quality Score Card */}
+                {tailoringResult.quality_report && (() => {
+                  const qr = tailoringResult.quality_report;
+                  const score = qr.fit_score ?? 0;
+                  const scoreBg =
+                    score >= 85 ? 'from-emerald-600 to-green-600' :
+                    score >= 72 ? 'from-green-600 to-teal-600' :
+                    score >= 58 ? 'from-yellow-500 to-amber-500' :
+                    'from-orange-500 to-red-500';
+                  const scoreBorder =
+                    score >= 72 ? 'border-emerald-200' :
+                    score >= 58 ? 'border-yellow-200' :
+                    'border-orange-200';
+                  return (
+                    <div className={`bg-white border ${scoreBorder} rounded-xl overflow-hidden`}>
+                      <div className={`bg-gradient-to-r ${scoreBg} px-4 py-3 flex items-center justify-between`}>
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg">🎯</span>
+                          <div>
+                            <h4 className="font-bold text-white text-sm">AI Quality Report</h4>
+                            <p className="text-white/80 text-xs">3-step pipeline: analyze → tailor → quality-check{tailoringResult.refinement_applied ? ' → refine' : ''}</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-white/70 text-[10px] uppercase tracking-wide font-semibold">Fit Score</p>
+                          <p className="text-white font-black text-3xl leading-none">{score}</p>
+                          <p className="text-white/90 text-xs font-semibold">{qr.fit_label}</p>
+                        </div>
+                      </div>
+                      <div className="p-4 space-y-3">
+                        {/* Badges */}
+                        <div className="flex flex-wrap gap-2">
+                          <span className="bg-slate-100 text-slate-700 text-xs px-2.5 py-1 rounded-full font-semibold">
+                            ATS Coverage: {qr.ats_keyword_coverage}%
                           </span>
-                        ))}
+                          <span className="bg-slate-100 text-slate-700 text-xs px-2.5 py-1 rounded-full font-semibold">
+                            Bullet Quality: {qr.bullet_quality_score}%
+                          </span>
+                          {tailoringResult.refinement_applied ? (
+                            <span className="bg-amber-100 text-amber-800 border border-amber-300 text-xs px-2.5 py-1 rounded-full font-bold">
+                              ⚡ Refinement Pass Applied
+                            </span>
+                          ) : (
+                            <span className="bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs px-2.5 py-1 rounded-full font-bold">
+                              ✓ Passed Quality Check
+                            </span>
+                          )}
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {qr.strengths?.length > 0 && (
+                            <div>
+                              <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">✅ Strengths</p>
+                              <ul className="space-y-1">
+                                {qr.strengths.map((s: string, i: number) => (
+                                  <li key={i} className="text-xs text-slate-700 flex items-start gap-1.5">
+                                    <span className="text-emerald-500 mt-0.5 flex-shrink-0">•</span>
+                                    {s}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                          {qr.gaps?.length > 0 && (
+                            <div>
+                              <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">
+                                {tailoringResult.refinement_applied ? '🔧 Gaps Fixed' : '⚠ Minor Gaps'}
+                              </p>
+                              <ul className="space-y-1">
+                                {qr.gaps.map((g: string, i: number) => (
+                                  <li key={i} className="text-xs text-slate-700 flex items-start gap-1.5">
+                                    <span className="text-amber-500 mt-0.5 flex-shrink-0">•</span>
+                                    {g}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
-                    <div className="bg-slate-50 rounded-xl p-3 border border-slate-200">
-                      <h4 className="font-bold text-slate-700 mb-1 text-xs uppercase tracking-wide">Content Selected</h4>
-                      <p className="text-slate-700 text-sm">
-                        {tailoringResult.tailored_content?.selected_work_experience?.reduce((sum: number, job: any) => sum + (job.bullets?.length || 0), 0) || 0} work bullets, {' '}
-                        {tailoringResult.tailored_content?.selected_projects?.reduce((sum: number, proj: any) => sum + (proj.bullets?.length || 0), 0) || 0} project bullets
-                      </p>
+                  );
+                })()}
+
+                {/* Job Intelligence Card */}
+                {tailoringResult.job_analysis && (
+                  <div className="bg-white border border-indigo-200 rounded-xl overflow-hidden">
+                    <div className="bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-3 flex items-center gap-2">
+                      <span className="text-lg">🔍</span>
+                      <div>
+                        <h4 className="font-bold text-white text-sm">Job Intelligence</h4>
+                        <p className="text-indigo-200 text-xs">Extracted from the job description by the AI pipeline</p>
+                      </div>
+                    </div>
+                    <div className="p-4 space-y-3">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div className="bg-slate-50 rounded-lg p-3 border border-slate-200">
+                          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1">Role Focus</p>
+                          <p className="text-sm text-slate-800">{tailoringResult.job_analysis.primary_focus}</p>
+                        </div>
+                        <div className="bg-slate-50 rounded-lg p-3 border border-slate-200">
+                          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1">Seniority · Industry</p>
+                          <p className="text-sm text-slate-800 capitalize">
+                            {tailoringResult.job_analysis.seniority_level}
+                            {tailoringResult.job_analysis.industry ? ` · ${tailoringResult.job_analysis.industry}` : ''}
+                          </p>
+                        </div>
+                      </div>
+                      {tailoringResult.job_analysis.technical_skills?.length > 0 && (
+                        <div>
+                          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">Required Technical Skills</p>
+                          <div className="flex flex-wrap gap-1">
+                            {tailoringResult.job_analysis.technical_skills.map((skill: string, i: number) => (
+                              <span key={i} className="bg-violet-100 text-violet-800 text-xs px-2 py-0.5 rounded-full font-medium">{skill}</span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {tailoringResult.job_analysis.must_haves?.length > 0 && (
+                        <div>
+                          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">Must-Have Requirements</p>
+                          <div className="flex flex-wrap gap-1">
+                            {tailoringResult.job_analysis.must_haves.map((req: string, i: number) => (
+                              <span key={i} className="bg-red-50 text-red-700 border border-red-200 text-xs px-2 py-0.5 rounded-full">{req}</span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {tailoringResult.ats_keywords_used?.length > 0 && (
+                        <div>
+                          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">
+                            ATS Keywords Woven In <span className="normal-case font-normal text-slate-400">({tailoringResult.ats_keywords_used.length} of {tailoringResult.job_analysis.ats_keywords?.length ?? '?'} targeted)</span>
+                          </p>
+                          <div className="flex flex-wrap gap-1">
+                            {tailoringResult.ats_keywords_used.map((kw: string, i: number) => (
+                              <span key={i} className="bg-emerald-100 text-emerald-800 text-xs px-2 py-0.5 rounded-full font-medium">✓ {kw}</span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
 
-                {/* Debug Info */}
-                <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3 text-xs text-yellow-800">
-                  <strong>Debug:</strong> pdfCompiled={String(tailoringResult.pdfCompiled)}, pdfFilename={tailoringResult.pdfFilename || 'null'}
+                {/* ── Inline LaTeX Editor ── */}
+                <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+                  {/* Editor header / toggle bar */}
+                  <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-slate-800 to-slate-900">
+                    <div className="flex items-center gap-2">
+                      <span className="text-base">✏️</span>
+                      <div>
+                        <h4 className="font-bold text-white text-sm">Edit Resume LaTeX</h4>
+                        <p className="text-slate-400 text-xs">Make changes then hit Save &amp; Recompile</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {/* Tab switcher — only show cover letter tab if it exists */}
+                      {tailoringResult.coverLetterFilename && (
+                        <div className="flex rounded-lg overflow-hidden border border-slate-600 text-xs">
+                          <button
+                            onClick={() => loadLatexForEditing(tailoringResult.filename, 'resume')}
+                            className={`px-3 py-1.5 font-semibold transition ${latexEditorTarget === 'resume' ? 'bg-violet-600 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
+                          >
+                            Resume
+                          </button>
+                          <button
+                            onClick={() => loadLatexForEditing(tailoringResult.coverLetterFilename, 'coverletter')}
+                            className={`px-3 py-1.5 font-semibold transition ${latexEditorTarget === 'coverletter' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
+                          >
+                            Cover Letter
+                          </button>
+                        </div>
+                      )}
+                      <button
+                        onClick={() => setLatexEditorOpen(o => !o)}
+                        className="flex items-center gap-1.5 bg-slate-700 hover:bg-slate-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition"
+                      >
+                        {latexEditorOpen ? '▲ Collapse' : '▼ Open Editor'}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Collapsible editor body */}
+                  {latexEditorOpen && (
+                    <div className="p-4 space-y-3 bg-slate-950">
+                      {/* Status bar above textarea */}
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-slate-400 font-mono">
+                          {latexEditorTarget === 'resume' ? tailoringResult.filename : tailoringResult.coverLetterFilename}
+                        </span>
+                        <span className="text-slate-500">{latexEditorContent.split('\n').length} lines</span>
+                      </div>
+
+                      {/* The textarea */}
+                      <textarea
+                        value={latexEditorContent}
+                        onChange={e => setLatexEditorContent(e.target.value)}
+                        spellCheck={false}
+                        className="w-full h-[480px] bg-slate-900 text-green-300 font-mono text-xs leading-relaxed p-4 rounded-lg border border-slate-700 focus:outline-none focus:border-violet-500 resize-y"
+                        style={{ fontFamily: "'JetBrains Mono', 'Fira Code', 'Courier New', monospace" }}
+                        placeholder="LaTeX source will appear here..."
+                      />
+
+                      {/* Recompile feedback */}
+                      {recompileError && (
+                        <div className="bg-red-950 border border-red-700 rounded-lg p-3 text-xs text-red-300">
+                          <strong className="text-red-400">Compilation Error:</strong>
+                          <pre className="mt-1 whitespace-pre-wrap leading-relaxed">{recompileError}</pre>
+                        </div>
+                      )}
+                      {recompileSuccess && (
+                        <div className="bg-emerald-950 border border-emerald-700 rounded-lg p-3 text-xs text-emerald-300 flex items-center gap-2">
+                          <span>✅</span> <span>Recompiled successfully! PDF preview updated below.</span>
+                        </div>
+                      )}
+
+                      {/* Action buttons */}
+                      <div className="flex items-center gap-3 flex-wrap">
+                        <button
+                          onClick={handleRecompile}
+                          disabled={recompiling || !latexEditorContent.trim()}
+                          className="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm px-5 py-2.5 rounded-xl transition shadow"
+                        >
+                          {recompiling ? (
+                            <>
+                              <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                              </svg>
+                              Compiling...
+                            </>
+                          ) : '🔨 Save & Recompile PDF'}
+                        </button>
+                        <button
+                          onClick={() => {
+                            const target = latexEditorTarget === 'resume' ? tailoringResult.filename : tailoringResult.coverLetterFilename;
+                            if (target) loadLatexForEditing(target, latexEditorTarget);
+                          }}
+                          className="text-slate-400 hover:text-white text-xs font-semibold px-3 py-2 rounded-lg border border-slate-700 hover:border-slate-500 transition"
+                        >
+                          ↺ Reset to Saved
+                        </button>
+                        <span className="text-slate-500 text-xs ml-auto">
+                          Tip: After recompile the PDF preview below auto-refreshes
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* ── AI Resume Refine Chat ── */}
+                <div className="bg-white border border-violet-200 rounded-xl overflow-hidden">
+                  {/* Chat header */}
+                  <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-violet-600 to-purple-700">
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg">🤖</span>
+                      <div>
+                        <h4 className="font-bold text-white text-sm">AI Resume Refinement Chat</h4>
+                        <p className="text-violet-200 text-xs">Tell the AI what to change — it edits surgically and recompiles</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {refineChatHistory.length > 0 && (
+                        <span className="bg-white/20 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
+                          {Math.floor(refineChatHistory.length / 2)} edit{Math.floor(refineChatHistory.length / 2) !== 1 ? 's' : ''} applied
+                        </span>
+                      )}
+                      <button
+                        onClick={() => setRefineChatOpen(o => !o)}
+                        className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition"
+                      >
+                        {refineChatOpen ? '▲ Collapse' : '▼ Open Chat'}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Collapsible chat body */}
+                  {refineChatOpen && (
+                    <div className="flex flex-col" style={{ height: '480px' }}>
+                      {/* Conversation history */}
+                      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50">
+                        {refineChatHistory.length === 0 ? (
+                          <div className="h-full flex flex-col items-center justify-center text-center gap-3 text-slate-400">
+                            <span className="text-4xl">💬</span>
+                            <div>
+                              <p className="font-semibold text-slate-600 text-sm">Tell the AI what to change</p>
+                              <p className="text-xs mt-1">Examples:</p>
+                            </div>
+                            <div className="grid grid-cols-1 gap-2 w-full max-w-sm text-left">
+                              {[
+                                "Make the project bullets more data-focused",
+                                "Emphasize leadership experience more in the work section",
+                                "Shorten the Skills section — keep only the top 6 skills",
+                                "Rewrite the Apple internship bullets to focus on Swift",
+                                "Remove the third project entirely",
+                              ].map((ex, i) => (
+                                <button
+                                  key={i}
+                                  onClick={() => setRefineInput(ex)}
+                                  className="text-left text-xs bg-white border border-slate-200 hover:border-violet-400 hover:bg-violet-50 text-slate-600 hover:text-violet-700 px-3 py-2 rounded-lg transition"
+                                >
+                                  &ldquo;{ex}&rdquo;
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        ) : (
+                          refineChatHistory.map((msg, i) => (
+                            <div
+                              key={i}
+                              className={`flex gap-2 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                            >
+                              {msg.role === 'assistant' && (
+                                <div className="w-7 h-7 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0 mt-0.5 text-sm">🤖</div>
+                              )}
+                              <div
+                                className={`max-w-[80%] px-3 py-2 rounded-xl text-sm leading-relaxed ${
+                                  msg.role === 'user'
+                                    ? 'bg-violet-600 text-white rounded-br-sm'
+                                    : msg.pdfUpdated
+                                    ? 'bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-bl-sm'
+                                    : 'bg-white border border-slate-200 text-slate-700 rounded-bl-sm'
+                                }`}
+                              >
+                                {msg.content}
+                              </div>
+                              {msg.role === 'user' && (
+                                <div className="w-7 h-7 rounded-full bg-violet-600 flex items-center justify-center flex-shrink-0 mt-0.5 text-xs font-bold text-white">You</div>
+                              )}
+                            </div>
+                          ))
+                        )}
+                        {refineLoading && (
+                          <div className="flex justify-start gap-2">
+                            <div className="w-7 h-7 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0 text-sm">🤖</div>
+                            <div className="bg-white border border-slate-200 px-4 py-2.5 rounded-xl rounded-bl-sm flex items-center gap-2">
+                              <svg className="animate-spin w-3.5 h-3.5 text-violet-500" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                              </svg>
+                              <span className="text-slate-500 text-xs">Editing resume &amp; recompiling PDF…</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Error bar */}
+                      {refineError && (
+                        <div className="px-4 py-2 bg-red-50 border-t border-red-200 text-xs text-red-700 flex items-start gap-2">
+                          <span className="font-bold flex-shrink-0">⚠</span>
+                          <span>{refineError}</span>
+                          <button onClick={() => setRefineError(null)} className="ml-auto text-red-400 hover:text-red-600 flex-shrink-0">✕</button>
+                        </div>
+                      )}
+
+                      {/* Context badge */}
+                      <div className="px-4 py-1.5 bg-violet-50 border-t border-violet-100 flex items-center gap-2 text-xs text-violet-600">
+                        <span className="font-semibold">Editing:</span>
+                        <span className="font-mono text-violet-700">
+                          {latexEditorTarget === 'resume' ? tailoringResult.filename : tailoringResult.coverLetterFilename}
+                        </span>
+                        {tailoringResult.coverLetterFilename && (
+                          <div className="ml-auto flex rounded overflow-hidden border border-violet-200 text-[10px]">
+                            <button
+                              onClick={() => { setLatexEditorTarget('resume'); setRefineChatHistory([]); }}
+                              className={`px-2 py-0.5 font-semibold transition ${latexEditorTarget === 'resume' ? 'bg-violet-600 text-white' : 'bg-white text-violet-600 hover:bg-violet-50'}`}
+                            >Resume</button>
+                            <button
+                              onClick={() => { setLatexEditorTarget('coverletter'); setRefineChatHistory([]); }}
+                              className={`px-2 py-0.5 font-semibold transition ${latexEditorTarget === 'coverletter' ? 'bg-violet-600 text-white' : 'bg-white text-violet-600 hover:bg-violet-50'}`}
+                            >Cover Letter</button>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Input row */}
+                      <div className="p-3 bg-white border-t border-slate-200 flex gap-2">
+                        <textarea
+                          value={refineInput}
+                          onChange={e => setRefineInput(e.target.value)}
+                          onKeyDown={e => {
+                            if (e.key === 'Enter' && !e.shiftKey && !refineLoading) {
+                              e.preventDefault();
+                              handleRefine();
+                            }
+                          }}
+                          disabled={refineLoading}
+                          rows={2}
+                          placeholder='Describe your change… e.g. "Focus the internship bullets more on data analysis"'
+                          className="flex-1 text-sm border border-slate-200 rounded-xl px-3 py-2 resize-none focus:outline-none focus:border-violet-500 disabled:opacity-50 placeholder:text-slate-400"
+                        />
+                        <button
+                          onClick={handleRefine}
+                          disabled={refineLoading || !refineInput.trim() || !latexEditorContent.trim()}
+                          className="flex-shrink-0 self-end bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-sm px-4 py-2.5 rounded-xl transition shadow flex items-center gap-1.5"
+                        >
+                          {refineLoading ? (
+                            <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                            </svg>
+                          ) : '↑'}
+                          {refineLoading ? '' : 'Apply'}
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Live PDF Previews */}
@@ -3216,7 +4123,8 @@ export default function AdminDashboard() {
                       <h4 className="font-bold text-slate-900 text-sm md:text-base">📄 Resume Preview</h4>
                       <div className="border-2 border-green-200 rounded-xl overflow-hidden bg-slate-100 shadow">
                         <iframe
-                          src={`/api/resume/download?file=${encodeURIComponent(tailoringResult.pdfFilename)}&t=${Date.now()}#view=FitH`}
+                          key={`resume-pdf-${pdfKey}`}
+                          src={`/api/resume/download?file=${encodeURIComponent(tailoringResult.pdfFilename)}&t=${pdfKey}#view=FitH`}
                           className="w-full h-[500px] md:h-[800px]"
                           title="Tailored Resume Preview"
                         />
@@ -3235,7 +4143,8 @@ export default function AdminDashboard() {
                       <h4 className="font-bold text-slate-900 text-sm md:text-base">✉️ Cover Letter Preview</h4>
                       <div className="border-2 border-blue-200 rounded-xl overflow-hidden bg-slate-100 shadow">
                         <iframe
-                          src={`/api/resume/download?file=${encodeURIComponent(tailoringResult.coverLetterPdfFilename)}&t=${Date.now()}#view=FitH`}
+                          key={`cl-pdf-${pdfKey}`}
+                          src={`/api/resume/download?file=${encodeURIComponent(tailoringResult.coverLetterPdfFilename)}&t=${pdfKey}#view=FitH`}
                           className="w-full h-[500px] md:h-[800px]"
                           title="Cover Letter Preview"
                         />
@@ -3244,6 +4153,36 @@ export default function AdminDashboard() {
                     </div>
                   )}
                 </div>
+
+                {/* ── Job Tracker Save Status ── */}
+                {tailoredSavedEntry && (
+                  <div className="bg-emerald-50 border border-emerald-300 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center gap-3">
+                    <div className="flex items-center gap-2 flex-1">
+                      <span className="text-2xl">✅</span>
+                      <div>
+                        <p className="font-bold text-emerald-800 text-sm">Saved to Job Tracker!</p>
+                        <p className="text-emerald-700 text-xs">
+                          {tailoredSavedEntry.company} — {tailoredSavedEntry.role?.substring(0, 60)}{tailoredSavedEntry.role?.length > 60 ? '…' : ''}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setActiveTab('jobtracker')}
+                      className="flex items-center gap-1.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold px-3 py-2 rounded-lg transition flex-shrink-0"
+                    >
+                      View in Job Tracker →
+                    </button>
+                  </div>
+                )}
+                {tailoredSaveError && (
+                  <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-start gap-2">
+                    <span className="text-red-500 font-bold">⚠</span>
+                    <div>
+                      <p className="font-bold text-red-700 text-sm">Job Tracker Save Failed</p>
+                      <p className="text-red-600 text-xs mt-0.5">{tailoredSaveError}</p>
+                    </div>
+                  </div>
+                )}
 
                 {/* Download Buttons */}
                 <div className="space-y-3">
@@ -3254,21 +4193,25 @@ export default function AdminDashboard() {
                     <h5 className="font-semibold text-slate-600 mb-2 text-xs uppercase tracking-wide">Resume</h5>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                       {tailoringResult.pdfCompiled && tailoringResult.pdfFilename && (
-                        <button
-                          onClick={() => downloadTexFile(tailoringResult.pdfFilename)}
+                        <a
+                          href={`/api/resume/download?file=${encodeURIComponent(tailoringResult.pdfFilename)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-4 py-3 rounded-xl font-bold hover:from-green-700 hover:to-emerald-700 transition flex items-center justify-center gap-2 shadow text-sm"
                         >
                           <Download className="w-4 h-4" />
-                          PDF Resume
-                        </button>
+                          View Resume PDF
+                        </a>
                       )}
-                      <button
-                        onClick={() => downloadTexFile(tailoringResult.filename)}
+                      <a
+                        href={`/api/resume/download?file=${encodeURIComponent(tailoringResult.filename)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="bg-blue-600 text-white px-4 py-3 rounded-xl font-semibold hover:bg-blue-700 transition flex items-center justify-center gap-2 text-sm"
                       >
                         <FileText className="w-4 h-4" />
                         LaTeX Source
-                      </button>
+                      </a>
                       <button
                         onClick={() => downloadAnalysis(
                           { job_analysis: tailoringResult.job_analysis, tailored_content: tailoringResult.tailored_content },
@@ -3288,21 +4231,25 @@ export default function AdminDashboard() {
                       <h5 className="font-semibold text-slate-600 mb-2 text-xs uppercase tracking-wide">Cover Letter</h5>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         {tailoringResult.coverLetterPdfCompiled && tailoringResult.coverLetterPdfFilename && (
-                          <button
-                            onClick={() => downloadTexFile(tailoringResult.coverLetterPdfFilename)}
+                          <a
+                            href={`/api/resume/download?file=${encodeURIComponent(tailoringResult.coverLetterPdfFilename)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-3 rounded-xl font-bold hover:from-blue-700 hover:to-indigo-700 transition flex items-center justify-center gap-2 shadow text-sm"
                           >
                             <Download className="w-4 h-4" />
-                            PDF Cover Letter
-                          </button>
+                            View Cover Letter PDF
+                          </a>
                         )}
-                        <button
-                          onClick={() => downloadTexFile(tailoringResult.coverLetterFilename)}
+                        <a
+                          href={`/api/resume/download?file=${encodeURIComponent(tailoringResult.coverLetterFilename)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           className="bg-indigo-600 text-white px-4 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition flex items-center justify-center gap-2 text-sm"
                         >
                           <FileText className="w-4 h-4" />
                           LaTeX Cover Letter
-                        </button>
+                        </a>
                       </div>
                     </div>
                   )}
@@ -3335,18 +4282,20 @@ export default function AdminDashboard() {
 
             {/* How It Works */}
             <div className="bg-white rounded-2xl shadow-sm p-4 md:p-5 admin-card">
-              <h3 className="text-base md:text-lg font-bold text-slate-900 mb-4">How It Works</h3>
-              <div className="space-y-3 text-slate-700">
+              <h3 className="text-base md:text-lg font-bold text-slate-900 mb-4">⚙️ How the AI Pipeline Works</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {[
-                  { n: "1", color: "purple", text: <><strong>AI analyzes</strong> the job description to extract required skills, keywords, and experience areas</> },
-                  { n: "2", color: "purple", text: <><strong>Selects the most relevant</strong> experiences and projects from your resume database</> },
-                  { n: "3", color: "purple", text: <><strong>Reframes bullet points</strong> to emphasize matching keywords while maintaining accuracy</> },
-                  { n: "4", color: "purple", text: <><strong>Generates a professional</strong> LaTeX resume optimized for ATS and human reviewers</> },
-                  { n: "5", color: "blue", text: <><strong>Creates a cover letter</strong> tailored to the job, highlighting your most relevant achievements</> },
-                ].map(({ n, color, text }) => (
-                  <div key={n} className="flex items-start gap-3">
-                    <div className={`bg-${color}-100 text-${color}-700 rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 font-bold text-xs`}>{n}</div>
-                    <p className="text-sm">{text}</p>
+                  { n: "1", emoji: "🔍", title: "Deep Job Analysis", text: "Extracts required skills, ATS keywords, must-haves, seniority level, and role focus from the job description" },
+                  { n: "2", emoji: "✍️", title: "Smart Selection + Tailoring", text: "Picks the most relevant experience and projects, then writes ATS-optimized, quantified bullets using STAR format" },
+                  { n: "3", emoji: "🎯", title: "Quality Check", text: "Scores ATS keyword coverage, bullet quality, and overall fit. Triggers a targeted refinement pass if score < 72" },
+                  { n: "4", emoji: "📄", title: "PDF Generation", text: "Compiles a pixel-perfect LaTeX resume and personalized cover letter — both downloadable as PDFs" },
+                ].map(({ n, emoji, title, text }) => (
+                  <div key={n} className="flex items-start gap-3 bg-slate-50 rounded-xl p-3 border border-slate-200">
+                    <div className="bg-purple-100 text-purple-700 rounded-full w-7 h-7 flex items-center justify-center flex-shrink-0 font-bold text-xs">{n}</div>
+                    <div>
+                      <p className="text-sm font-bold text-slate-800">{emoji} {title}</p>
+                      <p className="text-xs text-slate-500 mt-0.5">{text}</p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -3376,8 +4325,8 @@ export default function AdminDashboard() {
                   <div>
                     <h2 className="text-3xl font-bold">System Status</h2>
                     <p className="text-white/80 text-sm mt-1">
-                      {apiKeyStatus === 'valid' && 'All systems operational — Gemini is connected and responding.'}
-                      {apiKeyStatus === 'invalid' && 'Gemini API key is invalid or revoked. Follow the steps below to fix it.'}
+                      {apiKeyStatus === 'valid' && 'All systems operational — Anthropic Claude is connected and responding.'}
+                      {apiKeyStatus === 'invalid' && 'Anthropic API key is invalid or revoked. Follow the steps below to fix it.'}
                       {apiKeyStatus === 'checking' && 'Running diagnostics…'}
                       {apiKeyStatus === 'unknown' && 'Run a check to see the current API key status.'}
                     </p>
@@ -3397,27 +4346,27 @@ export default function AdminDashboard() {
             {/* ── Diagnostic Cards ── */}
             {apiKeyDiag && (
               <div className="grid md:grid-cols-3 gap-4">
-                {/* Gemini Test */}
+                {/* Anthropic Test */}
                 <div className={`bg-white rounded-xl shadow-sm p-6 border-2 ${
-                  apiKeyDiag.gemini_test?.ok ? 'border-green-300' : 'border-red-300'
+                  apiKeyDiag.anthropic_test?.ok ? 'border-green-300' : 'border-red-300'
                 }`}>
                   <div className="flex items-center gap-3 mb-4">
-                    {apiKeyDiag.gemini_test?.ok
+                    {apiKeyDiag.anthropic_test?.ok
                       ? <CheckCircle2 className="w-6 h-6 text-green-600" />
                       : <XCircle className="w-6 h-6 text-red-600" />}
-                    <h3 className="font-bold text-slate-900">Gemini Connection</h3>
+                    <h3 className="font-bold text-slate-900">Anthropic Claude Connection</h3>
                   </div>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-slate-500">Status</span>
-                      <span className={`font-semibold ${apiKeyDiag.gemini_test?.ok ? 'text-green-600' : 'text-red-600'}`}>
-                        {apiKeyDiag.gemini_test?.ok ? `HTTP ${apiKeyDiag.gemini_test.status} OK` : `HTTP ${apiKeyDiag.gemini_test?.status ?? '—'} Error`}
+                      <span className={`font-semibold ${apiKeyDiag.anthropic_test?.ok ? 'text-green-600' : 'text-red-600'}`}>
+                        {apiKeyDiag.anthropic_test?.ok ? `HTTP ${apiKeyDiag.anthropic_test.status} OK` : `HTTP ${apiKeyDiag.anthropic_test?.status ?? '—'} Error`}
                       </span>
                     </div>
-                    {!apiKeyDiag.gemini_test?.ok && (
+                    {!apiKeyDiag.anthropic_test?.ok && (
                       <div className="mt-3 p-3 bg-red-50 rounded-lg">
-                        <p className="text-red-700 text-xs font-medium">{apiKeyDiag.gemini_test?.error_code}</p>
-                        <p className="text-red-600 text-xs mt-1">{apiKeyDiag.gemini_test?.error_message}</p>
+                        <p className="text-red-700 text-xs font-medium">{apiKeyDiag.anthropic_test?.error_type}</p>
+                        <p className="text-red-600 text-xs mt-1">{apiKeyDiag.anthropic_test?.error_message}</p>
                       </div>
                     )}
                   </div>
@@ -3434,7 +4383,7 @@ export default function AdminDashboard() {
                       { label: 'Prefix', value: apiKeyDiag.key_diagnostics?.prefix_12 + '…' },
                       { label: 'Suffix', value: '…' + apiKeyDiag.key_diagnostics?.suffix_6 },
                       { label: 'Length', value: `${apiKeyDiag.key_diagnostics?.raw_length} chars` },
-                      { label: 'Format', value: apiKeyDiag.key_diagnostics?.starts_with_AIza ? 'AIza* ✓' : 'Invalid ✗' },
+                      { label: 'Format', value: apiKeyDiag.key_diagnostics?.starts_with_sk_ant ? 'sk-ant-* ✓' : 'Invalid ✗' },
                     ].map(({ label, value }) => (
                       <div key={label} className="flex justify-between">
                         <span className="text-slate-500">{label}</span>
@@ -3477,7 +4426,7 @@ export default function AdminDashboard() {
               <div className="bg-gradient-to-r from-slate-800 to-slate-900 p-6 text-white flex items-center gap-3">
                 <Terminal className="w-6 h-6" />
                 <div>
-                  <h3 className="text-xl font-bold">How to Change Your Gemini API Key</h3>
+                  <h3 className="text-xl font-bold">How to Change Your Anthropic API Key</h3>
                   <p className="text-slate-300 text-sm mt-1">Follow these steps exactly — takes under 2 minutes.</p>
                 </div>
               </div>
@@ -3488,15 +4437,15 @@ export default function AdminDashboard() {
                 <div className="flex gap-4">
                   <div className="flex-shrink-0 w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-sm">1</div>
                   <div>
-                    <h4 className="font-bold text-slate-900 mb-1">Get your new key from Google AI Studio</h4>
-                    <p className="text-slate-600 text-sm mb-2">Go to Google AI Studio and create or copy a new API key.</p>
+                    <h4 className="font-bold text-slate-900 mb-1">Get your new key from Anthropic Console</h4>
+                    <p className="text-slate-600 text-sm mb-2">Go to the Anthropic Console and create or copy a new API key.</p>
                     <a
-                      href="https://aistudio.google.com/app/apikey"
+                      href="https://console.anthropic.com/settings/keys"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-semibold text-sm underline underline-offset-2"
                     >
-                      aistudio.google.com/app/apikey ↗
+                      console.anthropic.com/settings/keys ↗
                     </a>
                   </div>
                 </div>
@@ -3511,7 +4460,7 @@ export default function AdminDashboard() {
                     <p className="text-slate-600 text-sm mb-3">Open the file at the project root and replace the key value:</p>
                     <div className="bg-slate-900 rounded-lg p-4 font-mono text-sm text-green-300">
                       <p className="text-slate-500 text-xs mb-2"># /Jawads Portfolio/.env.local</p>
-                      <p>GEMINI_API_KEY=<span className="text-yellow-300">AIzaSy...YOUR_NEW_KEY</span></p>
+                      <p>ANTHROPIC_API_KEY=<span className="text-yellow-300">sk-ant-...YOUR_NEW_KEY</span></p>
                     </div>
                     {apiKeyDiag?.env_file_diagnostics?.path && (
                       <p className="text-xs text-slate-400 mt-2">
@@ -3530,7 +4479,7 @@ export default function AdminDashboard() {
                       ⚠️ Check your shell config for a conflicting export
                     </h4>
                     <p className="text-slate-600 text-sm mb-3">
-                      If <code className="bg-slate-100 px-1 rounded text-xs">GEMINI_API_KEY</code> is exported in{' '}
+                      If <code className="bg-slate-100 px-1 rounded text-xs">ANTHROPIC_API_KEY</code> is exported in{' '}
                       <code className="bg-slate-100 px-1 rounded text-xs">~/.zshrc</code> or{' '}
                       <code className="bg-slate-100 px-1 rounded text-xs">~/.bash_profile</code>,
                       it <strong>overrides</strong> <code className="bg-slate-100 px-1 rounded text-xs">.env.local</code>.
@@ -3538,7 +4487,7 @@ export default function AdminDashboard() {
                     </p>
                     <div className="bg-slate-900 rounded-lg p-4 font-mono text-sm text-green-300 space-y-1">
                       <p><span className="text-slate-500"># Check if a shell export is shadowing .env.local</span></p>
-                      <p>grep -rn GEMINI_API_KEY ~/.zshrc ~/.zprofile ~/.bashrc ~/.bash_profile 2&gt;/dev/null</p>
+                      <p>grep -rn ANTHROPIC_API_KEY ~/.zshrc ~/.zprofile ~/.bashrc ~/.bash_profile 2&gt;/dev/null</p>
                     </div>
                     <p className="text-slate-600 text-sm mt-3">
                       If a line appears, <strong>remove or update it</strong> with your new key so both are in sync.
@@ -3561,7 +4510,7 @@ export default function AdminDashboard() {
                       <p className="text-slate-500 text-xs"># Standard restart (works once .zshrc export is removed)</p>
                       <p className="text-green-300">npm run dev</p>
                       <p className="text-slate-500 text-xs mt-3"># Emergency restart — forces .env.local regardless of shell exports</p>
-                      <p className="text-yellow-300">env -u GEMINI_API_KEY npm run dev</p>
+                      <p className="text-yellow-300">env -u ANTHROPIC_API_KEY npm run dev</p>
                     </div>
                   </div>
                 </div>
@@ -3929,14 +4878,26 @@ export default function AdminDashboard() {
                       <h3 className="text-lg font-bold">Application Pipeline</h3>
                       <span className="ml-2 text-xs bg-rose-500/30 text-rose-200 px-2 py-0.5 rounded-full font-semibold">{savedApplications.length} total</span>
                     </div>
-                    <button
-                      onClick={fetchSavedApplications}
-                      disabled={loadingApplications}
-                      className="text-slate-300 hover:text-white transition"
-                      title="Refresh"
-                    >
-                      <RefreshCw className={`w-4 h-4 ${loadingApplications ? 'animate-spin' : ''}`} />
-                    </button>
+                    <div className="flex items-center gap-3">
+                      {savedApplications.length > 0 && (
+                        <button
+                          onClick={handleClearAllApplications}
+                          className="flex items-center gap-1.5 text-xs font-semibold text-rose-300 hover:text-white bg-rose-500/20 hover:bg-rose-500/40 border border-rose-500/30 hover:border-rose-400/60 px-2.5 py-1 rounded-lg transition"
+                          title="Remove all applications"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                          Empty All
+                        </button>
+                      )}
+                      <button
+                        onClick={fetchSavedApplications}
+                        disabled={loadingApplications}
+                        className="text-slate-300 hover:text-white transition"
+                        title="Refresh"
+                      >
+                        <RefreshCw className={`w-4 h-4 ${loadingApplications ? 'animate-spin' : ''}`} />
+                      </button>
+                    </div>
                   </div>
 
                   {/* Status Filter Bar */}
@@ -4024,26 +4985,35 @@ export default function AdminDashboard() {
 
                               {/* Action buttons */}
                               <div className="flex items-center gap-1 flex-shrink-0">
-                                {app.resumeFilename && (
+                                {app.resumeFilename && app.resumeFilename.endsWith('.pdf') && (
                                   <button
-                                    onClick={() => window.open(`/api/resume/download?file=${encodeURIComponent(app.resumeFilename)}`, '_blank')}
-                                    className="p-1.5 rounded-lg text-slate-400 hover:text-green-700 hover:bg-green-50 transition"
-                                    title="Download Resume"
+                                    onClick={() => {
+                                      if (!isExpanded) setExpandedAppId(app.id);
+                                      setAppPdfPreview(appPdfPreview === `${app.id}:resume` ? null : `${app.id}:resume`);
+                                    }}
+                                    className={`p-1.5 rounded-lg transition ${appPdfPreview === `${app.id}:resume` ? 'text-green-700 bg-green-50' : 'text-slate-400 hover:text-green-700 hover:bg-green-50'}`}
+                                    title="View Resume PDF"
                                   >
                                     <FileText className="w-4 h-4" />
                                   </button>
                                 )}
-                                {app.coverLetterFilename && (
+                                {app.coverLetterFilename && app.coverLetterFilename.endsWith('.pdf') && (
                                   <button
-                                    onClick={() => window.open(`/api/resume/download?file=${encodeURIComponent(app.coverLetterFilename)}`, '_blank')}
-                                    className="p-1.5 rounded-lg text-slate-400 hover:text-blue-700 hover:bg-blue-50 transition"
-                                    title="Download Cover Letter"
+                                    onClick={() => {
+                                      if (!isExpanded) setExpandedAppId(app.id);
+                                      setAppPdfPreview(appPdfPreview === `${app.id}:coverletter` ? null : `${app.id}:coverletter`);
+                                    }}
+                                    className={`p-1.5 rounded-lg transition ${appPdfPreview === `${app.id}:coverletter` ? 'text-blue-700 bg-blue-50' : 'text-slate-400 hover:text-blue-700 hover:bg-blue-50'}`}
+                                    title="View Cover Letter PDF"
                                   >
                                     <Download className="w-4 h-4" />
                                   </button>
                                 )}
                                 <button
-                                  onClick={() => setExpandedAppId(isExpanded ? null : app.id)}
+                                  onClick={() => {
+                                    setExpandedAppId(isExpanded ? null : app.id);
+                                    if (isExpanded) setAppPdfPreview(null);
+                                  }}
                                   className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
                                   title={isExpanded ? 'Collapse' : 'Expand details'}
                                 >
@@ -4113,32 +5083,198 @@ export default function AdminDashboard() {
                                   </div>
                                 </div>
 
-                                {/* ── Resume & Cover Letter ── */}
-                                {(app.resumeFilename || app.coverLetterFilename) && (
-                                  <div>
-                                    <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-2 block">Documents Used</label>
-                                    <div className="flex flex-wrap gap-2">
-                                      {app.resumeFilename && (
+                                {/* ── AI Compatibility Test ── */}
+                                {(() => {
+                                  const isRunning = runningCompatibilityId === app.id;
+                                  const score = app.compatibilityScore ?? null;
+                                  const scoreColor = score === null ? 'text-slate-400' : score >= 75 ? 'text-green-600' : score >= 50 ? 'text-yellow-600' : 'text-red-600';
+                                  const scoreBg = score === null ? 'bg-slate-50 border-slate-200' : score >= 75 ? 'bg-green-50 border-green-200' : score >= 50 ? 'bg-yellow-50 border-yellow-200' : 'bg-red-50 border-red-200';
+                                  const scoreRing = score === null ? 'stroke-slate-300' : score >= 75 ? 'stroke-green-500' : score >= 50 ? 'stroke-yellow-500' : 'stroke-red-500';
+                                  const circumference = 2 * Math.PI * 30;
+                                  return (
+                                    <div className={`rounded-xl border p-4 ${scoreBg}`}>
+                                      <div className="flex items-center justify-between gap-4 flex-wrap">
+                                        <div className="flex items-center gap-4">
+                                          {/* Score ring */}
+                                          <div className="relative w-16 h-16 flex-shrink-0">
+                                            <svg className="w-16 h-16 -rotate-90" viewBox="0 0 72 72">
+                                              <circle cx="36" cy="36" r="30" fill="none" stroke="#e5e7eb" strokeWidth="8" />
+                                              <circle
+                                                cx="36" cy="36" r="30" fill="none"
+                                                className={scoreRing}
+                                                strokeWidth="8"
+                                                strokeDasharray={circumference}
+                                                strokeDashoffset={isRunning ? circumference : score !== null ? circumference - (score / 100) * circumference : circumference}
+                                                strokeLinecap="round"
+                                                style={isRunning ? { strokeDashoffset: circumference * 0.25, animation: 'spin 1s linear infinite', transformOrigin: 'center' } : {}}
+                                              />
+                                            </svg>
+                                            <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                              {isRunning ? (
+                                                <RefreshCw className="w-5 h-5 text-slate-400 animate-spin" />
+                                              ) : score !== null ? (
+                                                <>
+                                                  <span className={`text-lg font-black leading-none ${scoreColor}`}>{score}</span>
+                                                  <span className="text-[9px] text-slate-400">/100</span>
+                                                </>
+                                              ) : (
+                                                <span className="text-[10px] text-slate-400 font-bold text-center leading-tight">No<br/>Score</span>
+                                              )}
+                                            </div>
+                                          </div>
+                                          {/* Label */}
+                                          <div>
+                                            <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Compatibility Test</p>
+                                            {isRunning ? (
+                                              <p className="text-sm font-semibold text-slate-600 animate-pulse">Running AI analysis…</p>
+                                            ) : score !== null ? (
+                                              <>
+                                                <p className={`text-base font-black ${scoreColor}`}>{app.analysis?.compatibilityLabel || (score >= 75 ? 'Strong Match' : score >= 50 ? 'Partial Match' : 'Weak Match')}</p>
+                                                {app.analysis?.summary && <p className="text-xs text-slate-500 mt-0.5 max-w-xs">{app.analysis.summary}</p>}
+                                              </>
+                                            ) : (
+                                              <p className="text-sm text-slate-400">No compatibility score yet.</p>
+                                            )}
+                                          </div>
+                                        </div>
+                                        {/* Run button */}
                                         <button
-                                          onClick={() => window.open(`/api/resume/download?file=${encodeURIComponent(app.resumeFilename)}`, '_blank')}
-                                          className="flex items-center gap-2 px-4 py-2 bg-green-100 text-green-800 rounded-lg text-sm font-semibold hover:bg-green-200 transition border border-green-300"
+                                          onClick={() => handleRunCompatibilityTest(app)}
+                                          disabled={isRunning}
+                                          className="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-purple-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:from-violet-700 hover:to-purple-700 transition disabled:opacity-50 shadow-sm flex-shrink-0"
+                                        >
+                                          {isRunning ? (
+                                            <><RefreshCw className="w-3.5 h-3.5 animate-spin" /> Analyzing…</>
+                                          ) : (
+                                            <><Brain className="w-3.5 h-3.5" /> {score !== null ? 'Re-run Test' : 'Run Test'}</>
+                                          )}
+                                        </button>
+                                      </div>
+                                    </div>
+                                  );
+                                })()}
+
+                                {/* ── Tailored Documents ── */}
+                                <div className="space-y-3">
+                                  <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wide block">Tailored Documents</label>
+                                  <div className="flex flex-wrap gap-2">
+                                    {app.resumeFilename ? (
+                                      app.resumeFilename.endsWith('.pdf') ? (
+                                        <button
+                                          onClick={() => setAppPdfPreview(appPdfPreview === `${app.id}:resume` ? null : `${app.id}:resume`)}
+                                          className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition shadow-sm ${appPdfPreview === `${app.id}:resume` ? 'bg-green-800 text-white' : 'bg-green-600 text-white hover:bg-green-700'}`}
                                         >
                                           <FileText className="w-4 h-4" />
-                                          {app.resumeFilename.endsWith('.pdf') ? '📄 View Resume PDF' : '📄 Download Resume'}
+                                          {appPdfPreview === `${app.id}:resume` ? '✕ Close Resume PDF' : '📄 View Resume PDF'}
                                         </button>
-                                      )}
-                                      {app.coverLetterFilename && (
+                                      ) : (
+                                        <a
+                                          href={`/api/resume/download/?file=${encodeURIComponent(app.resumeFilename)}`}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="flex items-center gap-2 px-4 py-2.5 bg-green-600 text-white rounded-lg text-sm font-semibold hover:bg-green-700 transition shadow-sm"
+                                        >
+                                          <FileText className="w-4 h-4" />
+                                          📄 Download Resume (.tex)
+                                        </a>
+                                      )
+                                    ) : (
+                                      <span className="flex items-center gap-2 px-4 py-2.5 bg-slate-100 text-slate-400 rounded-lg text-sm border border-slate-200">
+                                        <FileText className="w-4 h-4" />
+                                        No Resume Saved
+                                      </span>
+                                    )}
+                                    {app.coverLetterFilename ? (
+                                      app.coverLetterFilename.endsWith('.pdf') ? (
                                         <button
-                                          onClick={() => window.open(`/api/resume/download?file=${encodeURIComponent(app.coverLetterFilename)}`, '_blank')}
-                                          className="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-800 rounded-lg text-sm font-semibold hover:bg-blue-200 transition border border-blue-300"
+                                          onClick={() => setAppPdfPreview(appPdfPreview === `${app.id}:coverletter` ? null : `${app.id}:coverletter`)}
+                                          className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition shadow-sm ${appPdfPreview === `${app.id}:coverletter` ? 'bg-blue-800 text-white' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
                                         >
                                           <Download className="w-4 h-4" />
-                                          {app.coverLetterFilename.endsWith('.pdf') ? '📝 View Cover Letter PDF' : '📝 Download Cover Letter'}
+                                          {appPdfPreview === `${app.id}:coverletter` ? '✕ Close Cover Letter PDF' : '📝 View Cover Letter PDF'}
                                         </button>
-                                      )}
-                                    </div>
+                                      ) : (
+                                        <a
+                                          href={`/api/resume/download/?file=${encodeURIComponent(app.coverLetterFilename)}`}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition shadow-sm"
+                                        >
+                                          <Download className="w-4 h-4" />
+                                          📝 Download Cover Letter (.tex)
+                                        </a>
+                                      )
+                                    ) : (
+                                      <span className="flex items-center gap-2 px-4 py-2.5 bg-slate-100 text-slate-400 rounded-lg text-sm border border-slate-200">
+                                        <Download className="w-4 h-4" />
+                                        No Cover Letter Saved
+                                      </span>
+                                    )}
+                                    <button
+                                      onClick={() => {
+                                        setJobDescription(app.jobDescription || '');
+                                        setTailorCompany(app.company || '');
+                                        setTailorRole(app.role || '');
+                                        setActiveTab('resume');
+                                      }}
+                                      className="flex items-center gap-2 px-4 py-2.5 bg-violet-100 text-violet-800 rounded-lg text-sm font-semibold hover:bg-violet-200 transition border border-violet-300"
+                                    >
+                                      🔄 Re-tailor Resume
+                                    </button>
                                   </div>
-                                )}
+
+                                  {/* ── Inline PDF Viewer (Resume) ── */}
+                                  {appPdfPreview === `${app.id}:resume` && app.resumeFilename?.endsWith('.pdf') && (
+                                    <div className="space-y-2">
+                                      <div className="flex items-center justify-between">
+                                        <p className="text-xs font-bold text-green-700 uppercase tracking-wide flex items-center gap-1">
+                                          <FileText className="w-3.5 h-3.5" /> Resume Preview
+                                        </p>
+                                        <a
+                                          href={`/api/resume/download/?file=${encodeURIComponent(app.resumeFilename)}`}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="text-xs text-green-700 hover:text-green-900 underline font-semibold"
+                                        >
+                                          Open in new tab ↗
+                                        </a>
+                                      </div>
+                                      <div className="border-2 border-green-200 rounded-xl overflow-hidden bg-slate-100 shadow">
+                                        <iframe
+                                          src={`/api/resume/download/?file=${encodeURIComponent(app.resumeFilename)}&t=${Date.now()}#view=FitH`}
+                                          className="w-full h-[600px]"
+                                          title="Resume PDF Preview"
+                                        />
+                                      </div>
+                                    </div>
+                                  )}
+
+                                  {/* ── Inline PDF Viewer (Cover Letter) ── */}
+                                  {appPdfPreview === `${app.id}:coverletter` && app.coverLetterFilename?.endsWith('.pdf') && (
+                                    <div className="space-y-2">
+                                      <div className="flex items-center justify-between">
+                                        <p className="text-xs font-bold text-blue-700 uppercase tracking-wide flex items-center gap-1">
+                                          <Download className="w-3.5 h-3.5" /> Cover Letter Preview
+                                        </p>
+                                        <a
+                                          href={`/api/resume/download/?file=${encodeURIComponent(app.coverLetterFilename)}`}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="text-xs text-blue-700 hover:text-blue-900 underline font-semibold"
+                                        >
+                                          Open in new tab ↗
+                                        </a>
+                                      </div>
+                                      <div className="border-2 border-blue-200 rounded-xl overflow-hidden bg-slate-100 shadow">
+                                        <iframe
+                                          src={`/api/resume/download/?file=${encodeURIComponent(app.coverLetterFilename)}&t=${Date.now()}#view=FitH`}
+                                          className="w-full h-[600px]"
+                                          title="Cover Letter PDF Preview"
+                                        />
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
 
                                 {/* ── AI Verdict ── */}
                                 {app.analysis?.criticalVerdict && (
@@ -4203,6 +5339,98 @@ export default function AdminDashboard() {
                                     </div>
                                   )}
                                 </div>
+
+                                {/* ── Application Q&A ── */}
+                                {(() => {
+                                  const isGenerating = qaLoadingId === app.id;
+                                  const history: any[] = app.qaHistory || [];
+                                  const currentInput = qaInputs[app.id] || '';
+
+                                  return (
+                                    <div className="rounded-xl border border-violet-200 bg-gradient-to-br from-violet-50 to-purple-50 overflow-hidden">
+                                      {/* Header */}
+                                      <div className="bg-gradient-to-r from-violet-700 to-purple-700 px-4 py-3 flex items-center gap-2">
+                                        <Brain className="w-4 h-4 text-violet-200" />
+                                        <div>
+                                          <p className="text-white font-bold text-sm">Application Q&amp;A Assistant</p>
+                                          <p className="text-violet-200 text-[11px]">Paste any question from the application — AI answers using your real background tailored to this job</p>
+                                        </div>
+                                      </div>
+
+                                      <div className="p-4 space-y-3">
+                                        {/* Input */}
+                                        <div>
+                                          <label className="text-[11px] font-bold text-violet-700 uppercase tracking-wide mb-1.5 block">Application Question</label>
+                                          <textarea
+                                            rows={3}
+                                            value={currentInput}
+                                            onChange={(e) => setQaInputs(prev => ({ ...prev, [app.id]: e.target.value }))}
+                                            placeholder={`e.g. "Tell me about a time you had to solve a difficult problem under pressure." or "Why do you want to work at ${app.company}?"`}
+                                            disabled={isGenerating}
+                                            className="w-full border border-violet-200 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-violet-400 focus:border-transparent resize-none placeholder:text-slate-300 disabled:opacity-60"
+                                          />
+                                        </div>
+
+                                        <button
+                                          onClick={() => handleGenerateApplicationResponse(app)}
+                                          disabled={isGenerating || !currentInput.trim()}
+                                          className="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-purple-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:from-violet-700 hover:to-purple-700 transition disabled:opacity-50 shadow-sm"
+                                        >
+                                          {isGenerating ? (
+                                            <><RefreshCw className="w-3.5 h-3.5 animate-spin" /> Crafting your response…</>
+                                          ) : (
+                                            <><Sparkles className="w-3.5 h-3.5" /> Generate Response</>
+                                          )}
+                                        </button>
+
+                                        {/* Q&A History */}
+                                        {history.length > 0 && (
+                                          <div className="space-y-3 pt-1">
+                                            <p className="text-[11px] font-bold text-violet-700 uppercase tracking-wide">{history.length} saved response{history.length !== 1 ? 's' : ''}</p>
+                                            {history.map((entry: any, i: number) => (
+                                              <div key={i} className="bg-white rounded-xl border border-violet-100 overflow-hidden shadow-sm">
+                                                {/* Question */}
+                                                <div className="px-4 py-2.5 border-b border-violet-50 flex items-start gap-2">
+                                                  <span className="text-violet-400 font-black text-xs mt-0.5 flex-shrink-0">Q</span>
+                                                  <p className="text-slate-700 text-sm font-semibold leading-snug">{entry.q}</p>
+                                                </div>
+                                                {/* Answer */}
+                                                <div className="px-4 py-3">
+                                                  <div className="flex items-start gap-2">
+                                                    <span className="text-green-500 font-black text-xs mt-0.5 flex-shrink-0">A</span>
+                                                    <p className="text-slate-700 text-sm leading-relaxed flex-1 whitespace-pre-wrap">{entry.a}</p>
+                                                  </div>
+                                                  <div className="flex items-center justify-between mt-3 pt-2 border-t border-slate-50">
+                                                    <span className="text-[10px] text-slate-300">
+                                                      {entry.createdAt ? new Date(entry.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : ''}
+                                                    </span>
+                                                    <div className="flex items-center gap-1.5">
+                                                      <button
+                                                        onClick={() => navigator.clipboard.writeText(entry.a)}
+                                                        className="text-[11px] text-slate-400 hover:text-violet-600 font-semibold flex items-center gap-1 transition px-2 py-1 rounded hover:bg-violet-50"
+                                                      >
+                                                        <FileText className="w-3 h-3" /> Copy
+                                                      </button>
+                                                      <button
+                                                        onClick={() => {
+                                                          const updated = history.filter((_: any, idx: number) => idx !== i);
+                                                          handleUpdateApplication(app.id, { qaHistory: updated });
+                                                        }}
+                                                        className="text-[11px] text-slate-300 hover:text-red-500 font-semibold flex items-center gap-1 transition px-2 py-1 rounded hover:bg-red-50"
+                                                      >
+                                                        <Trash2 className="w-3 h-3" /> Delete
+                                                      </button>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            ))}
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  );
+                                })()}
 
                                 {/* ── Notes ── */}
                                 <div>

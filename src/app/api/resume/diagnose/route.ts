@@ -7,15 +7,14 @@ export const dynamic = 'force-dynamic';
 /**
  * GET /api/resume/diagnose
  *
- * Comprehensive key & environment diagnostic for Gemini.
+ * Comprehensive key & environment diagnostic for Anthropic.
  * Shows EXACTLY what process.env sees at runtime (never exposes the full key).
  */
 export async function GET() {
-  // ─── 1. Inspect the raw env var ────────────────────────────────────────────
-  const raw = process.env.GEMINI_API_KEY ?? '';
+  // ─── 1. Inspect the raw env var ─────────────────────────────────────────────
+  const raw = process.env.ANTHROPIC_API_KEY ?? '';
   const trimmed = raw.trim().replace(/^["']|["']$/g, '');
 
-  // Character-level forensics (no full key ever returned)
   const charCodes = Array.from(raw.substring(0, 20)).map((c) => ({
     char: c === '\n' ? '\\n' : c === '\r' ? '\\r' : c === '\t' ? '\\t' : c,
     code: c.charCodeAt(0),
@@ -26,7 +25,7 @@ export async function GET() {
     raw_length: raw.length,
     trimmed_length: trimmed.length,
     has_trim_diff: raw.length !== trimmed.length,
-    starts_with_AIza: trimmed.startsWith('AIza'),
+    starts_with_sk_ant: trimmed.startsWith('sk-ant-'),
     prefix_12: trimmed.substring(0, 12),
     suffix_6: trimmed.slice(-6),
     first_20_char_codes: charCodes,
@@ -37,15 +36,15 @@ export async function GET() {
     has_spaces: raw !== raw.trim(),
   };
 
-  // ─── 2. Inspect the .env.local file on disk ─────────────────────────────────
+  // ─── 2. Inspect the .env.local file on disk ──────────────────────────────────
   let envFileDiag: Record<string, any> = { exists: false };
   try {
     const envPath = path.join(process.cwd(), '.env.local');
     if (fs.existsSync(envPath)) {
       const content = fs.readFileSync(envPath, 'utf-8');
       const lines = content.split('\n');
-      const keyLine = lines.find((l) => l.startsWith('GEMINI_API_KEY='));
-      const fileKey = keyLine ? keyLine.replace('GEMINI_API_KEY=', '').trim() : '';
+      const keyLine = lines.find((l) => l.startsWith('ANTHROPIC_API_KEY='));
+      const fileKey = keyLine ? keyLine.replace('ANTHROPIC_API_KEY=', '').trim() : '';
       envFileDiag = {
         exists: true,
         path: envPath,
@@ -62,13 +61,17 @@ export async function GET() {
     envFileDiag = { exists: false, error: e.message };
   }
 
-  // ─── 3. Test Gemini connectivity with the runtime key ───────────────────────
-  let geminiDiag: Record<string, any> = { tested: false };
+  // ─── 3. Test Anthropic connectivity with the runtime key ──────────────────────
+  let anthropicDiag: Record<string, any> = { tested: false };
   if (trimmed) {
     try {
-      // Test by hitting the models list endpoint
-      const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${trimmed}`);
-      geminiDiag = {
+      const resp = await fetch('https://api.anthropic.com/v1/models', {
+        headers: {
+          'x-api-key': trimmed,
+          'anthropic-version': '2023-06-01',
+        },
+      });
+      anthropicDiag = {
         tested: true,
         status: resp.status,
         ok: resp.ok,
@@ -76,22 +79,21 @@ export async function GET() {
       };
       if (!resp.ok) {
         const body = await resp.json().catch(() => ({}));
-        geminiDiag.error_code = body?.error?.code;
-        geminiDiag.error_message = body?.error?.message?.substring(0, 120);
+        anthropicDiag.error_type = body?.error?.type;
+        anthropicDiag.error_message = body?.error?.message?.substring(0, 120);
       }
     } catch (e: any) {
-      geminiDiag = { tested: true, fetch_error: e.message };
+      anthropicDiag = { tested: true, fetch_error: e.message };
     }
   }
 
-  // ─── 4. Process environment source clues ───────────────────────────────────
+  // ─── 4. Process environment source clues ────────────────────────────────────
   const envSourceClues = {
     node_env: process.env.NODE_ENV,
     next_public_app_url: process.env.NEXT_PUBLIC_APP_URL,
     cwd: process.cwd(),
     loaded_from_env_local: envFileDiag.exists && envFileDiag.env_key_suffix_matches_file,
     runtime_key_suffix_differs_from_file: !envFileDiag.env_key_suffix_matches_file,
-    // If the runtime key differs from .env.local, a shell/system env var is winning
     likely_source:
       envFileDiag.env_key_suffix_matches_file
         ? '.env.local  ✅'
@@ -100,12 +102,12 @@ export async function GET() {
 
   return NextResponse.json({
     summary:
-      geminiDiag.ok === true
-        ? '✅ Gemini key is VALID and working'
-        : `❌ Gemini key is INVALID — ${geminiDiag.error_code ?? geminiDiag.fetch_error ?? 'unknown error'}`,
+      anthropicDiag.ok === true
+        ? '✅ Anthropic key is VALID and working'
+        : `❌ Anthropic key is INVALID — ${anthropicDiag.error_type ?? anthropicDiag.fetch_error ?? 'unknown error'}`,
     key_diagnostics: keyDiag,
     env_file_diagnostics: envFileDiag,
-    gemini_test: geminiDiag,
+    anthropic_test: anthropicDiag,
     env_source_clues: envSourceClues,
   });
 }

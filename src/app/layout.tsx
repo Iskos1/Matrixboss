@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { siteMetadata } from "@/lib/data";
+import ClientLayout from "@/components/ClientLayout";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,7 +26,7 @@ export default function RootLayout({
         className={`${geistSans.variable} font-sans antialiased bg-slate-50 text-slate-900`}
         style={{ fontFamily: "var(--font-geist-sans), system-ui, sans-serif" }}
       >
-        {children}
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );

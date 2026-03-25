@@ -1,25 +1,21 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { DataProcessingService } from "@/lib/services/data-processing-service";
-import { handleApiError } from "@/lib/utils/error-utils";
+import { handleError, badRequest, json } from "@/lib/api/responses";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { text, category } = body;
 
-    if (!text || !text.trim()) {
-      return NextResponse.json(
-        { error: "Text content is required" },
-        { status: 400 }
-      );
+    if (!text?.trim()) {
+      return badRequest("Text content is required");
     }
 
-    const service = new DataProcessingService();
-    const data = await service.processText(text, category || 'auto');
+    const service = DataProcessingService.getInstance();
+    const data = await service.processText(text, category || "auto");
 
-    return NextResponse.json({ success: true, data });
-  } catch (error: any) {
-    console.error('Processing error:', error);
-    return handleApiError(error, "Failed to process text");
+    return json({ success: true, data });
+  } catch (error) {
+    return handleError(error, "Failed to process text");
   }
 }

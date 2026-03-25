@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 import { getProjectRoot } from '@/lib/utils/file-utils';
+import { handleError, badRequest, notFound, json } from '@/lib/api/responses';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,9 +26,9 @@ function writeTracker(data: any) {
 export async function GET() {
   try {
     const tracker = readTracker();
-    return NextResponse.json(tracker);
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return json(tracker);
+  } catch (error) {
+    return handleError(error, 'Failed to read job tracker');
   }
 }
 
@@ -35,18 +36,10 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const {
-      company,
-      role,
-      jobDescription,
-      resumeFilename,
-      coverLetterFilename,
-      compatibilityScore,
-      analysis,
-    } = body;
+    const { company, role, jobDescription, resumeFilename, coverLetterFilename, compatibilityScore, analysis } = body;
 
     if (!jobDescription) {
-      return NextResponse.json({ error: 'jobDescription is required' }, { status: 400 });
+      return badRequest('jobDescription is required');
     }
 
     const tracker = readTracker();
@@ -63,33 +56,32 @@ export async function POST(request: NextRequest) {
       analysis: analysis || null,
     };
 
-    tracker.applications.unshift(newApplication); // newest first
+    tracker.applications.unshift(newApplication);
     writeTracker(tracker);
 
-    return NextResponse.json({ success: true, application: newApplication });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return json({ success: true, application: newApplication });
+  } catch (error) {
+    return handleError(error, 'Failed to save application');
   }
 }
 
-// PATCH /api/jobs — update status, company, role, or notes on an application
+// PATCH /api/jobs — update an application
 export async function PATCH(request: NextRequest) {
   try {
     const body = await request.json();
     const { id, ...updates } = body;
 
     if (!id) {
-      return NextResponse.json({ error: 'id is required' }, { status: 400 });
+      return badRequest('id is required');
     }
 
     const tracker = readTracker();
     const idx = tracker.applications.findIndex((a: any) => a.id === id);
     if (idx === -1) {
-      return NextResponse.json({ error: 'Application not found' }, { status: 404 });
+      return notFound('Application not found');
     }
 
-    // Merge only allowed fields
-    const allowed = ['applicationStatus', 'company', 'role', 'notes'];
+    const allowed = ['applicationStatus', 'company', 'role', 'notes', 'qaHistory', 'compatibilityScore', 'analysis', 'resumeFilename', 'coverLetterFilename'];
     for (const key of allowed) {
       if (key in updates) {
         tracker.applications[idx][key] = updates[key];
@@ -98,20 +90,19 @@ export async function PATCH(request: NextRequest) {
     tracker.applications[idx].updatedAt = new Date().toISOString();
 
     writeTracker(tracker);
-    return NextResponse.json({ success: true, application: tracker.applications[idx] });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return json({ success: true, application: tracker.applications[idx] });
+  } catch (error) {
+    return handleError(error, 'Failed to update application');
   }
 }
 
-// DELETE /api/jobs?id=job_xxx — delete an application
+// DELETE /api/jobs?id=job_xxx
 export async function DELETE(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get('id');
+    const id = new URL(request.url).searchParams.get('id');
 
     if (!id) {
-      return NextResponse.json({ error: 'id is required' }, { status: 400 });
+      return badRequest('id is required');
     }
 
     const tracker = readTracker();
@@ -119,12 +110,12 @@ export async function DELETE(request: NextRequest) {
     tracker.applications = tracker.applications.filter((a: any) => a.id !== id);
 
     if (tracker.applications.length === before) {
-      return NextResponse.json({ error: 'Application not found' }, { status: 404 });
+      return notFound('Application not found');
     }
 
     writeTracker(tracker);
-    return NextResponse.json({ success: true });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return json({ success: true });
+  } catch (error) {
+    return handleError(error, 'Failed to delete application');
   }
 }

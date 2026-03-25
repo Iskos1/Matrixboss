@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle2, Layers, Zap } from "lucide-react";
 
 interface Path {
@@ -58,19 +57,10 @@ export default function PathSelector({
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="py-8 sm:py-12 px-4 sm:px-6"
-    >
+    <div className="py-8 sm:py-12 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto">
         {/* Hero Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-10 sm:mb-14"
-        >
+        <div className="text-center mb-10 sm:mb-14">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-100 text-purple-700 text-sm font-medium mb-6">
             <Zap className="w-4 h-4" />
             Learn by Building Real Projects
@@ -82,15 +72,11 @@ export default function PathSelector({
             Master in-demand skills through structured, hands-on projects.
             Go from beginner to advanced with guided learning paths.
           </p>
-        </motion.div>
+        </div>
 
         {/* No results */}
         {searchQuery && visiblePaths.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-16"
-          >
+          <div className="text-center py-16">
             <div className="text-5xl mb-4">🔍</div>
             <h2 className="text-xl font-semibold text-slate-900 mb-2">
               No paths match &ldquo;{searchQuery}&rdquo;
@@ -98,7 +84,7 @@ export default function PathSelector({
             <p className="text-slate-500">
               Try a different search term or browse all paths.
             </p>
-          </motion.div>
+          </div>
         )}
 
         {/* Path Cards */}
@@ -114,13 +100,8 @@ export default function PathSelector({
             const bgGradient = pathBgGradients[path.id] || "from-slate-50 to-slate-100";
 
             return (
-              <motion.div
+              <div
                 key={path.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1, duration: 0.4 }}
-                whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                whileTap={{ scale: 0.98 }}
                 className="group relative bg-white rounded-2xl shadow-md border border-slate-200/80 overflow-hidden cursor-pointer hover:shadow-xl transition-shadow duration-300"
                 onClick={() => onSelectPath(path.id)}
               >
@@ -181,11 +162,9 @@ export default function PathSelector({
                   {isStarted && (
                     <div className="mb-4">
                       <div className="w-full bg-slate-100 rounded-full h-1.5">
-                        <motion.div
+                        <div
                           className={`h-1.5 rounded-full bg-gradient-to-r ${gradient}`}
-                          initial={{ width: 0 }}
-                          animate={{ width: `${progressPercent}%` }}
-                          transition={{ duration: 0.8, delay: index * 0.1 }}
+                          style={{ width: `${progressPercent}%` }}
                         />
                       </div>
                       <p className="text-xs text-slate-400 mt-1.5">
@@ -212,23 +191,18 @@ export default function PathSelector({
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>
 
         {/* Bottom encouragement */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="text-center mt-12 sm:mt-16"
-        >
+        <div className="text-center mt-12 sm:mt-16">
           <p className="text-sm text-slate-400">
             🎯 Each path includes easy → medium → hard projects with step-by-step guides, code examples, and curated resources.
           </p>
-        </motion.div>
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

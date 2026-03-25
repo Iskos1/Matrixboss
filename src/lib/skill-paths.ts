@@ -41,17 +41,3 @@ const typedData = skillPathsData as SkillPathsData;
 
 // Export the paths
 export const skillPaths: SkillPath[] = typedData.paths;
-
-// Helper function to get a path by ID
-export function getPathById(pathId: string): SkillPath | undefined {
-  return skillPaths.find((p) => p.id === pathId);
-}
-
-// Helper function to get a project level
-export function getProjectLevel(
-  pathId: string,
-  level: string
-): ProjectLevel | undefined {
-  const path = getPathById(pathId);
-  return path?.levels.find((l) => l.level === level);
-}

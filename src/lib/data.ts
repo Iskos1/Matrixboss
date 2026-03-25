@@ -12,6 +12,7 @@ export interface Profile {
   email: string;
   location: string;
   availability: string;
+  avatar?: string; // Path to profile photo, e.g. "/profile.jpg"
 }
 
 export interface Position {

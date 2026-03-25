@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState } from "react";
 import { Sparkles, X, Lightbulb, Code2, FileText, Zap, Loader2 } from "lucide-react";
 
 interface ProjectEnhancerProps {
@@ -59,34 +58,25 @@ export default function ProjectEnhancer({ project }: ProjectEnhancerProps) {
   };
 
   return (
-    <>
+    <React.Fragment>
       <button
         onClick={handleOpen}
         className="inline-flex items-center gap-2 text-sm font-bold text-purple-700 bg-gradient-to-r from-purple-50 to-indigo-50 hover:from-purple-100 hover:to-indigo-100 px-4 py-2 rounded-xl transition-all duration-300 border-2 border-purple-200 hover:border-purple-300 hover:shadow-md hover:scale-105"
       >
-        <Sparkles size={16} className="animate-pulse" />
+        <Sparkles size={16} />
         Enhance with AI
       </button>
 
-      <AnimatePresence mode="wait">
-        {isOpen && (
+      {isOpen && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
+            <div
               onClick={handleClose}
-              className="absolute inset-0 bg-black/70 backdrop-blur-md"
+              className="absolute inset-0 bg-slate-900/80"
             />
             
             {/* Modal */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ duration: 0.3, ease: [0.21, 0.47, 0.32, 0.98] }}
+            <div
               onClick={(e) => e.stopPropagation()}
               className="relative w-full max-w-3xl bg-white rounded-3xl shadow-2xl overflow-hidden max-h-[85vh] flex flex-col"
             >
@@ -143,16 +133,12 @@ export default function ProjectEnhancer({ project }: ProjectEnhancerProps) {
                     </button>
                   </div>
                 ) : advice ? (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4 }}
+                  <div
                     className="space-y-6"
                   >
                     {/* Wow Factor */}
                     <div className="relative overflow-hidden rounded-2xl">
                       <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 opacity-90" />
-                      <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,.05)_50%,transparent_75%)] bg-[length:250%_250%] animate-gradient" />
                       <div className="relative p-6 text-white">
                         <div className="flex items-start gap-4">
                           <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl">
@@ -226,7 +212,7 @@ export default function ProjectEnhancer({ project }: ProjectEnhancerProps) {
                         ))}
                       </ul>
                     </div>
-                  </motion.div>
+                  </div>
                 ) : null}
               </div>
 
@@ -244,10 +230,9 @@ export default function ProjectEnhancer({ project }: ProjectEnhancerProps) {
                   </button>
                 </div>
               )}
-            </motion.div>
+            </div>
           </div>
         )}
-      </AnimatePresence>
-    </>
+    </React.Fragment>
   );
 }

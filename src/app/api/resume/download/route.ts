@@ -1,56 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { fileExists, joinPath } from '@/lib/utils/file-utils';
 import { FILE_PATTERNS, CONTENT_TYPES, PATHS } from '@/lib/constants';
-import { handleApiError } from '@/lib/utils/error-utils';
+import { handleError, badRequest, notFound } from '@/lib/api/responses';
 import fs from 'fs';
 
 export async function GET(request: NextRequest) {
   try {
-    const searchParams = request.nextUrl.searchParams;
-    const filename = searchParams.get('file');
+    const filename = request.nextUrl.searchParams.get('file');
 
     if (!filename) {
-      return NextResponse.json(
-        { error: 'Filename is required' },
-        { status: 400 }
-      );
+      return badRequest('Filename is required');
     }
 
-    // Security: Only allow downloading files that match the pattern
+    // Security: Only allow downloading files that match the safe pattern
     if (!FILE_PATTERNS.SAFE_DOWNLOAD.test(filename)) {
-      return NextResponse.json(
-        { error: 'Invalid filename' },
-        { status: 400 }
-      );
+      return badRequest('Invalid filename');
     }
 
     let filePath: string;
 
-    // If it's a template file, look in src/templates/
     if (filename === 'resume_template.tex' || filename === 'resume_template.pdf') {
       filePath = joinPath(PATHS.RESUME_TEMPLATE.replace('.tex', filename.includes('.pdf') ? '.pdf' : '.tex'));
     } else {
-      // First check generated/ directory
       const generatedPath = joinPath('generated', filename);
-      if (fileExists(generatedPath)) {
+      const generatedResumesPath = joinPath('generated_resumes', filename);
+      
+      if (fileExists(generatedResumesPath)) {
+        filePath = generatedResumesPath;
+      } else if (fileExists(generatedPath)) {
         filePath = generatedPath;
       } else {
-        // Fallback to root (legacy support)
         filePath = joinPath(filename);
       }
     }
 
-    // Check if file exists
     if (!fileExists(filePath)) {
-      return NextResponse.json(
-        { error: 'File not found' },
-        { status: 404 }
-      );
+      return notFound('File not found');
     }
 
-    // Determine content type
     let contentType: string;
-    
     if (filename.endsWith('.pdf')) {
       contentType = CONTENT_TYPES.PDF;
     } else if (filename.endsWith('.json')) {
@@ -59,24 +47,66 @@ export async function GET(request: NextRequest) {
       contentType = CONTENT_TYPES.TEXT;
     }
 
-    // Read file as buffer
     const fileContent = fs.readFileSync(filePath);
-
-    // For PDFs in preview mode, display inline; otherwise download
-    const disposition = filename.endsWith('.pdf') 
-      ? 'inline' 
+    const disposition = filename.endsWith('.pdf')
+      ? `inline; filename="${filename}"`
       : `attachment; filename="${filename}"`;
 
-    return new NextResponse(fileContent as unknown as BodyInit, {
+    return new NextResponse(new Uint8Array(fileContent), {
       status: 200,
       headers: {
         'Content-Type': contentType,
         'Content-Disposition': disposition,
         'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'X-Content-Type-Options': 'nosniff',
       },
     });
+  } catch (error) {
+    return handleError(error, 'Failed to download file');
+  }
+}
 
-  } catch (error: any) {
-    return handleApiError(error, 'Failed to download file');
+export async function HEAD(request: NextRequest) {
+  try {
+    const filename = request.nextUrl.searchParams.get('file');
+
+    if (!filename) {
+      return new NextResponse(null, { status: 400 });
+    }
+
+    if (!FILE_PATTERNS.SAFE_DOWNLOAD.test(filename)) {
+      return new NextResponse(null, { status: 400 });
+    }
+
+    let filePath: string;
+
+    if (filename === 'resume_template.tex' || filename === 'resume_template.pdf') {
+      filePath = joinPath(PATHS.RESUME_TEMPLATE.replace('.tex', filename.includes('.pdf') ? '.pdf' : '.tex'));
+    } else {
+      const generatedPath = joinPath('generated', filename);
+      const generatedResumesPath = joinPath('generated_resumes', filename);
+
+      if (fileExists(generatedResumesPath)) {
+        filePath = generatedResumesPath;
+      } else if (fileExists(generatedPath)) {
+        filePath = generatedPath;
+      } else {
+        filePath = joinPath(filename);
+      }
+    }
+
+    if (!fileExists(filePath)) {
+      return new NextResponse(null, { status: 404 });
+    }
+
+    return new NextResponse(null, {
+      status: 200,
+      headers: {
+        'Content-Type': filename.endsWith('.pdf') ? CONTENT_TYPES.PDF : CONTENT_TYPES.TEXT,
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+      },
+    });
+  } catch {
+    return new NextResponse(null, { status: 500 });
   }
 }

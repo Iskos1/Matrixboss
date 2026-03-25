@@ -1,93 +1,85 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { compileLatex } from '@/lib/utils/latex-utils';
 import { fileExists, getFileStats, joinPath, readFile } from '@/lib/utils/file-utils';
 import { PATHS, LATEX_CONFIG } from '@/lib/constants';
-import { handleApiError } from '@/lib/utils/error-utils';
+import { handleError, notFound, json, error as errorResponse } from '@/lib/api/responses';
 import path from 'path';
 import fs from 'fs';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { filename } = body;
+    const { filename, latexContent } = body;
 
-    // Determine which file to compile
     let texFile = filename || 'resume_template.tex';
     let workingDir: string | undefined;
-    
-    // If it's the default template, look in src/templates/
+
     if (texFile === 'resume_template.tex' || texFile === 'src/templates/resume_template.tex') {
       texFile = PATHS.RESUME_TEMPLATE;
     } else {
-      // Check if it exists in generated/
       const generatedDir = joinPath('generated');
+      const generatedResumesDir = joinPath('generated_resumes');
       const generatedPath = path.join(generatedDir, texFile);
-      if (fs.existsSync(generatedPath)) {
+      const generatedResumesPath = path.join(generatedResumesDir, texFile);
+      if (fs.existsSync(generatedResumesPath)) {
+        workingDir = generatedResumesDir;
+      } else if (fs.existsSync(generatedPath)) {
         workingDir = generatedDir;
-        // texFile is just the filename relative to workingDir
       }
-      // If not in generated, assume it's in root or relative to root (legacy behavior)
-    }
-    
-    // Verify file exists (helper for early return)
-    const fullPath = workingDir ? path.join(workingDir, texFile) : joinPath(texFile);
-    if (!fileExists(fullPath)) {
-      return NextResponse.json(
-        { error: 'LaTeX file not found' },
-        { status: 404 }
-      );
     }
 
-    // Compile LaTeX
-    const result = compileLatex(texFile, { 
+    const fullPath = workingDir ? path.join(workingDir, texFile) : joinPath(texFile);
+
+    // If latexContent is provided, save it to the file before compiling
+    if (latexContent && typeof latexContent === 'string') {
+      if (!workingDir) {
+        // File doesn't exist yet — default to generated_resumes
+        workingDir = joinPath('generated_resumes');
+        if (!fs.existsSync(workingDir)) fs.mkdirSync(workingDir, { recursive: true });
+      }
+      const savePath = path.join(workingDir, texFile);
+      fs.writeFileSync(savePath, latexContent, 'utf-8');
+    } else if (!fileExists(fullPath)) {
+      return notFound('LaTeX file not found');
+    }
+
+    const result = compileLatex(texFile, {
       timeout: LATEX_CONFIG.DEFAULT_TIMEOUT,
-      workingDir 
+      workingDir,
     });
 
     if (!result.success) {
-      return NextResponse.json(
-        { 
-          error: 'PDF generation failed',
-          details: result.error || 'PDF file was not created. Check LaTeX syntax.',
-          output: result.output
-        },
-        { status: 500 }
+      return errorResponse(
+        'PDF generation failed',
+        500,
+        result.error || 'PDF file was not created. Check LaTeX syntax.'
       );
     }
 
-    // Get file stats
     const stats = getFileStats(result.pdfPath);
 
-    return NextResponse.json({
+    return json({
       success: true,
       filename: result.pdfFilename,
       size: stats.size,
       message: 'Resume compiled successfully',
-      output: result.output
+      output: result.output,
     });
-
-  } catch (error: any) {
-    return handleApiError(error, 'Failed to compile resume');
+  } catch (error) {
+    return handleError(error, 'Failed to compile resume');
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const templatePath = joinPath(PATHS.RESUME_TEMPLATE);
     const pdfPath = joinPath(PATHS.RESUME_TEMPLATE_PDF);
 
-    // Check if template exists
     if (!fileExists(templatePath)) {
-      return NextResponse.json(
-        { error: 'Resume template not found' },
-        { status: 404 }
-      );
+      return notFound('Resume template not found');
     }
 
-    // Read template content
     const templateContent = readFile(templatePath);
-
-    // Check if PDF exists
     const pdfExists = fileExists(pdfPath);
     let pdfStats = null;
 
@@ -95,14 +87,13 @@ export async function GET(request: NextRequest) {
       pdfStats = getFileStats(pdfPath);
     }
 
-    return NextResponse.json({
+    return json({
       template: templateContent,
-      pdfExists: pdfExists,
+      pdfExists,
       pdfSize: pdfStats?.size || 0,
       pdfModified: pdfStats?.mtime || null,
     });
-
-  } catch (error: any) {
-    return handleApiError(error, 'Failed to read template');
+  } catch (error) {
+    return handleError(error, 'Failed to read template');
   }
 }

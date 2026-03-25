@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import {
   ArrowLeft,
   Trophy,
@@ -136,30 +135,19 @@ export default function ProgressDashboard({
   const recommendation = getRecommendation();
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="py-8 sm:py-12 px-4 sm:px-6"
-    >
+    <div className="py-8 sm:py-12 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto">
         {/* Back */}
-        <motion.button
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
+        <button
           onClick={onBack}
           className="mb-8 flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           <span className="text-sm font-medium">Back to Paths</span>
-        </motion.button>
+        </button>
 
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
+        <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <BarChart3 className="w-6 h-6 text-purple-600" />
             <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">
@@ -169,7 +157,7 @@ export default function ProgressDashboard({
           <p className="text-slate-500">
             Track your learning journey and celebrate your achievements.
           </p>
-        </motion.div>
+        </div>
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
@@ -206,28 +194,20 @@ export default function ProgressDashboard({
               border: "border-blue-200",
             },
           ].map((stat, idx) => (
-            <motion.div
+            <div
               key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 + idx * 0.05 }}
               className={`${stat.bg} border ${stat.border} rounded-2xl p-5`}
             >
               <div className="mb-3">{stat.icon}</div>
               <p className="text-2xl font-bold text-slate-900">{stat.value}</p>
               <p className="text-xs text-slate-500 mt-1">{stat.label}</p>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         {/* Recommended Next Action */}
         {recommendation && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="mb-8"
-          >
+          <div className="mb-8">
             <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3 flex items-center gap-2">
               <Zap className="w-4 h-4" />
               Recommended Next
@@ -249,16 +229,11 @@ export default function ProgressDashboard({
                 <ChevronRight className="w-5 h-5 text-white/70 group-hover:translate-x-1 transition-transform" />
               </div>
             </button>
-          </motion.div>
+          </div>
         )}
 
         {/* Path Progress Cards */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="mb-8"
-        >
+        <div className="mb-8">
           <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3 flex items-center gap-2">
             <BookOpen className="w-4 h-4" />
             Path Progress
@@ -318,14 +293,10 @@ export default function ProgressDashboard({
               );
             })}
           </div>
-        </motion.div>
+        </div>
 
         {/* Achievements */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-        >
+        <div>
           <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3 flex items-center gap-2">
             <Star className="w-4 h-4" />
             Achievements
@@ -333,11 +304,8 @@ export default function ProgressDashboard({
           {achievements.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {achievements.map((achievement, idx) => (
-                <motion.div
+                <div
                   key={achievement.title}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.6 + idx * 0.05 }}
                   className="bg-white rounded-xl border border-slate-200 p-4 text-center hover:shadow-sm transition-shadow"
                 >
                   <div className="text-3xl mb-2">{achievement.icon}</div>
@@ -347,7 +315,7 @@ export default function ProgressDashboard({
                   <p className="text-xs text-slate-400 mt-0.5">
                     {achievement.desc}
                   </p>
-                </motion.div>
+                </div>
               ))}
             </div>
           ) : (
@@ -358,32 +326,25 @@ export default function ProgressDashboard({
               </p>
             </div>
           )}
-        </motion.div>
+        </div>
 
         {/* Steps Completed Detail */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="mt-8 bg-white rounded-xl border border-slate-200 p-5"
-        >
+        <div className="mt-8 bg-white rounded-xl border border-slate-200 p-5">
           <h3 className="text-sm font-semibold text-slate-900 mb-3">
             Steps Breakdown
           </h3>
           <div className="w-full bg-slate-100 rounded-full h-4 mb-2 overflow-hidden">
-            <motion.div
+            <div
               className="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 h-4 rounded-full"
-              initial={{ width: 0 }}
-              animate={{ width: `${stats.overallProgress}%` }}
-              transition={{ duration: 1.5, ease: "easeOut" }}
+              style={{ width: `${stats.overallProgress}%` }}
             />
           </div>
           <div className="flex items-center justify-between text-xs text-slate-500">
             <span>{stats.completedSteps} steps completed</span>
             <span>{stats.totalSteps - stats.completedSteps} remaining</span>
           </div>
-        </motion.div>
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

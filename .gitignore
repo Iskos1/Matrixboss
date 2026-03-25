@@ -69,6 +69,14 @@ resume_template.out
 
 # Test/scratch files
 reddit_test.json
+test.pdf
+test2.pdf
+PORTFOLIO_SYSTEM_BREAKDOWN.md
+
+# IDE internals (Cursor project data, Claude sessions)
+.claude/
+.cursor/projects/
+.cursor/skills-cursor/
 
 # npm cache
 .npm/

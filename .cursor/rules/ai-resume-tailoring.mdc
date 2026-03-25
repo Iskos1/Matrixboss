@@ -1,0 +1,49 @@
+---
+description: AI Resume Tailoring Engine rules.
+alwaysApply: true
+---
+
+# AI Resume Tailoring Engine
+
+## LaTeX Resume Output (Deterministic)
+
+No AI decisions at this step — generate LaTeX strictly from the tailored JSON.
+
+**Fixed layout (in order):**
+1. Header — Name, Email, Phone, GitHub, LinkedIn
+2. Skills — one bullet per category (`Category: skill1, skill2, ...`)
+3. Work Experience — **always first**, no exceptions
+4. Project Work — always second
+5. Certifications — all on one line separated by `|` (if any selected)
+6. Education — always last
+
+> `section_order` is hardcoded to `["work_experience", "projects"]` in the LaTeX generator. Any AI output suggesting a different order is ignored.
+
+**Rendering rules:**
+- Work Experience entries: `Company (bold) + location` → `italic title + date` → bullet points
+- Project Work entries: `bold title + date` → `italic role (if any)` → bullet points
+- Use the resume template preamble from `resume_template.tex` (includes font, margins, spacing)
+- Escape all LaTeX special characters: `& % $ # _ { } ~ ^`
+
+## Language Style — Entry-Level Professional
+
+All AI-generated bullet points, summaries, and cover letter content **must use entry-level professional language**:
+
+- **Simple, clear sentences** — avoid jargon, buzzwords, or overly corporate language
+- **Honest and grounded** — reflect real experience without inflating seniority (no "led teams of 50" when the candidate is a student)
+- **Action-oriented but modest** — use strong action verbs that fit a junior/early-career context: `Built`, `Developed`, `Assisted`, `Contributed`, `Implemented`, `Designed`, `Analyzed`, `Supported`, `Created`, `Tested`
+- **Avoid senior-level verbs** — do not use `Spearheaded`, `Orchestrated`, `Evangelized`, `Championed`, `Drove strategic vision`, or similar executive-level language
+- **Quantify where honest** — include real numbers and outcomes only when they are factually grounded in the candidate data
+- **Cover letter tone** — warm, professional, and eager-to-learn; not boastful or over-polished
+
+## Bullet Point Conciseness — Mandatory
+
+Every AI-generated resume bullet point **must be concise and punchy**:
+
+- **One line only** — 10 to 18 words maximum per bullet
+- **Cut all filler** — remove "in order to", "was responsible for", "helped to", "worked on", "assisted with"
+- **Lead with the verb** — action verb first, result or impact immediately after
+- **One idea per bullet** — no semicolons, no multi-clause sentences, no run-ons
+- **Format**: `[Action verb] + [what you did] + [result/metric if available]`
+- ✅ Good: `Built a REST API that reduced data load time by 40%`
+- ❌ Bad: `Was responsible for helping to build and maintain a REST API that was used to handle data requests and in order to improve performance`

@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { X, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
-import Image from "next/image";
 
 interface ImageLightboxProps {
   images: string[];
@@ -68,7 +67,7 @@ export default function ImageLightbox({
 
       {/* Project Title & Link */}
       {projectTitle && (
-        <div className="absolute top-4 left-4 z-50 bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full">
+        <div className="absolute top-4 left-4 z-50 bg-black/50 px-6 py-3 rounded-full">
           <div className="flex items-center gap-3">
             <h3 className="text-white font-semibold">{projectTitle}</h3>
             {projectLink && projectLink !== "#" && (
@@ -107,7 +106,7 @@ export default function ImageLightbox({
 
       {/* Image Counter */}
       {images.length > 1 && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-50 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-50 bg-black/50 px-4 py-2 rounded-full">
           <p className="text-white text-sm font-medium">
             {currentIndex + 1} / {images.length}
           </p>
@@ -133,7 +132,7 @@ export default function ImageLightbox({
 
       {/* Thumbnail Strip */}
       {images.length > 1 && (
-        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-50 flex gap-2 bg-white/10 backdrop-blur-sm p-2 rounded-lg max-w-[90vw] overflow-x-auto">
+        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-50 flex gap-2 bg-black/50 p-2 rounded-lg max-w-[90vw] overflow-x-auto">
           {images.map((image, index) => (
             <button
               key={index}

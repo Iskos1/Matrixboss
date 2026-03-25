@@ -97,10 +97,26 @@ export function compileLatex(
       output: result.substring(0, 500),
     };
   } catch (execError: any) {
+    // xelatex exits with code 1 for warnings (overfull hbox, etc.) even when
+    // the PDF is successfully written. Check for the PDF before reporting failure.
+    const pdfFile = texPath.replace('.tex', '.pdf');
+    const pdfPath = options.workingDir ? joinPath(options.workingDir, pdfFile) : joinPath(pdfFile);
+
+    if (fileExists(pdfPath)) {
+      const stats = getFileStats(pdfPath);
+      return {
+        success: true,
+        pdfPath,
+        pdfFilename: pdfFile,
+        size: stats.size,
+        output: execError.stdout || execError.stderr || execError.message,
+      };
+    }
+
     return {
       success: false,
       pdfPath: '',
-      pdfFilename: texPath.replace('.tex', '.pdf'),
+      pdfFilename: pdfFile,
       error: execError.message,
       output: execError.stdout || execError.stderr,
     };

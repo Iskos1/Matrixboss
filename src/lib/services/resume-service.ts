@@ -1,15 +1,31 @@
 import fs from 'fs';
 import path from 'path';
 import { getProjectRoot } from '@/lib/utils/file-utils';
-import { getGeminiClient, cleanJsonResponse } from '@/lib/utils/api-utils';
+import { generate, parseAIJson } from '@/lib/ai/anthropic';
+
+// ─── Interfaces ──────────────────────────────────────────────────────────────
 
 export interface JobAnalysis {
-  technical_skills: string[];
-  soft_skills: string[];
-  experience_areas: string[];
-  ats_keywords: string[];
   primary_focus: string;
   seniority_level: string;
+  company_name: string;
+  industry: string;
+  technical_skills: string[];
+  soft_skills: string[];
+  ats_keywords: string[];
+  must_haves: string[];
+  nice_to_haves: string[];
+}
+
+export interface QualityReport {
+  fit_score: number;
+  fit_label: string;
+  ats_keyword_coverage: number;
+  bullet_quality_score: number;
+  strengths: string[];
+  gaps: string[];
+  needs_refinement: boolean;
+  refinement_instructions: string[];
 }
 
 export interface TailoredContent {
@@ -19,6 +35,7 @@ export interface TailoredContent {
   selected_projects: Array<{
     id: string;
     title: string;
+    role?: string;
     date: string;
     bullets: Array<{
       original_id: string;
@@ -40,19 +57,19 @@ export interface TailoredContent {
     }>;
     include: boolean;
   }>;
-  /**
-   * The order in which the two main content sections should appear on the resume.
-   * AI decides this based on job requirements:
-   *   - ["work_experience", "projects"] → experience-first (e.g. corporate, ops, sales roles)
-   *   - ["projects", "work_experience"] → project-first (e.g. tech, dev, data science roles)
-   */
   section_order: Array<'work_experience' | 'projects'>;
   tailoring_summary: string;
+  // ─── New fields from the 3-step pipeline ───
+  job_analysis: JobAnalysis;
+  quality_report: QualityReport;
+  ats_keywords_used: string[];
+  refinement_applied: boolean;
 }
 
 export interface ResumeData {
   personal_info: {
     name: string;
+    location?: string;
     email: string;
     phone: string;
     github: { url: string; display: string };
@@ -63,30 +80,34 @@ export interface ResumeData {
     institution: string;
     location: string;
     degree: string;
+    gpa?: string;
     graduation_date: string;
     coursework: string[];
   };
-  /**
-   * Skills grouped by category, populated from portfolio.json.
-   * Keys are category names (e.g. "technical", "business", "tools").
-   * Values are arrays of skill name strings.
-   */
+  secondary_education?: {
+    institution: string;
+    location: string;
+    degree: string;
+    graduation_date: string;
+    notes?: string[];
+  };
   skills: Record<string, string[]>;
-  /**
-   * All projects from portfolio.json — every entry the admin has saved,
-   * including non-featured / private ones.  Each item carries the full
-   * description, technicalDetails, key_features, and tags so the AI can
-   * generate rich, specific bullet points.
-   */
   projects: any[];
-  /**
-   * All work-experience positions from portfolio.json, flattened so each
-   * role is its own entry (one company with two roles → two entries).
-   * Each entry carries the full description paragraph and tags.
-   */
   work_experience: any[];
   certifications: Array<{ name: string; year: string }>;
+  leadership: Array<{
+    id: string | number;
+    organization: string;
+    role: string;
+    period: string;
+    location?: string;
+    bullets: string[];
+  }>;
 }
+
+// ─── Singleton ───────────────────────────────────────────────────────────────
+
+let _instance: ResumeService | null = null;
 
 export class ResumeService {
   private resumeData: ResumeData;
@@ -95,22 +116,27 @@ export class ResumeService {
     this.resumeData = this.loadResumeData();
   }
 
-  // ---------------------------------------------------------------------------
-  // Private helpers
-  // ---------------------------------------------------------------------------
+  static getInstance(): ResumeService {
+    if (!_instance) {
+      _instance = new ResumeService();
+    }
+    return _instance;
+  }
+
+  /** Force reload data (call after admin edits) */
+  reload(): void {
+    this.resumeData = this.loadResumeData();
+  }
+
+  // ─── Private helpers ────────────────────────────────────────────────────────
 
   private loadResumeData(): ResumeData {
     try {
       const resumePath    = path.join(getProjectRoot(), 'src/data/resume_data.json');
       const portfolioPath = path.join(getProjectRoot(), 'src/data/portfolio.json');
 
-      // resume_data.json supplies:
-      //   • personal_info, education, professional_summary (always used as-is)
-      //   • pre-written bullet points with specific metrics for projects & experience
-      //     (used as a supplement so the AI can see real numbers/achievements)
       const resumeData: any = JSON.parse(fs.readFileSync(resumePath, 'utf-8'));
 
-      // portfolio.json is the admin-managed source of truth for everything else.
       if (!fs.existsSync(portfolioPath)) {
         console.warn('[ResumeService] portfolio.json not found — falling back to resume_data.json only');
         return resumeData;
@@ -118,9 +144,7 @@ export class ResumeService {
 
       const portfolioData: any = JSON.parse(fs.readFileSync(portfolioPath, 'utf-8'));
 
-      // ── 1. SKILLS ────────────────────────────────────────────────────────────
-      // Use ALL skills the admin has saved, grouped by their category field.
-      // This replaces the sparse 3-entry list that was hard-coded in resume_data.json.
+      // Skills — grouped by category
       if (portfolioData.skills && Array.isArray(portfolioData.skills)) {
         const grouped: Record<string, string[]> = {};
         for (const skill of portfolioData.skills) {
@@ -129,71 +153,56 @@ export class ResumeService {
           grouped[cat].push(skill.name);
         }
         resumeData.skills = grouped;
-        console.log(`[ResumeService] Loaded ${portfolioData.skills.length} skills across ${Object.keys(grouped).length} categories from portfolio.json`);
+        console.log(`[ResumeService] Loaded ${portfolioData.skills.length} skills from portfolio.json`);
       }
 
-      // ── 2. PROJECTS ──────────────────────────────────────────────────────────
-      // Use EVERY project the admin has saved — including non-featured / private
-      // ones — with the full description, technicalDetails, key_features, and tags.
-      // ALSO merge in pre-written bullet points from resume_data.json (matched by
-      // title keyword) so the AI has both rich context AND specific metrics.
+      // Projects — merge portfolio data with pre-written bullets from resume_data.json
       const rdProjects: any[] = Array.isArray(resumeData.projects) ? resumeData.projects : [];
-
       if (portfolioData.projects && Array.isArray(portfolioData.projects)) {
         resumeData.projects = portfolioData.projects.map((p: any) => {
-          // Find the closest matching pre-written project in resume_data.json by title
           const titleWords = (p.title ?? '').toLowerCase().split(/\s+/);
           const rdMatch = rdProjects.find((rdp: any) => {
             const rdTitle = (rdp.title ?? '').toLowerCase();
             return titleWords.some((w: string) => w.length > 4 && rdTitle.includes(w));
           });
-
           return {
-            id:                   String(p.id),
-            title:                p.title ?? '',
-            date:                 p.date ?? '',
-            featured:             p.featured ?? false,
-            tags:                 p.tags ?? [],
-            description:          p.description ?? '',
-            technicalDetails:     p.technicalDetails ?? '',
-            key_features:         p.key_features ?? [],
-            link:                 p.link ?? '',
-            // Pre-written bullets carry specific metrics the AI should reference
-            pre_written_bullets:  rdMatch?.bullets?.map((b: any) => b.text) ?? [],
+            id:                  String(p.id),
+            title:               p.title ?? '',
+            date:                p.date ?? '',
+            featured:            p.featured ?? false,
+            tags:                p.tags ?? [],
+            description:         p.description ?? '',
+            technicalDetails:    p.technicalDetails ?? '',
+            key_features:        p.key_features ?? [],
+            link:                p.link ?? '',
+            pre_written_bullets: rdMatch?.bullets?.map((b: any) => b.text) ?? [],
           };
         });
         console.log(`[ResumeService] Loaded ${resumeData.projects.length} projects from portfolio.json`);
       }
 
-      // ── 3. WORK EXPERIENCE ───────────────────────────────────────────────────
-      // Flatten portfolio.json's multi-position format (one company → many roles)
-      // into individual entries so every role is visible to the AI separately.
-      // ALSO merge in pre-written bullets from resume_data.json (matched by company
-      // name) so the AI can reference real metrics like "500+ prompts per week".
+      // Work experience — flatten multi-position format, merge pre-written bullets
       const rdJobs: any[] = Array.isArray(resumeData.work_experience) ? resumeData.work_experience : [];
-
       if (portfolioData.experience && Array.isArray(portfolioData.experience)) {
         const flat: any[] = [];
         for (const exp of portfolioData.experience) {
-          // Match by company name (first word is usually enough: "Apple" vs "Apple Inc.")
           const companyKey = (exp.company ?? '').toLowerCase().split(/\s+/)[0];
           const rdMatch = rdJobs.find((rdj: any) =>
             (rdj.company ?? '').toLowerCase().includes(companyKey) ||
             companyKey.includes((rdj.company ?? '').toLowerCase().split(/\s+/)[0])
           );
-
           const positions: any[] = Array.isArray(exp.positions) ? exp.positions : [];
           for (const pos of positions) {
             flat.push({
-              id:                   String(exp.id),
-              company:              exp.company ?? '',
-              location:             exp.location ?? '',
-              title:                pos.role ?? '',
-              date:                 pos.period ?? '',
-              description:          pos.description ?? '',
-              tags:                 pos.tags ?? [],
-              // Pre-written bullets carry specific metrics the AI should reference
-              pre_written_bullets:  rdMatch?.bullets?.map((b: any) => b.text) ?? [],
+              id:                  String(exp.id),
+              company:             exp.company ?? '',
+              location:            exp.location ?? '',
+              title:               pos.role ?? '',
+              date:                pos.period ?? '',
+              description:         pos.description ?? '',
+              technicalDetails:    pos.technicalDetails ?? '',
+              tags:                pos.tags ?? [],
+              pre_written_bullets: rdMatch?.bullets?.map((b: any) => b.text) ?? [],
             });
           }
         }
@@ -201,15 +210,29 @@ export class ResumeService {
         console.log(`[ResumeService] Loaded ${flat.length} experience positions from portfolio.json`);
       }
 
-      // ── 4. CERTIFICATIONS ────────────────────────────────────────────────────
-      // Admin manages these in portfolio.json via the Certifications tab.
+      // Certifications
       if (portfolioData.certifications && Array.isArray(portfolioData.certifications)) {
         resumeData.certifications = portfolioData.certifications.map((c: any) => ({
-          name:   c.name  ?? '',
+          name:   c.name   ?? '',
           issuer: c.issuer ?? '',
-          year:   c.year  ?? '',
+          year:   c.year   ?? '',
         }));
         console.log(`[ResumeService] Loaded ${resumeData.certifications.length} certifications from portfolio.json`);
+      }
+
+      // Leadership
+      if (portfolioData.leadership && Array.isArray(portfolioData.leadership)) {
+        resumeData.leadership = portfolioData.leadership.map((l: any) => ({
+          id:           String(l.id ?? ''),
+          organization: l.organization ?? '',
+          role:         l.role ?? '',
+          period:       l.period ?? '',
+          location:     l.location ?? '',
+          bullets:      Array.isArray(l.bullets) ? l.bullets.filter((b: string) => b.trim()) : [],
+        }));
+        console.log(`[ResumeService] Loaded ${resumeData.leadership.length} leadership entries from portfolio.json`);
+      } else {
+        resumeData.leadership = [];
       }
 
       return resumeData;
@@ -221,10 +244,7 @@ export class ResumeService {
 
   private escapeLatex(text: string): string {
     if (!text) return '';
-
-    // Handle backslash first
-    let escaped = text.replace(/\\/g, '\\textbackslash{}');
-
+    const escaped = text.replace(/\\/g, '\\textbackslash{}');
     const replacements: Record<string, string> = {
       '&': '\\&',
       '%': '\\%',
@@ -236,305 +256,450 @@ export class ResumeService {
       '~': '\\textasciitilde{}',
       '^': '\\textasciicircum{}',
     };
-
     return escaped.replace(/[&%$#_{}~^]/g, (match) => replacements[match]);
   }
 
-  /**
-   * Send a prompt to Gemini and return the raw text response.
-   * Implements fallback logic to try multiple models if the primary one fails.
-   */
-  private async generateAIText(prompt: string, jsonMode: boolean = false): Promise<string> {
-    const client = getGeminiClient();
-    
-    // Priority order: 
-    // 1. Gemini 3.1 Pro Preview (Cutting edge)
-    // 2. Gemini 3.1 Pro (In case the stable name is available)
-    const models = [
-      'gemini-3.1-pro-preview',
-      'gemini-3.1-pro'
-    ];
-
-    let lastError: any = null;
-
-    console.log(`[ResumeService] Starting AI generation. Prompt length: ${prompt.length} chars. JSON Mode: ${jsonMode}`);
-
-    for (const modelName of models) {
-      try {
-        console.log(`[ResumeService] Attempting to generate content with model: ${modelName}`);
-        const model = client.getGenerativeModel({ 
-          model: modelName,
-          // Only use JSON mode for models that support it (most new ones do)
-          generationConfig: jsonMode ? { responseMimeType: "application/json" } : undefined
-        });
-        
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
-        
-        if (!text) {
-          throw new Error(`Empty response from ${modelName}`);
-        }
-        
-        console.log(`[ResumeService] Success with model: ${modelName}. Response length: ${text.length} chars.`);
-        return text;
-      } catch (error: any) {
-        // Log detailed error info
-        const status = error.status || error.response?.status;
-        const message = error.message || 'Unknown error';
-        console.warn(`[ResumeService] Failed with model ${modelName} (Status: ${status}): ${message}`);
-        
-        lastError = error;
-        
-        // CRITICAL: Stop if API key is invalid
-        if (message.includes('API_KEY_INVALID') || status === 403 || message.includes('API key not valid')) {
-          console.error('[ResumeService] CRITICAL: API Key appears invalid. Stopping retries.');
-          throw error;
-        }
-      }
-    }
-
-    console.error('[ResumeService] All models failed. Last error:', lastError);
-    throw lastError || new Error('Failed to generate content from any available Gemini model');
+  private async ai(prompt: string, jsonMode: boolean = false): Promise<string> {
+    const result = await generate(prompt, { jsonMode });
+    console.log(`[ResumeService] AI call done: ${result.text.length} chars`);
+    return result.text;
   }
 
-  // ---------------------------------------------------------------------------
-  // Public AI methods
-  // ---------------------------------------------------------------------------
+  // ─── STEP 1: Deep Job Analysis ───────────────────────────────────────────────
 
-  /**
-   * Step 1 – Analyse the job description and extract structured metadata.
-   */
-  async analyzeJobDescription(jobDescription: string): Promise<JobAnalysis> {
-    const prompt = `Analyze this job description and extract:
-1. Key technical skills required
-2. Soft skills and competencies
-3. Experience areas (e.g., cloud, sales, AI, consulting)
-4. Important keywords for ATS optimization
-5. The role's primary focus areas
+  private async analyzeJob(jobDescription: string): Promise<JobAnalysis> {
+    console.log('[ResumeService] Step 1: Analyzing job description...');
 
-Job Description:
+    const prompt = `You are a senior recruiter. Deeply analyze this job description and extract all critical information.
+
+JOB DESCRIPTION:
 ${jobDescription}
 
-Return your analysis in JSON format with these keys:
-- technical_skills: list of technical skills
-- soft_skills: list of soft skills
-- experience_areas: list of experience domains
-- ats_keywords: list of important keywords for ATS
-- primary_focus: string describing the main role focus
-- seniority_level: string (entry, mid, senior)
+Return JSON ONLY with this exact structure:
+{
+  "primary_focus": "One sentence describing what this role is fundamentally about",
+  "seniority_level": "entry | junior | mid | senior | lead | executive",
+  "company_name": "Company name or empty string if not mentioned",
+  "industry": "Industry sector (e.g. Tech, Finance, Healthcare, Aerospace)",
+  "technical_skills": ["hard skills explicitly required or strongly implied"],
+  "soft_skills": ["soft skills mentioned (communication, leadership, etc.)"],
+  "ats_keywords": ["critical keywords an ATS scanner would look for — include exact phrases from JD"],
+  "must_haves": ["hard requirements — if candidate lacks these, they likely won't pass screening"],
+  "nice_to_haves": ["preferred but not required qualifications"]
+}`;
 
-Do not include markdown formatting. Just raw JSON.`;
-
-    try {
-      const text = await this.generateAIText(prompt, true);
-      console.log('Gemini Response (Job Analysis):', text.substring(0, 100) + '...');
-      return JSON.parse(cleanJsonResponse(text));
-    } catch (error) {
-      console.error('Error analyzing job description:', error);
-      throw new Error('Failed to analyze job description');
-    }
+    const text = await this.ai(prompt, true);
+    return parseAIJson<JobAnalysis>(text);
   }
 
-  /**
-   * Step 2 – Select and rewrite resume content to match the job analysis.
-   */
-  async tailorContent(jobAnalysis: JobAnalysis): Promise<TailoredContent> {
-    const prompt = `You are an expert resume writer and career coach. Your job is to tailor a candidate's resume to a specific role using ONLY the verified information provided below.
+  // ─── STEP 2: Smart Selection + Tailored Bullet Writing ───────────────────────
 
-═══════════════════════════════════════════
-JOB ANALYSIS
-═══════════════════════════════════════════
-${JSON.stringify(jobAnalysis, null, 2)}
+  private async selectAndTailor(
+    jobDescription: string,
+    jobAnalysis: JobAnalysis
+  ): Promise<Omit<TailoredContent, 'job_analysis' | 'quality_report' | 'ats_keywords_used' | 'refinement_applied'>> {
+    console.log('[ResumeService] Step 2: Selecting content + writing tailored bullets...');
 
-═══════════════════════════════════════════
-CANDIDATE'S COMPLETE RESUME DATA
-═══════════════════════════════════════════
-${JSON.stringify(this.resumeData, null, 2)}
+    const candidateData = {
+      skills: this.resumeData.skills,
+      certifications: this.resumeData.certifications,
+      projects: this.resumeData.projects.map((p: any) => ({
+        id: p.id,
+        title: p.title,
+        date: p.date,
+        tags: p.tags,
+        description: p.description,
+        technicalDetails: p.technicalDetails,
+        pre_written_bullets: p.pre_written_bullets,
+      })),
+      work_experience: this.resumeData.work_experience.map((j: any) => ({
+        id: j.id,
+        company: j.company,
+        location: j.location,
+        title: j.title,
+        date: j.date,
+        description: j.description,
+        technicalDetails: j.technicalDetails,
+        tags: j.tags,
+        pre_written_bullets: j.pre_written_bullets,
+      })),
+    };
 
-═══════════════════════════════════════════
-DATA STRUCTURE — READ THIS FIRST
-═══════════════════════════════════════════
-• "skills": object where each key is a category (e.g. "technical", "business", "tools") and the value is an array of skill name strings. Select ONLY from these — never invent skills.
+    // Top ATS keywords to mandate inclusion of — take up to 10 most important
+    const mandatoryKeywords = jobAnalysis.ats_keywords.slice(0, 10);
 
-• "projects": ALL of the candidate's projects, including private/non-public ones. Each has:
-  - title, date, tags
-  - description: full paragraph describing what was built and why
-  - technicalDetails: implementation specifics, stack, architecture
-  - key_features: array of standout capabilities
-  - pre_written_bullets: reference material containing facts and some metrics — use these as inspiration for content, but rewrite them following the RULES below. Do not copy percentages blindly.
-  Use ALL of the above as your source material to write strong, specific bullet points.
+    const prompt = `You are an expert resume writer and ATS optimization specialist. Your task is to select the BEST content from this candidate's background and write powerful, tailored bullet points for the specific job.
 
-• "work_experience": ALL positions, already flattened — one entry per role. Each has:
-  - company, location, title, date
-  - description: full paragraph of what they did and achieved in this role
-  - tags: skills/tools used
-  - pre_written_bullets: reference material containing facts and some metrics — use these as inspiration for content, but rewrite them following the RULES below. Do not copy percentages blindly.
-  Use the description, tags, AND pre_written_bullets together to write the strongest possible bullet points.
+═══ JOB ANALYSIS ═══
+Role Focus: ${jobAnalysis.primary_focus}
+Seniority: ${jobAnalysis.seniority_level}
+Company/Industry: ${jobAnalysis.company_name || 'Not specified'} / ${jobAnalysis.industry}
+Must-Have Skills: ${jobAnalysis.must_haves.join(', ')}
+Technical Skills Required: ${jobAnalysis.technical_skills.join(', ')}
 
-• "certifications": array of { name, issuer, year }. Select the most relevant ones — never invent new ones.
+═══ MANDATORY ATS KEYWORDS ═══
+You MUST include AT LEAST 8 of these exact phrases (or their direct variants) somewhere across all bullets and the summary. This is non-negotiable for ATS passage:
+${mandatoryKeywords.map((kw, i) => `  ${i + 1}. "${kw}"`).join('\n')}
 
-• "personal_info" + "education": use as-is for the resume header and education section.
+═══ FULL JOB DESCRIPTION ═══
+${jobDescription}
 
-═══════════════════════════════════════════
-RULES
-═══════════════════════════════════════════
-1. SIMPLE ENTRY-LEVEL LANGUAGE: Write all bullet points and the professional summary in clear, simple, entry-level professional language. Avoid corporate jargon, buzzwords, and overly complex phrasing. Write confidently and clearly, as if explaining your work to someone outside your field.
-2. ACTION VERBS: Start most bullet points with a strong action verb (e.g. Built, Designed, Managed, Analyzed, Improved, Developed, Led, Created, Implemented, Reduced, Increased, Supported, Coordinated, Delivered, Streamlined). Vary the verbs — do not repeat the same one back to back.
-3. GOOGLE XYZ FORMAT & LIMIT PERCENTAGES: Structure bullet points using the Google XYZ formula — "Accomplished [X] by doing [Y] which resulted in [Z]." STRICT RULE: Use a maximum of 2 percentages across the ENTIRE resume. For all other results, describe the impact in plain language (e.g. "resulting in a faster onboarding experience for clients", "enabling the team to process requests without manual review", "allowing the business to scale without additional headcount"). A naturally described result is more believable and readable than a resume stuffed with percentages. Only keep a percentage if it is genuinely the most compelling way to express that specific result.
-4. RECRUITER PERSPECTIVE: Before finalizing any bullet point, summary, or section — read it through the eyes of a seasoned recruiter with 30+ years of experience who has reviewed thousands of resumes for this exact type of role. Ask yourself: "Does this immediately show relevance to the job? Does it sound like a real person who can do this work, or does it sound generic?" Every word on this resume should earn its place. Cut anything vague, filler, or disconnected from the job. If a hiring manager spent 10 seconds scanning this resume, they should immediately see why this candidate fits the role.
-5. YOU DECIDE THE SECTION ORDER: It is your responsibility — not the candidate's — to determine whether Work Experience or Project Work appears first on this resume. Base this decision entirely on the job description. If the role values professional experience, client-facing work, or years in the field, lead with Work Experience. If the role values technical ability, what has been built, or hands-on skills, lead with Projects. Make a confident, deliberate call. Do not default blindly — read the job and choose what gives this candidate the strongest first impression.
-6. ONE PAGE ONLY — INCLUDING CERTIFICATIONS: The entire resume — Skills, Projects, Work Experience, Education, AND Certifications — must fit on a single page. To guarantee this: write a maximum of 2 bullet points per project or experience entry, select a maximum of 3 projects and 2 experience entries, and keep the professional summary to 2 sentences. Keep every bullet short and punchy — one line preferred, two lines maximum. Only include content that is directly relevant to the job. The Certifications section must appear on the same page as the rest of the resume — if the resume feels too full, cut a less-relevant bullet or project, not the certifications.
+═══ CANDIDATE DATA ═══
+${JSON.stringify(candidateData, null, 2)}
 
-═══════════════════════════════════════════
-SECTION ORDER DECISION RULES
-═══════════════════════════════════════════
-Output "section_order": ["work_experience", "projects"] (experience first) when the job is:
-  • Corporate, enterprise, or government roles (ops, sales, account management, consulting)
-  • Roles that explicitly ask for years of professional experience
-  • Roles in regulated industries (finance, healthcare, federal/defense)
-  • Management, leadership, or client-facing positions
-  • Any role where the primary_focus is business operations, sales, or client relations
+═══ YOUR INSTRUCTIONS ═══
+1. SELECTION: Pick the 2-3 most relevant work experience entries AND 3-4 most relevant projects. Quality over quantity.
+2. BULLET WRITING: Write 3-4 strong bullets per entry. Each bullet must:
+   - Start with a strong action verb (Built, Developed, Implemented, Designed, Analyzed, Created, Automated, Delivered, Improved, Reduced, Increased)
+   - Include quantification where real metrics exist in the candidate data (never fabricate)
+   - Include ATS keywords from the mandatory list above — distribute them naturally across bullets
+   - Be factually accurate — only use metrics and details that appear in the candidate data
+   - Be concise: ONE line, 10–18 words maximum
+   - Format: [Action verb] + [what you did] + [result/metric if available]
+   - NO filler: cut "in order to", "was responsible for", "helped to", "worked on"
+   - No semicolons, no multi-clause run-ons — one idea per bullet
+3. LANGUAGE STYLE — ENTRY-LEVEL PROFESSIONAL:
+   - Simple, clear, honest language for a junior/early-career candidate
+   - Do NOT use Spearheaded, Orchestrated, Championed, Evangelized, or Drove strategic vision
+   - Tone: professional and competent, not boastful or over-inflated
+4. SKILLS: Select only skills directly relevant to this role
+5. SUMMARY: Write a 2-sentence professional summary that directly addresses what this role needs AND uses at least 3 ATS keywords from the mandatory list
+6. SECTION ORDER: Always ["work_experience", "projects"] — Work Experience ALWAYS first
+7. CERTIFICATIONS: Include only certifications relevant to this role
 
-Output "section_order": ["projects", "work_experience"] (projects first) when the job is:
-  • Technical or engineering roles (software dev, data science, cloud/infra, ML/AI engineering)
-  • Roles that ask for a portfolio, GitHub, or specific technical deliverables
-  • Startup or product roles where what you've built matters more than where you worked
-  • Roles where the primary_focus is building, coding, data analysis, or research
-
-If unclear, default to ["work_experience", "projects"].
-
-═══════════════════════════════════════════
-REQUIRED JSON OUTPUT (raw JSON only, no markdown)
-═══════════════════════════════════════════
+Return JSON ONLY:
 {
-  "tailored_professional_summary": "2-3 sentence summary...",
+  "tailored_professional_summary": "2-sentence summary targeting this specific role with ATS keywords woven in",
   "selected_skills": {
     "CategoryName": ["skill1", "skill2"]
   },
-  "selected_certifications": [
-    { "name": "Certification Name", "year": "2025" }
-  ],
+  "selected_certifications": [{ "name": "", "year": "" }],
   "section_order": ["work_experience", "projects"],
-  "selected_projects": [
-    {
-      "id": "project id from data",
-      "title": "Project Title",
-      "date": "date from data",
-      "bullets": [
-        {
-          "original_id": "derived",
-          "tailored_text": "Action verb + what you did + result in plain language or one real metric",
-          "relevance_score": 95
-        }
-      ],
-      "include": true
-    }
-  ],
   "selected_work_experience": [
     {
-      "id": "id from data",
-      "company": "Company Name",
-      "location": "Location",
-      "title": "Job Title",
-      "date": "Date Range",
+      "id": "",
+      "company": "",
+      "location": "",
+      "title": "",
+      "date": "",
       "bullets": [
-        {
-          "original_id": "derived",
-          "tailored_text": "Action verb + what you did + result in plain language or one real metric",
-          "relevance_score": 90
-        }
+        { "original_id": "derived", "tailored_text": "Action verb + what you did + result/metric", "relevance_score": 95 }
       ],
       "include": true
     }
   ],
-  "tailoring_summary": "Brief explanation of what was prioritized, section order chosen, and why"
+  "selected_projects": [
+    {
+      "id": "",
+      "title": "",
+      "role": "",
+      "date": "",
+      "bullets": [
+        { "original_id": "derived", "tailored_text": "Action verb + what you did + result/metric", "relevance_score": 90 }
+      ],
+      "include": true
+    }
+  ],
+  "tailoring_summary": "Brief explanation of your tailoring strategy, which ATS keywords were used, and why specific entries were selected"
 }`;
 
-    try {
-      const text = await this.generateAIText(prompt, true);
-      console.log('Gemini Response (Tailoring):', text.substring(0, 100) + '...');
-      return JSON.parse(cleanJsonResponse(text));
-    } catch (error) {
-      console.error('Error tailoring content:', error);
-      throw new Error('Failed to tailor content');
-    }
+    const text = await this.ai(prompt, true);
+    return parseAIJson<Omit<TailoredContent, 'job_analysis' | 'quality_report' | 'ats_keywords_used' | 'refinement_applied'>>(text);
   }
 
+  // ─── STEP 3: Quality Check & Optional Refinement ─────────────────────────────
+
+  private async qualityCheck(
+    jobAnalysis: JobAnalysis,
+    tailoredDraft: Omit<TailoredContent, 'job_analysis' | 'quality_report' | 'ats_keywords_used' | 'refinement_applied'>
+  ): Promise<QualityReport> {
+    console.log('[ResumeService] Step 3: Running quality check...');
+
+    const allBullets = [
+      ...tailoredDraft.selected_work_experience.flatMap((j: any) => j.bullets?.map((b: any) => b.tailored_text) ?? []),
+      ...tailoredDraft.selected_projects.flatMap((p: any) => p.bullets?.map((b: any) => b.tailored_text) ?? []),
+    ];
+
+    // Check which ATS keywords actually appear in all text
+    const allText = [
+      tailoredDraft.tailored_professional_summary,
+      ...allBullets,
+    ].join(' ').toLowerCase();
+    const kw_found = jobAnalysis.ats_keywords.filter(kw => allText.includes(kw.toLowerCase()));
+    const kw_missing = jobAnalysis.ats_keywords.filter(kw => !allText.includes(kw.toLowerCase()));
+
+    const prompt = `You are a senior resume quality reviewer. Score this tailored resume content against the job requirements using the rubric below.
+
+═══ JOB REQUIREMENTS ═══
+Primary Focus: ${jobAnalysis.primary_focus}
+ATS Keywords (${jobAnalysis.ats_keywords.length} total): ${jobAnalysis.ats_keywords.join(', ')}
+Must-Haves: ${jobAnalysis.must_haves.join(', ')}
+Technical Skills Required: ${jobAnalysis.technical_skills.join(', ')}
+
+═══ RESUME CONTENT TO REVIEW ═══
+SUMMARY:
+${tailoredDraft.tailored_professional_summary}
+
+BULLETS (${allBullets.length} total):
+${allBullets.map((b, i) => `${i + 1}. ${b}`).join('\n')}
+
+SELECTED SKILLS:
+${Object.entries(tailoredDraft.selected_skills).map(([k, v]) => `${k}: ${(v as string[]).join(', ')}`).join('\n')}
+
+═══ ATS KEYWORD ANALYSIS (pre-computed) ═══
+Keywords FOUND in resume (${kw_found.length}): ${kw_found.join(', ') || 'none'}
+Keywords MISSING from resume (${kw_missing.length}): ${kw_missing.join(', ') || 'none'}
+
+═══ SCORING RUBRIC ═══
+fit_score (0–100): Holistic match of candidate content to job requirements.
+  - 90–100: All must-haves covered, 80%+ ATS keywords present, bullets are specific and quantified
+  - 80–89: Most must-haves covered, 60–79% ATS keywords present, strong bullets
+  - 70–79: Core skills present but some must-haves missing or bullets are vague
+  - 60–69: Partial match — key technical skills or several must-haves absent
+  - Below 60: Weak match — major requirements unaddressed
+
+ats_keyword_coverage: Percentage of ATS keywords found in the resume. Use the pre-computed data above.
+  - Formula: (keywords found / total keywords) × 100, rounded to nearest integer
+
+bullet_quality_score (0–100):
+  - 90–100: Every bullet starts with action verb, has real metric, is concise (≤18 words)
+  - 70–89: Most bullets are strong; minor vagueness or missing metrics
+  - Below 70: Bullets are generic, wordy, or lack quantification
+
+needs_refinement: Set to true if fit_score < 80 OR ats_keyword_coverage < 60.
+
+Score and return JSON ONLY:
+{
+  "fit_score": <integer 0-100>,
+  "fit_label": "Excellent Match | Strong Match | Good Match | Partial Match | Weak Match",
+  "ats_keyword_coverage": <integer 0-100 — use the pre-computed formula above>,
+  "bullet_quality_score": <integer 0-100>,
+  "strengths": ["specific strength — max 3"],
+  "gaps": ["specific gap with the exact keyword or requirement missing — max 3"],
+  "needs_refinement": <true if fit_score < 80 OR ats_keyword_coverage < 60>,
+  "refinement_instructions": ["concrete fix: e.g. 'Add keyword X to bullet 3 of Handshake entry' — max 3 instructions"]
+}`;
+
+    const text = await this.ai(prompt, true);
+    return parseAIJson<QualityReport>(text);
+  }
+
+  // ─── STEP 4 (conditional): Targeted Refinement ───────────────────────────────
+
+  private async refineContent(
+    jobAnalysis: JobAnalysis,
+    jobDescription: string,
+    draft: Omit<TailoredContent, 'job_analysis' | 'quality_report' | 'ats_keywords_used' | 'refinement_applied'>,
+    qualityReport: QualityReport,
+    passNumber: number = 1
+  ): Promise<Omit<TailoredContent, 'job_analysis' | 'quality_report' | 'ats_keywords_used' | 'refinement_applied'>> {
+    console.log(`[ResumeService] Step 4 (pass ${passNumber}): Applying targeted refinement...`);
+
+    // Which keywords are still missing?
+    const allText = [
+      draft.tailored_professional_summary,
+      ...draft.selected_work_experience.flatMap((j: any) => j.bullets?.map((b: any) => b.tailored_text) ?? []),
+      ...draft.selected_projects.flatMap((p: any) => p.bullets?.map((b: any) => b.tailored_text) ?? []),
+    ].join(' ').toLowerCase();
+    const missingKeywords = jobAnalysis.ats_keywords.filter(kw => !allText.includes(kw.toLowerCase()));
+
+    const prompt = `You are a resume refinement specialist. Improve this tailored resume draft to achieve a fit score of 85+.
+
+═══ WHAT NEEDS FIXING ═══
+Current fit score: ${qualityReport.fit_score}/100 — Target: 85+
+ATS keyword coverage: ${qualityReport.ats_keyword_coverage}% — Target: 70%+
+
+GAPS TO FIX:
+${qualityReport.gaps.map((g, i) => `${i + 1}. ${g}`).join('\n')}
+
+SPECIFIC INSTRUCTIONS:
+${qualityReport.refinement_instructions.map((inst, i) => `${i + 1}. ${inst}`).join('\n')}
+
+MISSING ATS KEYWORDS (${missingKeywords.length}) — you MUST work these into bullets or the summary:
+${missingKeywords.slice(0, 8).map((kw, i) => `  ${i + 1}. "${kw}"`).join('\n') || '  (none missing)'}
+
+JOB FOCUS: ${jobAnalysis.primary_focus}
+MUST-HAVES REQUIRED: ${jobAnalysis.must_haves.join(', ')}
+
+═══ CURRENT DRAFT ═══
+${JSON.stringify(draft, null, 2)}
+
+═══ YOUR TASK ═══
+- Fix every gap listed above
+- Weave the missing ATS keywords into bullets naturally (don't just append them)
+- Keep bullets concise: ONE line, 10–18 words, action verb first
+- Do NOT fabricate metrics — only use numbers that appear in the candidate data
+- Return the COMPLETE updated JSON with the SAME structure as the input draft
+
+Return JSON ONLY:`;
+
+    const text = await this.ai(prompt, true);
+    return parseAIJson<Omit<TailoredContent, 'job_analysis' | 'quality_report' | 'ats_keywords_used' | 'refinement_applied'>>(text);
+  }
+
+  // ─── Public AI methods ───────────────────────────────────────────────────────
+
   /**
-   * Step 3 – Generate a cover letter body matched to the job and tailored resume.
+   * Full pipeline:
+   * 1. Deep job analysis
+   * 2. Smart content selection + tailored bullet writing
+   * 3. Quality check + re-score loop (up to 3 refinement passes if score < 80)
    */
+  async tailorContent(jobDescription: string): Promise<TailoredContent> {
+    const SCORE_TARGET = 80;
+    const MAX_REFINEMENT_PASSES = 3;
+
+    // ── Step 1: Job Analysis ─────────────────────────────────────────────────
+    const jobAnalysis = await this.analyzeJob(jobDescription);
+    console.log(`[ResumeService] Job analyzed: ${jobAnalysis.primary_focus} | ${jobAnalysis.seniority_level} | ${jobAnalysis.ats_keywords.length} ATS keywords`);
+
+    // ── Step 2: Select + Tailor ──────────────────────────────────────────────
+    let draft = await this.selectAndTailor(jobDescription, jobAnalysis);
+
+    // ── Step 3: Quality Check + Refinement loop ──────────────────────────────
+    let qualityReport = await this.qualityCheck(jobAnalysis, draft);
+    console.log(`[ResumeService] Initial quality score: ${qualityReport.fit_score} (${qualityReport.fit_label}) | ATS coverage: ${qualityReport.ats_keyword_coverage}%`);
+
+    let refinementApplied = false;
+    let refinementPasses = 0;
+
+    while (qualityReport.needs_refinement && refinementPasses < MAX_REFINEMENT_PASSES) {
+      refinementPasses++;
+      console.log(`[ResumeService] Score ${qualityReport.fit_score} < ${SCORE_TARGET} — starting refinement pass ${refinementPasses}/${MAX_REFINEMENT_PASSES}...`);
+      try {
+        draft = await this.refineContent(jobAnalysis, jobDescription, draft, qualityReport, refinementPasses);
+        refinementApplied = true;
+
+        // Re-score after each refinement pass
+        qualityReport = await this.qualityCheck(jobAnalysis, draft);
+        console.log(`[ResumeService] Post-refinement pass ${refinementPasses} score: ${qualityReport.fit_score} (${qualityReport.fit_label}) | ATS coverage: ${qualityReport.ats_keyword_coverage}%`);
+      } catch (err) {
+        console.error(`[ResumeService] Refinement pass ${refinementPasses} failed:`, err);
+        break;
+      }
+    }
+
+    if (refinementPasses > 0) {
+      console.log(`[ResumeService] Refinement complete after ${refinementPasses} pass(es). Final score: ${qualityReport.fit_score}`);
+    }
+
+    // Collect which ATS keywords actually appear in the final bullets
+    const allText = [
+      draft.tailored_professional_summary,
+      ...draft.selected_work_experience.flatMap((j: any) => j.bullets?.map((b: any) => b.tailored_text) ?? []),
+      ...draft.selected_projects.flatMap((p: any) => p.bullets?.map((b: any) => b.tailored_text) ?? []),
+    ].join(' ').toLowerCase();
+
+    const atsKeywordsUsed = jobAnalysis.ats_keywords.filter(kw =>
+      allText.includes(kw.toLowerCase())
+    );
+
+    return {
+      ...draft,
+      job_analysis: jobAnalysis,
+      quality_report: qualityReport,
+      ats_keywords_used: atsKeywordsUsed,
+      refinement_applied: refinementApplied,
+    };
+  }
+
   async generateCoverLetter(
     jobDescription: string,
     tailoredContent: TailoredContent
   ): Promise<string> {
-    const prompt = `Write a professional cover letter for this job. Keep it simple, clear, and engaging.
+    const { personal_info } = this.resumeData;
 
-Job Description Snippet:
-${jobDescription.substring(0, 1000)}...
+    const includedProjects = tailoredContent.selected_projects
+      .filter(p => p.include !== false && p.bullets?.length > 0)
+      .map(p => `${p.title}${p.role ? ` (${p.role})` : ''}: ${p.bullets.slice(0, 2).map(b => b.tailored_text).join('; ')}`)
+      .join('\n');
 
-Candidate's Resume Summary (SOURCE OF TRUTH):
-- Professional Summary: ${tailoredContent.tailored_professional_summary}
-- Top Skills: ${Object.values(tailoredContent.selected_skills).flat().slice(0, 5).join(', ')}
-- Recent Experience: ${tailoredContent.selected_work_experience[0]?.company || 'N/A'}
+    const includedJobs = tailoredContent.selected_work_experience
+      .filter(j => j.include !== false && j.bullets?.length > 0)
+      .map(j => `${j.company} — ${j.title}: ${j.bullets.slice(0, 2).map(b => b.tailored_text).join('; ')}`)
+      .join('\n');
 
-CRITICAL RULES:
-1. ONLY use information explicitly stated in the "Candidate's Resume Summary" above.
-2. DO NOT invent achievements, skills, roles, or companies.
-3. If the candidate lacks a required skill, do NOT mention it. Focus on what they DO have.
-4. Keep it 3-4 paragraphs maximum.
-5. Use simple, clear, entry-level professional language.
-6. Make it personal and genuine.
-7. Highlight 2-3 relevant achievements, but only those present in the provided resume data.
+    const topSkills = Object.entries(tailoredContent.selected_skills)
+      .map(([cat, skills]) => `${cat}: ${(skills as string[]).slice(0, 4).join(', ')}`)
+      .join(' | ');
 
-Return ONLY the body paragraphs of the cover letter (no header/signature). Start with a strong opening paragraph.`;
+    const jobFocus = tailoredContent.job_analysis?.primary_focus || 'the role';
+    const companyName = tailoredContent.job_analysis?.company_name || 'the company';
 
-    try {
-      return await this.generateAIText(prompt);
-    } catch (error) {
-      console.error('Error generating cover letter:', error);
-      throw new Error('Failed to generate cover letter');
-    }
+    const prompt = `Write a compelling, personalized cover letter for ${personal_info.name} applying to ${companyName}.
+
+Today's date: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+
+ROLE FOCUS: ${jobFocus}
+
+JOB DESCRIPTION:
+${jobDescription.substring(0, 1000)}
+
+CANDIDATE'S TAILORED HIGHLIGHTS:
+Summary: ${tailoredContent.tailored_professional_summary}
+Skills: ${topSkills}
+Key Projects: ${includedProjects || 'None'}
+Work Experience: ${includedJobs || 'None'}
+
+INSTRUCTIONS:
+- Open with a strong, specific hook (not "I am writing to apply...")
+- Show genuine understanding of what the company/role needs
+- Connect 2-3 specific achievements to those needs
+- Close confidently with a clear call to action
+- Keep it to 3-4 paragraphs, professional but personable
+- Write the full letter: date, contact block, salutation, body, sign-off (Sincerely, ${personal_info.name})`;
+
+    const result = await generate(prompt);
+    return result.text;
   }
 
-  // ---------------------------------------------------------------------------
-  // LaTeX generation (no AI calls — purely deterministic)
-  // ---------------------------------------------------------------------------
+  // ─── LaTeX generation (deterministic — no AI calls) ──────────────────────────
 
-  generateLatexResume(tailoredContent: TailoredContent): string {
-    const { personal_info, education, certifications } = this.resumeData;
-
-    // -----------------------------------------------------------------------
-    // PREAMBLE — identical to src/templates/resume_template.tex
-    // -----------------------------------------------------------------------
-    let latex = `\\documentclass[11pt, a4paper]{article}
+  private readTemplatePreamble(): string {
+    try {
+      const templatePath = path.join(getProjectRoot(), 'src/templates/resume_template.tex');
+      const raw = fs.readFileSync(templatePath, 'utf-8');
+      const marker = '\\begin{document}';
+      const idx = raw.indexOf(marker);
+      if (idx !== -1) return raw.substring(0, idx + marker.length);
+      console.warn('[ResumeService] \\begin{document} not found in template — using fallback preamble');
+    } catch (err) {
+      console.warn('[ResumeService] Could not read resume_template.tex — using fallback preamble:', err);
+    }
+    return `\\documentclass[10pt, a4paper]{article}
 
 % --- UNIVERSAL PREAMBLE BLOCK ---
-\\usepackage[a4paper, top=1.5cm, bottom=1.5cm, left=1.5cm, right=1.5cm]{geometry}
+\\usepackage[a4paper, top=1.2cm, bottom=1.2cm, left=1.2cm, right=1.2cm]{geometry}
 \\usepackage{fontspec}
 
-% Use babel for font management
-\\usepackage[english, provide=*]{babel}
-\\babelprovide[import, main]{english}
-% Font setup with TeX Gyre Heros (Helvetica clone)
-\\setmainfont{texgyreheros-regular.otf}[
-  BoldFont = texgyreheros-bold.otf,
-  ItalicFont = texgyreheros-italic.otf,
-  BoldItalicFont = texgyreheros-bolditalic.otf,
+\\usepackage[english]{babel}
+
+% IBM Plex Sans — clean, modern, professional sans-serif (available in TeX Live 2025)
+\\setmainfont{IBMPlexSans}[
+  Extension = .otf,
+  UprightFont = *-Regular,
+  BoldFont = *-Bold,
+  ItalicFont = *-Italic,
+  BoldItalicFont = *-BoldItalic,
 ]
 
-% List formatting
+% List formatting - compact and clean
 \\usepackage{enumitem}
-\\setlist[itemize]{leftmargin=*, nosep, topsep=2pt, itemsep=1pt, label=\\textbullet}
+\\setlist[itemize]{leftmargin=*, nosep, label=\\textbullet}
 
-% Section formatting
+% Section formatting - Centered and Uppercase transformation
 \\usepackage{titlesec}
-\\titleformat{\\section}{\\large\\bfseries\\uppercase}{}{0em}{}[\\titlerule]
-\\titlespacing{\\section}{0pt}{6pt}{4pt}
+\\titleformat{\\section}
+  {\\large\\bfseries\\filcenter} 
+  {} 
+  {0em} 
+  {\\MakeUppercase} 
+  [\\titlerule] 
+\\titlespacing{\\section}{0pt}{8pt}{4pt}
 
 % Link Coloring (Professional Dark Blue)
 \\usepackage{xcolor}
-\\definecolor{linkblue}{RGB}{0, 0, 139} % Dark Blue
+\\definecolor{linkblue}{RGB}{0, 0, 139}
 
 % Hyperlink setup
 \\usepackage{hyperref}
@@ -543,152 +708,127 @@ Return ONLY the body paragraphs of the cover letter (no header/signature). Start
     linkcolor=linkblue,
     filecolor=linkblue,
     urlcolor=linkblue,
-    pdftitle={Resume - ${this.escapeLatex(personal_info.name)}},
+    pdftitle={Resume - Jawad Mousa Iskandar},
     pdfpagemode=FullScreen,
 }
 
 % --- USER CONFIGURATION SECTION ---
-\\newcommand{\\myName}{${this.escapeLatex(personal_info.name)}}
-\\newcommand{\\myEmail}{${this.escapeLatex(personal_info.email)}}
-\\newcommand{\\myPhone}{${this.escapeLatex(personal_info.phone)}}
+\\newcommand{\\myName}{Jawad Mousa Iskandar}
+\\newcommand{\\myEmail}{Jawad.iskandar@outlook.com}
+\\newcommand{\\myPhone}{(571) 269-8465}
 
 % Social Links
-\\newcommand{\\myGithubLink}{${personal_info.github.url}}
-\\newcommand{\\myGithubDisp}{${this.escapeLatex(personal_info.github.display)}}
+\\newcommand{\\myGithubLink}{https://github.com/Iskos1}
+\\newcommand{\\myGithubDisp}{github.com/Iskos1}
 
-\\newcommand{\\myLinkedinLink}{${personal_info.linkedin.url}}
-\\newcommand{\\myLinkedinDisp}{${this.escapeLatex(personal_info.linkedin.display)}}
+\\newcommand{\\myLinkedinLink}{https://linkedin.com/in/jawad-iskandar/}
+\\newcommand{\\myLinkedinDisp}{linkedin.com/in/jawad-iskandar}
 
-\\begin{document}
+\\begin{document}`;
+  }
+
+  generateLatexResume(tailoredContent: TailoredContent): string {
+    const { personal_info, education } = this.resumeData;
+
+    let latex = this.readTemplatePreamble();
+
+    // Header
+    latex += `
 
 \\pagestyle{empty}
 
-% --- CONTACT INFORMATION ---
 \\begin{center}
-    {\\LARGE \\textbf{\\myName}} \\\\
+    {\\LARGE \\textbf{${this.escapeLatex(personal_info.name)}}} \\\\
     \\vspace{2pt}
-    {\\small \\myEmail \\ | \\myPhone | \\href{\\myGithubLink}{\\myGithubDisp} | \\href{\\myLinkedinLink}{\\myLinkedinDisp}} \\\\
-    \\vspace{2pt}
-    U.S. Citizen | Eligible for Security Clearance
+    {\\small ${this.escapeLatex(personal_info.email)} \\ | \\ ${this.escapeLatex(personal_info.phone)} \\ | \\ \\href{${personal_info.github.url}}{${this.escapeLatex(personal_info.github.display)}} \\ | \\ \\href{${personal_info.linkedin.url}}{${this.escapeLatex(personal_info.linkedin.display)}}}
 \\end{center}
 
-% --- SKILLS ---
-\\section{Skills}
-\\begin{itemize}
 `;
 
-    // Add skills
-    for (const [category, skills] of Object.entries(tailoredContent.selected_skills)) {
-      if (skills && skills.length > 0) {
-        const escapedSkills = skills.map((s) => this.escapeLatex(s)).join(', ');
-        latex += `    \\item \\textbf{${this.escapeLatex(category)}:} ${escapedSkills}.\n`;
+    // Skills
+    const skillEntries = Object.entries(tailoredContent.selected_skills).filter(
+      ([, skills]) => skills && skills.length > 0
+    );
+    if (skillEntries.length > 0) {
+      latex += `\\section{Skills}\n\\begin{itemize}\n`;
+      for (const [category, skills] of skillEntries) {
+        const escapedSkills = (skills as string[]).map((s) => this.escapeLatex(s)).join(', ');
+        latex += `    \\item \\textbf{${this.escapeLatex(category)}:} ${escapedSkills}\n`;
       }
+      latex += `\\end{itemize}\n\n`;
     }
 
-    latex += `\\end{itemize}\n`;
+    // Work Experience always comes first — hardcoded, non-negotiable
+    const sectionOrder: Array<'work_experience' | 'projects'> = ['work_experience', 'projects'];
 
-    // -----------------------------------------------------------------------
-    // DYNAMIC SECTION ORDER
-    // The AI decides whether Work Experience or Project Work comes first
-    // based on what the job values most. Default: experience first.
-    // -----------------------------------------------------------------------
-    const sectionOrder: Array<'work_experience' | 'projects'> =
-      tailoredContent.section_order?.length === 2
-        ? tailoredContent.section_order
-        : ['work_experience', 'projects'];
+    console.log(`[ResumeService] Section order: ${sectionOrder.join(' → ')} (fixed — Work Experience always first)`);
 
-    console.log(`[ResumeService] Section order: ${sectionOrder.join(' → ')}`);
-
-    // Helper: render the Projects block
-    const renderProjects = (): string => {
-      let block = `
-% --- PROJECT WORK ---
-\\section{Project Work}
-`;
-      let first = true;
-      for (const project of tailoredContent.selected_projects) {
-        if (project.include !== false && project.bullets && project.bullets.length > 0) {
-          if (!first) block += '\n\\vspace{3pt}\n\n';
-          first = false;
-          block += `\\noindent
-\\textbf{${this.escapeLatex(project.title)}} \\hfill ${this.escapeLatex(project.date)}
-\\begin{itemize}
-`;
-          for (const bullet of project.bullets) {
-            block += `    \\item ${this.escapeLatex(bullet.tailored_text)}\n`;
-          }
-          block += `\\end{itemize}\n`;
-        }
-      }
-      return block;
-    };
-
-    // Helper: render the Work Experience block
     const renderWorkExperience = (): string => {
-      let block = `
-% --- WORK EXPERIENCE ---
-\\section{Work Experience}
-`;
-      let first = true;
-      for (const job of tailoredContent.selected_work_experience) {
-        if (job.include !== false && job.bullets && job.bullets.length > 0) {
-          if (!first) block += '\n\\vspace{3pt}\n\n';
-          first = false;
-          block += `\\noindent
-\\textbf{${this.escapeLatex(job.company)}} \\hfill ${this.escapeLatex(job.location)} \\\\
-\\textit{${this.escapeLatex(job.title)}} \\hfill ${this.escapeLatex(job.date)}
-\\begin{itemize}
-`;
-          for (const bullet of job.bullets) {
-            block += `    \\item ${this.escapeLatex(bullet.tailored_text)}\n`;
-          }
-          block += `\\end{itemize}\n`;
+      let block = `\\section{Work Experience}\n\n`;
+      const included = tailoredContent.selected_work_experience.filter(
+        (j) => j.include !== false && j.bullets && j.bullets.length > 0
+      );
+      for (let i = 0; i < included.length; i++) {
+        const job = included[i];
+        if (i > 0) block += `\\vspace{4pt}\n\n`;
+        block += `\\noindent\n`;
+        block += `\\textbf{${this.escapeLatex(job.company)}} \\hfill ${this.escapeLatex(job.location)} \\\\\n`;
+        block += `\\textit{${this.escapeLatex(job.title)}} \\hfill ${this.escapeLatex(job.date)}\n`;
+        block += `\\begin{itemize}\n`;
+        for (const bullet of job.bullets) {
+          block += `    \\item ${this.escapeLatex(bullet.tailored_text)}\n`;
         }
+        block += `\\end{itemize}\n\n`;
       }
       return block;
     };
 
-    // Render sections in AI-decided order
-    for (const section of sectionOrder) {
-      if (section === 'projects') {
-        latex += renderProjects();
-      } else {
-        latex += renderWorkExperience();
+    const renderProjectWork = (): string => {
+      let block = `\\section{Project Work}\n\n`;
+      const included = tailoredContent.selected_projects.filter(
+        (p) => p.include !== false && p.bullets && p.bullets.length > 0
+      );
+      for (let i = 0; i < included.length; i++) {
+        const project = included[i];
+        if (i > 0) block += `\\vspace{4pt}\n\n`;
+        block += `\\noindent\n`;
+        if (project.role) {
+          block += `\\textbf{${this.escapeLatex(project.title)}} \\hfill ${this.escapeLatex(project.date)} \\\\\n`;
+          block += `\\textit{${this.escapeLatex(project.role)}}\n`;
+        } else {
+          block += `\\textbf{${this.escapeLatex(project.title)}} \\hfill ${this.escapeLatex(project.date)}\n`;
+        }
+        block += `\\begin{itemize}\n`;
+        for (const bullet of project.bullets) {
+          block += `    \\item ${this.escapeLatex(bullet.tailored_text)}\n`;
+        }
+        block += `\\end{itemize}\n\n`;
       }
+      return block;
+    };
+
+    for (const section of sectionOrder) {
+      latex += section === 'projects' ? renderProjectWork() : renderWorkExperience();
     }
 
-    // Add education
-    const coursework = education.coursework.map((c) => this.escapeLatex(c)).join(', ');
-    latex += `
-% --- EDUCATION ---
-\\section{Education}
-\\noindent
-\\textbf{${this.escapeLatex(education.institution)}} \\hfill ${this.escapeLatex(education.location)} \\\\
-\\textit{${this.escapeLatex(education.degree)}} \\hfill ${this.escapeLatex(education.graduation_date)} \\\\
-\\textbf{Relevant Coursework:} ${coursework}.
-`;
-
-    // Add certifications — prefer AI-selected ones, fall back to all from resume data
-    const certsToRender =
-      tailoredContent.selected_certifications?.length > 0
-        ? tailoredContent.selected_certifications
-        : certifications ?? [];
-
-    if (certsToRender.length > 0) {
-      latex += `
-% --- CERTIFICATIONS ---
-\\section{Certifications}
-\\noindent
-`;
-      certsToRender.forEach((cert, index) => {
-        const separator = index < certsToRender.length - 1 ? ' \\\\\n' : '\n';
-        latex += `\\textbf{${this.escapeLatex(cert.name)}} \\hfill ${this.escapeLatex(cert.year)}${separator}`;
-      });
+    // Certifications
+    const certs = tailoredContent.selected_certifications ?? [];
+    if (certs.length > 0) {
+      latex += `\\section{Certifications}\n\\noindent\n`;
+      const certParts = certs.map(
+        (cert) => `\\textbf{${this.escapeLatex(cert.name)}} (${this.escapeLatex(cert.year)})`
+      );
+      latex += certParts.join(' \\ | \\ ') + '\n\n';
     }
 
-    latex += `
-\\end{document}
-`;
+    // Education (always last)
+    latex += `\\section{Education}\n`;
+    latex += `\\noindent\n`;
+    latex += `\\textbf{${this.escapeLatex(education.institution)}} \\hfill ${this.escapeLatex(education.location)} \\\\\n`;
+    latex += `\\textit{${this.escapeLatex(education.degree)}} \\hfill ${this.escapeLatex(education.graduation_date)} \\\\\n`;
+    latex += `{\\small \\textbf{Relevant Coursework:} ${education.coursework.map((c) => this.escapeLatex(c)).join(', ')}.}\n\n`;
+
+    latex += `\\end{document}\n`;
 
     return latex;
   }
@@ -701,23 +841,21 @@ Return ONLY the body paragraphs of the cover letter (no header/signature). Start
 % --- PREAMBLE ---
 \\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
 \\usepackage{fontspec}
-\\usepackage[english, provide=*]{babel}
-\\babelprovide[import, main]{english}
-\\setmainfont{texgyreheros-regular.otf}[
-  BoldFont = texgyreheros-bold.otf,
-  ItalicFont = texgyreheros-italic.otf,
-  BoldItalicFont = texgyreheros-bolditalic.otf,
+\\usepackage[english]{babel}
+\\setmainfont{IBMPlexSans}[
+  Extension = .otf,
+  UprightFont = *-Regular,
+  BoldFont = *-Bold,
+  ItalicFont = *-Italic,
+  BoldItalicFont = *-BoldItalic,
 ]
 
-% Remove page numbers
 \\pagestyle{empty}
 
-% Paragraph formatting
 \\usepackage{parskip}
 \\setlength{\\parindent}{0pt}
 \\setlength{\\parskip}{10pt}
 
-% Hyperlink setup
 \\usepackage{xcolor}
 \\definecolor{linkblue}{RGB}{0, 0, 139}
 \\usepackage{hyperref}
@@ -730,31 +868,17 @@ Return ONLY the body paragraphs of the cover letter (no header/signature). Start
 
 \\begin{document}
 
-% --- HEADER ---
+% --- CANDIDATE HEADER ---
 \\begin{center}
     {\\Large \\textbf{${this.escapeLatex(personal_info.name)}}} \\\\
     \\vspace{2pt}
-    {\\small ${this.escapeLatex(personal_info.email)} $|$ ${this.escapeLatex(personal_info.phone)}} \\\\
-    {\\small \\href{${personal_info.linkedin.url}}{${this.escapeLatex(personal_info.linkedin.display)}} $|$ \\href{${personal_info.github.url}}{${this.escapeLatex(personal_info.github.display)}}}
+    {\\small ${this.escapeLatex(personal_info.email)} \\ | \\ ${this.escapeLatex(personal_info.phone)}} \\\\
+    {\\small \\href{${personal_info.linkedin.url}}{${this.escapeLatex(personal_info.linkedin.display)}} \\ | \\ \\href{${personal_info.github.url}}{${this.escapeLatex(personal_info.github.display)}}}
 \\end{center}
 
-\\vspace{10pt}
-
-% --- DATE ---
-\\today
-
-\\vspace{10pt}
-
-% --- BODY ---
-Dear Hiring Manager,
+\\vspace{14pt}
 
 ${this.escapeLatex(coverLetterBody)}
-
-Thank you for your time and consideration.
-
-Sincerely,
-
-${this.escapeLatex(personal_info.name)}
 
 \\end{document}
 `;

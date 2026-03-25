@@ -1,139 +1,251 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ArrowDown, Sparkles } from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
 import { profile as defaultProfile } from "@/lib/data";
 import { Profile } from "@/lib/data";
+import { MapPin, ArrowRight, Github, Linkedin, Mail } from "lucide-react";
 
 interface HeroProps {
   profile?: Profile;
 }
 
 export default function Hero({ profile = defaultProfile }: HeroProps) {
-  // Safe check if profile is somehow undefined (though defaultProfile handles it)
+  const [imgError, setImgError] = useState(false);
+
   if (!profile) return null;
+
+  const firstName = profile.name.split(" ")[0];
+  const lastName = profile.name.split(" ").slice(1).join(" ");
+  const initials = profile.name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
+  const hasAvatar = profile.avatar && profile.avatar.length > 0 && !imgError;
 
   return (
     <section
       id="about"
-      className="relative min-h-screen flex items-center justify-center px-6 pt-16 overflow-hidden"
+      className="relative pt-24 pb-20 px-6 overflow-hidden bg-white"
     >
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 -z-10">
-        {/* Gradient Orbs */}
-        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-purple-300/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-blue-300/20 rounded-full blur-3xl animate-pulse delay-1000" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-indigo-200/10 via-purple-200/10 to-pink-200/10 rounded-full blur-3xl" />
-        
-        {/* Grid Pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#8882_1px,transparent_1px),linear-gradient(to_bottom,#8882_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
-      </div>
+      {/* Subtle dot-grid texture */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: "radial-gradient(circle, #e2e8f0 1px, transparent 1px)",
+          backgroundSize: "32px 32px",
+        }}
+      />
 
-      <div className="max-w-4xl mx-auto text-center relative z-10">
-        {/* Availability Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-        >
-          <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200/60 text-sm font-semibold text-emerald-700 mb-8 shadow-sm backdrop-blur-sm">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-            </span>
-            {profile.availability}
-          </span>
-        </motion.div>
+      {/* Ambient glow — top right */}
+      <div
+        className="absolute -top-48 -right-48 w-[640px] h-[640px] rounded-full pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(59,130,246,0.1) 0%, rgba(124,58,237,0.06) 45%, transparent 70%)",
+        }}
+      />
 
-        {/* Headline with Enhanced Gradient */}
-        <motion.h1
-          className="text-5xl sm:text-6xl md:text-8xl font-extrabold tracking-tight leading-[1.1] mb-8"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2, ease: [0.21, 0.47, 0.32, 0.98] }}
-        >
-          <span className="block text-slate-900 mb-2">Hi, I'm</span>
-          <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 animate-gradient bg-[length:200%_auto]">
-            {profile.name}
-          </span>
-        </motion.h1>
+      {/* Ambient glow — bottom left */}
+      <div
+        className="absolute -bottom-24 -left-24 w-80 h-80 rounded-full pointer-events-none"
+        style={{
+          background: "radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 70%)",
+        }}
+      />
 
-        {/* Role with Icon */}
-        <motion.div
-          className="flex items-center justify-center gap-3 mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.35 }}
-        >
-          <div className="h-px w-8 bg-gradient-to-r from-transparent to-slate-300" />
-          <p className="text-xl sm:text-2xl md:text-3xl text-slate-600 font-medium flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-purple-500" />
-            {profile.role}
-          </p>
-          <div className="h-px w-8 bg-gradient-to-l from-transparent to-slate-300" />
-        </motion.div>
+      <div className="relative max-w-5xl mx-auto">
+        {/* ── Two-column layout ── */}
+        <div className="flex flex-col-reverse lg:flex-row lg:items-center lg:justify-between gap-10 lg:gap-16">
 
-        {/* Tagline */}
-        <motion.p
-          className="text-lg sm:text-xl text-slate-500 max-w-2xl mx-auto mb-12 leading-relaxed"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-        >
-          {profile.tagline}
-        </motion.p>
+          {/* ─── LEFT: Content ─── */}
+          <div className="flex-1 max-w-xl">
 
-        {/* Enhanced CTA Buttons */}
-        <motion.div
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.65 }}
-        >
-          <a
-            href="#projects"
-            className="group relative px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-base font-semibold rounded-xl hover:shadow-xl hover:shadow-purple-500/25 transition-all duration-300 hover:-translate-y-0.5 overflow-hidden"
-          >
-            <span className="relative z-10 flex items-center gap-2">
-              View My Work
-              <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </span>
-            <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </a>
-          <a
-            href="#contact"
-            className="group px-8 py-4 bg-white border-2 border-slate-200 text-slate-700 text-base font-semibold rounded-xl hover:bg-slate-50 hover:border-slate-300 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
-          >
-            <span className="flex items-center gap-2">
-              Get in Touch
-              <svg className="w-4 h-4 group-hover:rotate-45 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
-            </span>
-          </a>
-        </motion.div>
+            {/* Availability pill */}
+            <div className="inline-flex items-center gap-2 mb-8 px-3.5 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+              </span>
+              <span className="text-xs font-semibold text-emerald-700 tracking-wide">
+                {profile.availability}
+              </span>
+            </div>
 
-        {/* Stats or Quick Info */}
-        <motion.div
-          className="mt-16 flex flex-wrap items-center justify-center gap-8 text-sm"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.9 }}
-        >
-          <div className="flex items-center gap-2 text-slate-500">
-            <div className="w-2 h-2 rounded-full bg-purple-500" />
-            <span className="font-medium">Building innovative solutions</span>
+            {/* Name */}
+            <h1 className="text-5xl sm:text-6xl font-extrabold leading-[1.04] tracking-tighter mb-5">
+              <span className="text-slate-900">{firstName} </span>
+              <span
+                style={{
+                  background: "linear-gradient(125deg, #2563eb 0%, #7c3aed 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
+                {lastName}
+              </span>
+            </h1>
+
+            {/* Role */}
+            <div className="flex items-center gap-3 mb-5">
+              <div
+                className="h-[3px] w-8 rounded-full flex-shrink-0"
+                style={{ background: "linear-gradient(90deg, #2563eb, #7c3aed)" }}
+              />
+              <p className="text-base sm:text-lg font-semibold text-slate-600 leading-snug">
+                {profile.role}
+              </p>
+            </div>
+
+            {/* Tagline */}
+            <p className="text-sm sm:text-base text-slate-500 leading-relaxed mb-7 max-w-md">
+              {profile.tagline}
+            </p>
+
+            {/* Location */}
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-slate-400 mb-9">
+              <MapPin size={13} className="flex-shrink-0" />
+              <span>{profile.location}</span>
+              <span className="text-slate-300">·</span>
+              <span>U.S. Citizen</span>
+              <span className="text-slate-300">·</span>
+              <span>Security Clearance Eligible</span>
+            </div>
+
+            {/* CTAs */}
+            <div className="flex flex-wrap gap-3">
+              <a
+                href="/#projects"
+                className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white rounded-lg transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
+                style={{
+                  background: "linear-gradient(125deg, #2563eb 0%, #7c3aed 100%)",
+                  boxShadow: "0 4px 14px 0 rgba(37,99,235,0.3)",
+                }}
+              >
+                View My Work
+                <ArrowRight size={14} />
+              </a>
+              <a
+                href={`mailto:${profile.email}`}
+                className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-slate-700 bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 rounded-lg transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
+              >
+                <Mail size={14} />
+                Get in Touch
+              </a>
+              <a
+                href="https://linkedin.com/in/jawad-iskandar"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-slate-700 bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 rounded-lg transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
+              >
+                <Linkedin size={14} />
+                LinkedIn
+              </a>
+              <a
+                href="https://github.com/Iskos1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-slate-700 bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 rounded-lg transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
+              >
+                <Github size={14} />
+                GitHub
+              </a>
+            </div>
           </div>
-          <div className="w-px h-4 bg-slate-300" />
-          <div className="flex items-center gap-2 text-slate-500">
-            <div className="w-2 h-2 rounded-full bg-blue-500" />
-            <span className="font-medium">{profile.location}</span>
-          </div>
-        </motion.div>
-      </div>
 
+          {/* ─── RIGHT: Profile Photo ─── */}
+          <div className="flex-shrink-0 flex justify-center lg:justify-end">
+            <div className="relative">
+              {/* Soft glow behind the photo */}
+              <div
+                className="absolute inset-0 rounded-full scale-[1.15] pointer-events-none"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(37,99,235,0.18), rgba(124,58,237,0.14))",
+                  filter: "blur(24px)",
+                }}
+              />
+
+              {/* Gradient border ring */}
+              <div
+                className="relative w-52 h-52 sm:w-60 sm:h-60 lg:w-64 lg:h-64 rounded-full p-[3px]"
+                style={{
+                  background: "linear-gradient(135deg, #2563eb, #7c3aed)",
+                }}
+              >
+                {/* Inner white gap */}
+                <div className="w-full h-full rounded-full p-[3px] bg-white">
+                  <div className="w-full h-full rounded-full overflow-hidden bg-slate-100">
+                    {hasAvatar ? (
+                      <Image
+                        src={profile.avatar!}
+                        alt={profile.name}
+                        width={256}
+                        height={256}
+                        className="w-full h-full object-cover"
+                        onError={() => setImgError(true)}
+                        priority
+                      />
+                    ) : (
+                      /* Initials placeholder */
+                      <div
+                        className="w-full h-full flex flex-col items-center justify-center gap-1"
+                        style={{
+                          background: "linear-gradient(135deg, #dbeafe 0%, #ede9fe 100%)",
+                        }}
+                      >
+                        <span
+                          className="text-5xl font-extrabold tracking-tight select-none"
+                          style={{
+                            background: "linear-gradient(125deg, #2563eb, #7c3aed)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
+                            backgroundClip: "text",
+                          }}
+                        >
+                          {initials}
+                        </span>
+                        <span className="text-[10px] font-medium text-slate-400 tracking-widest uppercase">
+                          Add photo
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Stats row ── */}
+        <div className="mt-14 pt-8 border-t border-slate-100 grid grid-cols-2 sm:grid-cols-4 gap-6">
+          {[
+            { label: "Orders Analyzed", value: "100k+" },
+            { label: "Years Experience", value: "3+" },
+            { label: "Skills", value: "27" },
+            { label: "Projects Built", value: "6+" },
+          ].map((s) => (
+            <div key={s.label}>
+              <p
+                className="text-2xl font-extrabold tracking-tight"
+                style={{
+                  background: "linear-gradient(125deg, #2563eb 0%, #7c3aed 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
+                {s.value}
+              </p>
+              <p className="text-sm text-slate-400 mt-0.5">{s.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }

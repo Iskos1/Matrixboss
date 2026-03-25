@@ -1,8 +1,9 @@
 {
   "personal_info": {
     "name": "Jawad Mousa Iskandar",
+    "location": "Vienna, VA 22181",
     "email": "Jawad.iskandar@outlook.com",
-    "phone": "571-269-8465",
+    "phone": "(571) 269-8465",
     "github": {
       "url": "https://github.com/Iskos1",
       "display": "github.com/Iskos1"
@@ -170,6 +171,7 @@
     "institution": "George Mason University",
     "location": "Fairfax, VA",
     "degree": "B.S. in Business and Information Systems",
+    "gpa": "3.79/4.0",
     "graduation_date": "Dec 2025",
     "coursework": [
       "Cloud Computing Essentials",
@@ -178,6 +180,13 @@
       "Systems Analysis and Design",
       "Programming for Analytics"
     ]
+  },
+  "secondary_education": {
+    "institution": "Oakton High School",
+    "location": "Oakton, VA",
+    "degree": "High School Diploma, SAT I: M:780 V:760",
+    "graduation_date": "June 2021",
+    "notes": ["National Merit Scholar Finalist. Member of Varsity Lacrosse Team."]
   },
   "certifications": [
     { "name": "AWS Certified Cloud Practitioner", "year": "2025" },

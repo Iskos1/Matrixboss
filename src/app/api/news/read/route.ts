@@ -1,22 +1,20 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { JSDOM } from "jsdom";
 import { Readability } from "@mozilla/readability";
+import { handleError, badRequest, json } from "@/lib/api/responses";
 
 export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
-  const url = searchParams.get("url");
+  const url = request.nextUrl.searchParams.get("url");
 
   if (!url) {
-    return NextResponse.json(
-      { error: "URL is required" },
-      { status: 400 }
-    );
+    return badRequest("URL is required");
   }
 
   try {
     const response = await fetch(url, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
       },
     });
 
@@ -30,24 +28,17 @@ export async function GET(request: NextRequest) {
     const article = reader.parse();
 
     if (!article) {
-      return NextResponse.json(
-        { error: "Failed to parse article content" },
-        { status: 422 }
-      );
+      return handleError(new Error("Could not extract article content"), "Failed to parse article content");
     }
 
-    return NextResponse.json({
+    return json({
       title: article.title,
       content: article.content,
       textContent: article.textContent,
       byline: article.byline,
       siteName: article.siteName,
     });
-  } catch (error: any) {
-    console.error("Error fetching article:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch article content", details: error.message },
-      { status: 500 }
-    );
+  } catch (error) {
+    return handleError(error, "Failed to fetch article content");
   }
 }

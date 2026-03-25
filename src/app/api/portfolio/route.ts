@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { readJsonFile, writeJsonFile, joinPath } from "@/lib/utils/file-utils";
 import { PATHS } from "@/lib/constants";
-import { handleApiError } from "@/lib/utils/error-utils";
+import { handleError, badRequest, json } from "@/lib/api/responses";
 
 const dataPath = joinPath(PATHS.PORTFOLIO_DATA);
 
@@ -9,9 +9,9 @@ const dataPath = joinPath(PATHS.PORTFOLIO_DATA);
 export async function GET() {
   try {
     const data = readJsonFile(dataPath);
-    return NextResponse.json(data);
-  } catch (error: any) {
-    return handleApiError(error, "Failed to read portfolio data");
+    return json(data);
+  } catch (error) {
+    return handleError(error, "Failed to read portfolio data");
   }
 }
 
@@ -19,23 +19,15 @@ export async function GET() {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
-    
-    // Validate the data structure
+
     if (!body.profile || !body.skills || !body.experience || !body.projects || !body.certifications) {
-      return NextResponse.json(
-        { error: "Invalid data structure" },
-        { status: 400 }
-      );
+      return badRequest("Invalid data structure — profile, skills, experience, projects, and certifications are required");
     }
 
-    // Write to file
     writeJsonFile(dataPath, body);
-    
-    return NextResponse.json({ 
-      success: true, 
-      message: "Portfolio data updated successfully" 
-    });
-  } catch (error: any) {
-    return handleApiError(error, "Failed to update portfolio data");
+
+    return json({ success: true, message: "Portfolio data updated successfully" });
+  } catch (error) {
+    return handleError(error, "Failed to update portfolio data");
   }
 }

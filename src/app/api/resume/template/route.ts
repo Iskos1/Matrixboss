@@ -1,29 +1,23 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { compileLatex } from '@/lib/utils/latex-utils';
 import { readFile, writeFile, fileExists, getFileStats, joinPath } from '@/lib/utils/file-utils';
 import { PATHS, LATEX_CONFIG } from '@/lib/constants';
-import { handleApiError } from '@/lib/utils/error-utils';
+import { handleError, badRequest, notFound, json } from '@/lib/api/responses';
 
 // GET: Fetch template content
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const templatePath = joinPath(PATHS.RESUME_TEMPLATE);
 
     if (!fileExists(templatePath)) {
-      return NextResponse.json(
-        { error: 'Resume template not found' },
-        { status: 404 }
-      );
+      return notFound('Resume template not found');
     }
 
     const templateContent = readFile(templatePath);
 
-    return NextResponse.json({
-      content: templateContent,
-      success: true,
-    });
-  } catch (error: any) {
-    return handleApiError(error, 'Failed to read template');
+    return json({ content: templateContent, success: true });
+  } catch (error) {
+    return handleError(error, 'Failed to read template');
   }
 }
 
@@ -34,22 +28,16 @@ export async function POST(request: NextRequest) {
     const { content, autoCompile } = body;
 
     if (!content) {
-      return NextResponse.json(
-        { error: 'Template content is required' },
-        { status: 400 }
-      );
+      return badRequest('Template content is required');
     }
 
     const templatePath = joinPath(PATHS.RESUME_TEMPLATE);
-
-    // Save the updated content
     writeFile(templatePath, content);
 
     let pdfCompiled = false;
     let pdfSize = 0;
     let compilationError = null;
 
-    // Auto-compile if requested
     if (autoCompile) {
       const compileResult = compileLatex(PATHS.RESUME_TEMPLATE, { timeout: LATEX_CONFIG.DEFAULT_TIMEOUT });
       if (compileResult.success) {
@@ -61,14 +49,14 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({
+    return json({
       success: true,
       message: 'Template updated successfully',
       pdfCompiled,
       pdfSize,
       compilationError,
     });
-  } catch (error: any) {
-    return handleApiError(error, 'Failed to update template');
+  } catch (error) {
+    return handleError(error, 'Failed to update template');
   }
 }

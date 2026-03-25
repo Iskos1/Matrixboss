@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import {
   CheckCircle2,
   Lock,
@@ -100,30 +99,19 @@ export default function ProjectRoadmap({
   const overallPercent = overallSteps > 0 ? Math.round((overallCompleted / overallSteps) * 100) : 0;
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="py-8 sm:py-12 px-4 sm:px-6"
-    >
+    <div className="py-8 sm:py-12 px-4 sm:px-6">
       <div className="max-w-4xl mx-auto">
         {/* Back Button */}
-        <motion.button
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
+        <button
           onClick={onBack}
           className="mb-8 flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           <span className="text-sm font-medium">All Paths</span>
-        </motion.button>
+        </button>
 
         {/* Path Header Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 mb-8 shadow-sm"
-        >
+        <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 mb-8 shadow-sm">
           <div className="flex flex-col sm:flex-row items-start gap-5">
             <div className="text-5xl sm:text-6xl">{pathIcon}</div>
             <div className="flex-1">
@@ -142,11 +130,9 @@ export default function ProjectRoadmap({
                     <span className="font-semibold text-slate-700">{overallPercent}%</span>
                   </div>
                   <div className="w-full bg-slate-100 rounded-full h-2">
-                    <motion.div
+                    <div
                       className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full"
-                      initial={{ width: 0 }}
-                      animate={{ width: `${overallPercent}%` }}
-                      transition={{ duration: 1, ease: "easeOut" }}
+                      style={{ width: `${overallPercent}%` }}
                     />
                   </div>
                 </div>
@@ -156,21 +142,16 @@ export default function ProjectRoadmap({
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Roadmap Title */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="flex items-center gap-3 mb-6"
-        >
+        <div className="flex items-center gap-3 mb-6">
           <Sparkles className="w-5 h-5 text-purple-500" />
           <h2 className="text-lg font-semibold text-slate-900">
             Learning Roadmap
           </h2>
           <div className="flex-1 h-px bg-slate-200" />
-        </motion.div>
+        </div>
 
         {/* Project Cards */}
         <div className="relative">
@@ -191,13 +172,7 @@ export default function ProjectRoadmap({
                   : 0;
 
               return (
-                <motion.div
-                  key={project.level}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.15 + index * 0.1 }}
-                  className="relative"
-                >
+                <div key={project.level} className="relative">
                   {/* Timeline dot (desktop) */}
                   <div className="absolute left-4 sm:left-6 top-7 hidden sm:flex items-center justify-center z-10">
                     <div
@@ -362,12 +337,12 @@ export default function ProjectRoadmap({
                       </div>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               );
             })}
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
