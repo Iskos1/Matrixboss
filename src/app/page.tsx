@@ -1,5 +1,3 @@
-// Always read fresh portfolio.json at request time (important for Vercel deployments)
-export const dynamic = 'force-dynamic';
 
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
