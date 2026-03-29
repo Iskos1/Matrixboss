@@ -1,22 +1,57 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { commitProfileImage, commitPortfolioJson, isValidGitHubToken } from "@/lib/http/github-api";
 
 interface ProfileTabProps {
   portfolioData: any;
   onChange: (data: any) => void;
 }
 
+const GITHUB_TOKEN_KEY = "github_pat";
+
 export default function ProfileTab({ portfolioData, onChange }: ProfileTabProps) {
   const [avatarUploading, setAvatarUploading] = useState(false);
   const [avatarDragOver, setAvatarDragOver] = useState(false);
-  const [avatarStatus, setAvatarStatus] = useState<"" | "success" | "error">("");
+  const [avatarStatus, setAvatarStatus] = useState<"" | "success" | "error" | "deploying">("");
+  const [avatarStatusMsg, setAvatarStatusMsg] = useState("");
+  const [githubToken, setGithubToken] = useState("");
+  const [showTokenInput, setShowTokenInput] = useState(false);
+  const [tokenSaved, setTokenSaved] = useState(false);
+
+  const isStaticSite = process.env.NEXT_PUBLIC_GITHUB_PAGES === "true";
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(GITHUB_TOKEN_KEY);
+      if (saved) { setGithubToken(saved); setTokenSaved(true); }
+    } catch { /* ignore */ }
+  }, []);
 
   const updateProfile = (field: string, value: string) => {
     onChange({ ...portfolioData, profile: { ...portfolioData.profile, [field]: value } });
   };
 
-  const isStaticSite = process.env.NEXT_PUBLIC_GITHUB_PAGES === "true";
+  const saveToken = () => {
+    const trimmed = githubToken.trim();
+    if (!trimmed) { alert("Please enter a token."); return; }
+    if (!isValidGitHubToken(trimmed)) {
+      alert("Token must start with ghp_ or github_pat_ — please check and try again.");
+      return;
+    }
+    try {
+      localStorage.setItem(GITHUB_TOKEN_KEY, trimmed);
+      setGithubToken(trimmed);
+      setTokenSaved(true);
+      setShowTokenInput(false);
+    } catch { alert("Could not save token to localStorage."); }
+  };
+
+  const clearToken = () => {
+    try { localStorage.removeItem(GITHUB_TOKEN_KEY); } catch { /* ignore */ }
+    setGithubToken("");
+    setTokenSaved(false);
+  };
 
   const handleAvatarUpload = async (file: File) => {
     if (!file.type.startsWith("image/")) {
@@ -29,30 +64,53 @@ export default function ProfileTab({ portfolioData, onChange }: ProfileTabProps)
     }
     setAvatarUploading(true);
     setAvatarStatus("");
+    setAvatarStatusMsg("");
 
-    // GitHub Pages: no server — convert to base64 and store in localStorage
+    // GitHub Pages: commit directly to the repo via GitHub API
     if (isStaticSite) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const base64 = e.target?.result as string;
-        try {
-          localStorage.setItem("portfolio_avatar", base64);
-          onChange({ ...portfolioData, profile: { ...portfolioData.profile, avatar: base64 } });
-          setAvatarStatus("success");
-          setTimeout(() => setAvatarStatus(""), 8000);
-        } catch {
-          alert("Storage failed — image may be too large for local storage.");
-          setAvatarStatus("error");
-        } finally {
-          setAvatarUploading(false);
-        }
-      };
-      reader.onerror = () => {
-        alert("Failed to read image file.");
-        setAvatarStatus("error");
+      if (!githubToken) {
+        setShowTokenInput(true);
         setAvatarUploading(false);
-      };
-      reader.readAsDataURL(file);
+        alert("Add your GitHub token first (see the setup section below the upload area).");
+        return;
+      }
+
+      // Optimistic preview via base64 data URL
+      const reader = new FileReader();
+      const base64DataUrl = await new Promise<string>((resolve, reject) => {
+        reader.onload = (e) => resolve(e.target?.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+      onChange({ ...portfolioData, profile: { ...portfolioData.profile, avatar: base64DataUrl } });
+
+      setAvatarStatus("deploying");
+      setAvatarStatusMsg("Committing image to GitHub…");
+
+      const imageResult = await commitProfileImage(githubToken, file);
+      if (!imageResult.success) {
+        onChange({ ...portfolioData, profile: { ...portfolioData.profile, avatar: portfolioData.profile.avatar } });
+        setAvatarStatus("error");
+        setAvatarStatusMsg(imageResult.error || "Upload failed");
+        setAvatarUploading(false);
+        return;
+      }
+
+      setAvatarStatusMsg("Updating portfolio data…");
+      const updatedData = { ...portfolioData, profile: { ...portfolioData.profile, avatar: imageResult.avatarPath } };
+      const jsonResult = await commitPortfolioJson(githubToken, updatedData);
+      if (!jsonResult.success) {
+        setAvatarStatus("error");
+        setAvatarStatusMsg(`Image saved, but portfolio.json update failed: ${jsonResult.error}`);
+        setAvatarUploading(false);
+        return;
+      }
+
+      onChange(updatedData);
+      setAvatarStatus("success");
+      setAvatarStatusMsg("Committed! GitHub Pages is deploying — live in ~2 minutes.");
+      setAvatarUploading(false);
+      setTimeout(() => { setAvatarStatus(""); setAvatarStatusMsg(""); }, 15000);
       return;
     }
 
@@ -65,14 +123,15 @@ export default function ProfileTab({ portfolioData, onChange }: ProfileTabProps)
       if (result.success) {
         onChange({ ...portfolioData, profile: { ...portfolioData.profile, avatar: result.path } });
         setAvatarStatus("success");
-        setTimeout(() => setAvatarStatus(""), 8000);
+        setAvatarStatusMsg("Photo saved! Push to GitHub to deploy.");
+        setTimeout(() => { setAvatarStatus(""); setAvatarStatusMsg(""); }, 8000);
       } else {
-        alert(result.error || "Upload failed");
         setAvatarStatus("error");
+        setAvatarStatusMsg(result.error || "Upload failed");
       }
     } catch {
-      alert("Upload failed — please try again.");
       setAvatarStatus("error");
+      setAvatarStatusMsg("Upload failed — please try again.");
     } finally {
       setAvatarUploading(false);
     }
@@ -81,8 +140,13 @@ export default function ProfileTab({ portfolioData, onChange }: ProfileTabProps)
   const handleAvatarRemove = async () => {
     if (!confirm("Remove your profile photo?")) return;
     if (isStaticSite) {
-      localStorage.removeItem("portfolio_avatar");
-      onChange({ ...portfolioData, profile: { ...portfolioData.profile, avatar: "" } });
+      if (githubToken) {
+        const updatedData = { ...portfolioData, profile: { ...portfolioData.profile, avatar: "" } };
+        await commitPortfolioJson(githubToken, updatedData).catch(() => {});
+        onChange(updatedData);
+      } else {
+        onChange({ ...portfolioData, profile: { ...portfolioData.profile, avatar: "" } });
+      }
       return;
     }
     try {
@@ -196,12 +260,86 @@ export default function ProfileTab({ portfolioData, onChange }: ProfileTabProps)
                 </button>
               )}
 
+              {avatarStatus === "deploying" && (
+                <div className="mt-2 rounded-lg bg-blue-50 border border-blue-200 px-3 py-2">
+                  <p className="text-xs text-blue-700 font-medium flex items-center gap-1.5">
+                    <span className="w-3 h-3 border-2 border-blue-500 border-t-transparent rounded-full animate-spin flex-shrink-0" />
+                    {avatarStatusMsg}
+                  </p>
+                </div>
+              )}
               {avatarStatus === "success" && (
                 <div className="mt-2 rounded-lg bg-emerald-50 border border-emerald-200 px-3 py-2">
                   <p className="text-xs text-emerald-700 font-medium flex items-center gap-1">
                     <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                    {isStaticSite ? "Photo saved to this browser — visible on this device." : "Photo saved locally! Push to GitHub to deploy."}
+                    {avatarStatusMsg}
                   </p>
+                </div>
+              )}
+              {avatarStatus === "error" && (
+                <div className="mt-2 rounded-lg bg-red-50 border border-red-200 px-3 py-2">
+                  <p className="text-xs text-red-700 font-medium flex items-center gap-1">
+                    <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                    {avatarStatusMsg}
+                  </p>
+                </div>
+              )}
+
+              {/* GitHub Token setup — only shown on static site */}
+              {isStaticSite && (
+                <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-3">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <p className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+                      <svg className="w-3.5 h-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg>
+                      GitHub Token {tokenSaved ? <span className="text-emerald-600 font-semibold">✓ Connected</span> : <span className="text-amber-600">Required for permanent upload</span>}
+                    </p>
+                    <button
+                      onClick={() => setShowTokenInput(v => !v)}
+                      className="text-xs text-purple-600 hover:text-purple-800 font-medium"
+                    >
+                      {tokenSaved ? "Change" : showTokenInput ? "Cancel" : "Set up"}
+                    </button>
+                  </div>
+
+                  {!tokenSaved && !showTokenInput && (
+                    <p className="text-xs text-slate-500">
+                      Without a token, uploads only save in this browser.{" "}
+                      <button onClick={() => setShowTokenInput(true)} className="text-purple-600 underline underline-offset-2">Add token →</button>
+                    </p>
+                  )}
+
+                  {showTokenInput && (
+                    <div className="mt-2 space-y-2">
+                      <p className="text-xs text-slate-500">
+                        Create a token at{" "}
+                        <a href="https://github.com/settings/tokens/new?scopes=public_repo&description=Portfolio+Upload" target="_blank" rel="noopener noreferrer" className="text-purple-600 underline underline-offset-2">github.com/settings/tokens</a>
+                        {" "}with <strong>Contents: Read & Write</strong> permission on the Matrixboss repo.
+                      </p>
+                      <div className="flex gap-2">
+                        <input
+                          type="password"
+                          value={githubToken}
+                          onChange={(e) => setGithubToken(e.target.value)}
+                          placeholder="ghp_xxxxxxxxxxxx"
+                          className="flex-1 text-xs px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white font-mono"
+                          onKeyDown={(e) => { if (e.key === "Enter") saveToken(); }}
+                        />
+                        <button
+                          onClick={saveToken}
+                          className="px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold rounded-lg transition"
+                        >
+                          Save
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {tokenSaved && !showTokenInput && (
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs text-slate-500">Token saved — uploads will commit directly to GitHub.</p>
+                      <button onClick={clearToken} className="text-xs text-red-500 hover:text-red-700 font-medium">Remove</button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
