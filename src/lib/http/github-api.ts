@@ -86,7 +86,6 @@ export async function commitProfileImage(
     const oldPath = `public/profile.${oldExt}`;
     const oldSha = await getFileSha(token, oldPath);
     if (oldSha) {
-      // Delete old file (GitHub API requires SHA + empty-ish workaround; we just overwrite with a placeholder isn't clean — skip silent failures)
       await fetch(`${API_BASE}/repos/${GITHUB_REPO}/contents/${oldPath}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github.v3+json", "Content-Type": "application/json" },

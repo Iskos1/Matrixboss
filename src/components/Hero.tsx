@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import portfolioData from "@/data/portfolio.json";
 import type { Profile } from "@/lib/portfolio/types";
 const defaultProfile = portfolioData.profile as Profile;
@@ -13,14 +13,6 @@ interface HeroProps {
 
 export default function Hero({ profile = defaultProfile }: HeroProps) {
   const [imgError, setImgError] = useState(false);
-  const [localAvatar, setLocalAvatar] = useState<string>("");
-
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem("portfolio_avatar");
-      if (saved) setLocalAvatar(saved);
-    } catch { /* localStorage unavailable */ }
-  }, []);
 
   if (!profile) return null;
 
@@ -33,9 +25,7 @@ export default function Hero({ profile = defaultProfile }: HeroProps) {
     .slice(0, 2)
     .toUpperCase();
 
-  const avatarSrc = profile.avatar || localAvatar;
-  const hasAvatar = avatarSrc && avatarSrc.length > 0 && !imgError;
-  const isDataUrl = avatarSrc?.startsWith("data:");
+  const hasAvatar = profile.avatar && profile.avatar.length > 0 && !imgError;
 
   return (
     <section
@@ -192,17 +182,8 @@ export default function Hero({ profile = defaultProfile }: HeroProps) {
                 <div className="w-full h-full rounded-full p-[3px] bg-white">
                   <div className="w-full h-full rounded-full overflow-hidden bg-slate-100">
                     {hasAvatar ? (
-                      isDataUrl ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={avatarSrc}
-                          alt={profile.name}
-                          className="w-full h-full object-cover"
-                          onError={() => setImgError(true)}
-                        />
-                      ) : (
                       <Image
-                        src={avatarSrc!}
+                        src={profile.avatar!}
                         alt={profile.name}
                         width={256}
                         height={256}
@@ -210,7 +191,6 @@ export default function Hero({ profile = defaultProfile }: HeroProps) {
                         onError={() => setImgError(true)}
                         priority
                       />
-                      )
                     ) : (
                       /* Initials placeholder */
                       <div

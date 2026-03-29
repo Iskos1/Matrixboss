@@ -18,6 +18,7 @@ export default function ProfileTab({ portfolioData, onChange }: ProfileTabProps)
   const [githubToken, setGithubToken] = useState("");
   const [showTokenInput, setShowTokenInput] = useState(false);
   const [tokenSaved, setTokenSaved] = useState(false);
+  const [tokenPromptMsg, setTokenPromptMsg] = useState("");
 
   const isStaticSite = process.env.NEXT_PUBLIC_GITHUB_PAGES === "true";
 
@@ -44,6 +45,7 @@ export default function ProfileTab({ portfolioData, onChange }: ProfileTabProps)
       setGithubToken(trimmed);
       setTokenSaved(true);
       setShowTokenInput(false);
+      setTokenPromptMsg("");
     } catch { alert("Could not save token to localStorage."); }
   };
 
@@ -69,9 +71,9 @@ export default function ProfileTab({ portfolioData, onChange }: ProfileTabProps)
     // GitHub Pages: commit directly to the repo via GitHub API
     if (isStaticSite) {
       if (!githubToken) {
-        setShowTokenInput(true);
         setAvatarUploading(false);
-        alert("Add your GitHub token first (see the setup section below the upload area).");
+        setShowTokenInput(true);
+        setTokenPromptMsg("A GitHub token is required to upload your photo to the live site. Enter it below and then re-upload.");
         return;
       }
 
@@ -291,17 +293,28 @@ export default function ProfileTab({ portfolioData, onChange }: ProfileTabProps)
                   <div className="flex items-center justify-between mb-1.5">
                     <p className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
                       <svg className="w-3.5 h-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg>
-                      GitHub Token {tokenSaved ? <span className="text-emerald-600 font-semibold">✓ Connected</span> : <span className="text-amber-600">Required for permanent upload</span>}
+                      GitHub Token{" "}
+                      {tokenSaved
+                        ? <span className="text-emerald-600 font-semibold">✓ Connected</span>
+                        : <span className="text-amber-600">Required for upload</span>}
                     </p>
                     <button
-                      onClick={() => setShowTokenInput(v => !v)}
+                      onClick={() => { setShowTokenInput(v => !v); setTokenPromptMsg(""); }}
                       className="text-xs text-purple-600 hover:text-purple-800 font-medium"
                     >
                       {tokenSaved ? "Change" : showTokenInput ? "Cancel" : "Set up"}
                     </button>
                   </div>
 
-                  {!tokenSaved && !showTokenInput && (
+                  {/* Prompt shown when upload was attempted without a token */}
+                  {tokenPromptMsg && !showTokenInput && (
+                    <div className="mb-2 flex items-start gap-1.5 rounded-lg bg-amber-50 border border-amber-200 px-2.5 py-2">
+                      <svg className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>
+                      <p className="text-xs text-amber-700">{tokenPromptMsg}</p>
+                    </div>
+                  )}
+
+                  {!tokenSaved && !showTokenInput && !tokenPromptMsg && (
                     <p className="text-xs text-slate-500">
                       Without a token, uploads only save in this browser.{" "}
                       <button onClick={() => setShowTokenInput(true)} className="text-purple-600 underline underline-offset-2">Add token →</button>
@@ -336,7 +349,7 @@ export default function ProfileTab({ portfolioData, onChange }: ProfileTabProps)
 
                   {tokenSaved && !showTokenInput && (
                     <div className="flex items-center justify-between">
-                      <p className="text-xs text-slate-500">Token saved — uploads will commit directly to GitHub.</p>
+                      <p className="text-xs text-slate-500">Token saved — uploads commit directly to GitHub.</p>
                       <button onClick={clearToken} className="text-xs text-red-500 hover:text-red-700 font-medium">Remove</button>
                     </div>
                   )}
