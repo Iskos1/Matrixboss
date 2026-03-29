@@ -16,13 +16,47 @@ export default function ProfileTab({ portfolioData, onChange }: ProfileTabProps)
     onChange({ ...portfolioData, profile: { ...portfolioData.profile, [field]: value } });
   };
 
+  const isStaticSite = process.env.NEXT_PUBLIC_GITHUB_PAGES === "true";
+
   const handleAvatarUpload = async (file: File) => {
     if (!file.type.startsWith("image/")) {
       alert("Please select an image file (JPG, PNG, WebP, or GIF).");
       return;
     }
+    if (file.size > 5 * 1024 * 1024) {
+      alert("File too large. Maximum size is 5MB.");
+      return;
+    }
     setAvatarUploading(true);
     setAvatarStatus("");
+
+    // GitHub Pages: no server — convert to base64 and store in localStorage
+    if (isStaticSite) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const base64 = e.target?.result as string;
+        try {
+          localStorage.setItem("portfolio_avatar", base64);
+          onChange({ ...portfolioData, profile: { ...portfolioData.profile, avatar: base64 } });
+          setAvatarStatus("success");
+          setTimeout(() => setAvatarStatus(""), 8000);
+        } catch {
+          alert("Storage failed — image may be too large for local storage.");
+          setAvatarStatus("error");
+        } finally {
+          setAvatarUploading(false);
+        }
+      };
+      reader.onerror = () => {
+        alert("Failed to read image file.");
+        setAvatarStatus("error");
+        setAvatarUploading(false);
+      };
+      reader.readAsDataURL(file);
+      return;
+    }
+
+    // Local dev: use the server API
     try {
       const form = new FormData();
       form.append("file", file);
@@ -46,6 +80,11 @@ export default function ProfileTab({ portfolioData, onChange }: ProfileTabProps)
 
   const handleAvatarRemove = async () => {
     if (!confirm("Remove your profile photo?")) return;
+    if (isStaticSite) {
+      localStorage.removeItem("portfolio_avatar");
+      onChange({ ...portfolioData, profile: { ...portfolioData.profile, avatar: "" } });
+      return;
+    }
     try {
       await fetch("/api/avatar", { method: "DELETE" });
       onChange({ ...portfolioData, profile: { ...portfolioData.profile, avatar: "" } });
@@ -161,7 +200,7 @@ export default function ProfileTab({ portfolioData, onChange }: ProfileTabProps)
                 <div className="mt-2 rounded-lg bg-emerald-50 border border-emerald-200 px-3 py-2">
                   <p className="text-xs text-emerald-700 font-medium flex items-center gap-1">
                     <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                    Photo saved locally! Push to GitHub to deploy.
+                    {isStaticSite ? "Photo saved to this browser — visible on this device." : "Photo saved locally! Push to GitHub to deploy."}
                   </p>
                 </div>
               )}
