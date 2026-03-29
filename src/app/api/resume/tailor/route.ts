@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { ResumeService } from '@/lib/resume/service';
 import { compileLatex, cleanupLatexArtifacts } from '@/lib/resume/latex';
-import { joinPath } from '@/lib/storage/file-utils';
+import { joinPath, getWritableRoot } from '@/lib/storage/file-utils';
 import { handleError, badRequest, json } from '@/lib/http/responses';
 
 export const dynamic = 'force-dynamic';
@@ -43,7 +43,8 @@ export async function POST(request: NextRequest) {
       ? fileName.replace(/\.tex$/, '')
       : `tailored_resume_${timestamp.replace(/-/g, '_').substring(0, 15)}`;
 
-    const outputDir = joinPath('generated');
+    // On Vercel, /var/task is read-only — write generated files to /tmp instead.
+    const outputDir = path.join(getWritableRoot(), 'generated');
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
     }
