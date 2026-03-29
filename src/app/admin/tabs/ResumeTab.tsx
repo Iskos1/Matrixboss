@@ -61,6 +61,7 @@ export default function ResumeTab({ onApplicationSaved, onNavigate, initData, on
 
   useEffect(() => {
     loadTemplateData();
+    loadTemplateContent();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -357,13 +358,33 @@ export default function ResumeTab({ onApplicationSaved, onNavigate, initData, on
                 <p className="text-center text-xs md:text-sm text-slate-500">👆 Live resume preview. Tap <strong>&quot;Edit&quot;</strong> to make changes.</p>
               </div>
             ) : (
-              <div className="text-center py-12">
-                <FileText className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                <h4 className="text-lg font-bold text-slate-700 mb-2">No PDF Available</h4>
-                <p className="text-slate-500 text-sm mb-4">Compile your template to see the preview</p>
-                <button onClick={compileTemplate} disabled={compilingTemplate} className="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition disabled:opacity-50 inline-flex items-center gap-2">
-                  {compilingTemplate ? <><RefreshCw className="w-5 h-5 animate-spin" />Compiling...</> : <><FileText className="w-5 h-5" />Compile Now</>}
-                </button>
+              <div className="space-y-4">
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
+                  <span className="text-amber-500 text-lg flex-shrink-0">⚠</span>
+                  <div className="min-w-0">
+                    <p className="font-semibold text-amber-800 text-sm">PDF preview not available on this deployment</p>
+                    <p className="text-amber-700 text-xs mt-1">
+                      PDF compilation requires <code className="bg-amber-100 px-1 rounded">xelatex</code> which is not installed on Vercel.
+                      Download the LaTeX source below to compile locally, or click <strong>Edit</strong> to modify the template.
+                    </p>
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      <button onClick={compileTemplate} disabled={compilingTemplate} className="bg-blue-600 text-white px-4 py-2 rounded-lg text-xs font-semibold hover:bg-blue-700 transition disabled:opacity-50 inline-flex items-center gap-1.5">
+                        {compilingTemplate ? <><RefreshCw className="w-3.5 h-3.5 animate-spin" />Compiling...</> : <><FileText className="w-3.5 h-3.5" />Try Compile</>}
+                      </button>
+                      <a href="/api/resume/download?file=resume_template.tex" className="bg-slate-700 text-white px-4 py-2 rounded-lg text-xs font-semibold hover:bg-slate-800 transition inline-flex items-center gap-1.5">
+                        <Download className="w-3.5 h-3.5" />Download .tex
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                {templateContent && (
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-slate-700 text-sm">LaTeX Source (read-only — click Edit to modify)</h4>
+                    <div className="border-2 border-slate-200 rounded-xl overflow-hidden bg-slate-900">
+                      <pre className="w-full h-[500px] md:h-[700px] px-4 py-3 font-mono text-xs text-green-400 overflow-auto whitespace-pre leading-relaxed">{templateContent}</pre>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>

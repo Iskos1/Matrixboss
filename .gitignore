@@ -61,8 +61,7 @@ __pycache__/
 generated_resumes/
 generated/
 
-# Resume build artifacts
-resume_template.pdf
+# Resume build artifacts (resume_template.pdf is committed for Vercel deployment)
 resume_template.aux
 resume_template.log
 resume_template.out

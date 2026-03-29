@@ -22,6 +22,15 @@ const nextConfig = {
   swcMinify: false,
   experimental: {
     forceSwcTransforms: false,
+    // Tell Vercel's bundler to include static data/template files used by
+    // API routes via fs.readFileSync — without this they are stripped from
+    // the serverless function bundle and any fs access returns 404.
+    outputFileTracingIncludes: {
+      '/api/**': [
+        './src/templates/**',
+        './src/data/**',
+      ],
+    },
   },
   webpack: (config, { dev, isServer }) => {
     if (dev) {
