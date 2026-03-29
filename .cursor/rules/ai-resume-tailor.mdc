@@ -1,8 +1,0 @@
----
-alwaysApply: false
-description: Deprecated duplicate ruleset. Use `.cursor/rules/ai-resume-tailoring.mdc`.
----
-
-# Disabled duplicate ruleset
-
-This file is intentionally disabled to avoid conflicts. All active resume tailoring guidance lives in `ai-resume-tailoring.mdc`.

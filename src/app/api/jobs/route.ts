@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import { getProjectRoot } from '@/lib/utils/file-utils';
-import { handleError, badRequest, notFound, json } from '@/lib/api/responses';
+import { getProjectRoot } from '@/lib/storage/file-utils';
+import { handleError, badRequest, notFound, json } from '@/lib/http/responses';
 
 export const dynamic = 'force-dynamic';
 
@@ -99,7 +99,7 @@ export async function PATCH(request: NextRequest) {
 // DELETE /api/jobs?id=job_xxx
 export async function DELETE(request: NextRequest) {
   try {
-    const id = new URL(request.url).searchParams.get('id');
+    const id = request.nextUrl.searchParams.get('id');
 
     if (!id) {
       return badRequest('id is required');

@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { projects as defaultProjects } from "@/lib/data";
-import { ProjectItem } from "@/lib/data";
+import portfolioData from "@/data/portfolio.json";
+import type { ProjectItem } from "@/lib/portfolio/types";
+const defaultProjects = portfolioData.projects as ProjectItem[];
 import { ExternalLink, FileText } from "lucide-react";
 import ImageLightbox from "./ImageLightbox";
 

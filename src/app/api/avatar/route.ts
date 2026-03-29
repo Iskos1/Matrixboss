@@ -2,9 +2,9 @@ import { NextRequest } from "next/server";
 import { writeFile, unlink } from "fs/promises";
 import { existsSync } from "fs";
 import path from "path";
-import { readJsonFile, writeJsonFile, joinPath } from "@/lib/utils/file-utils";
-import { PATHS } from "@/lib/constants";
-import { handleError, badRequest, json } from "@/lib/api/responses";
+import { readJsonFile, writeJsonFile, joinPath } from "@/lib/storage/file-utils";
+import { PATHS } from "@/lib/config/constants";
+import { handleError, badRequest, json } from "@/lib/http/responses";
 
 const MIME_TO_EXT: Record<string, string> = {
   "image/jpeg": "jpg",

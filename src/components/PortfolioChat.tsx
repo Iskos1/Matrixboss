@@ -5,7 +5,7 @@ import {
   Send, Bot, User, Loader2, Paperclip, Mic, MicOff,
   X, MessageSquare, Maximize2, Minimize2,
 } from 'lucide-react';
-import { isStaticDeployment, browserChat } from '@/lib/utils/anthropic-browser';
+import { isStaticDeployment, browserChat } from '@/lib/http/browser-api';
 import portfolioDataFallback from '@/data/portfolio.json';
 
 interface Message {

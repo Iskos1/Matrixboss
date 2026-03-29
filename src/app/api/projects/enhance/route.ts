@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { generateJson } from '@/lib/ai/anthropic';
-import { handleError, badRequest, json } from '@/lib/api/responses';
+import { handleError, badRequest, json } from '@/lib/http/responses';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 120;

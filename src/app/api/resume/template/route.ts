@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server';
-import { compileLatex } from '@/lib/utils/latex-utils';
-import { readFile, writeFile, fileExists, getFileStats, joinPath } from '@/lib/utils/file-utils';
-import { PATHS, LATEX_CONFIG } from '@/lib/constants';
-import { handleError, badRequest, notFound, json } from '@/lib/api/responses';
+import { compileLatex } from '@/lib/resume/latex';
+import { readFile, writeFile, fileExists, getFileStats, joinPath } from '@/lib/storage/file-utils';
+import { PATHS, LATEX_CONFIG } from '@/lib/config/constants';
+import { handleError, badRequest, notFound, json } from '@/lib/http/responses';
 
 // GET: Fetch template content
 export async function GET() {

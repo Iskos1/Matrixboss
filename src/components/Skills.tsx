@@ -1,7 +1,8 @@
 "use client";
 
-import { skills as defaultSkills } from "@/lib/data";
-import { Skill } from "@/lib/data";
+import portfolioData from "@/data/portfolio.json";
+import type { Skill } from "@/lib/portfolio/types";
+const defaultSkills = portfolioData.skills as Skill[];
 
 interface SkillsProps {
   skills?: Skill[];

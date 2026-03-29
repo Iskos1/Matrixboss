@@ -1,8 +1,76 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
+import https from 'https';
 import path from 'path';
+import { MODEL } from '@/lib/ai/anthropic';
 
 export const dynamic = 'force-dynamic';
+
+async function testAnthropicMessages(apiKey: string): Promise<Record<string, any>> {
+  // Simple test without extended thinking for a fast, reliable health check.
+  const body = JSON.stringify({
+    model: MODEL,
+    max_tokens: 16,
+    messages: [{ role: 'user', content: 'Reply with the single word: OK' }],
+  });
+
+  return await new Promise((resolve) => {
+    const req = https.request(
+      'https://api.anthropic.com/v1/messages',
+      {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'content-length': Buffer.byteLength(body),
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+        },
+      },
+      (res) => {
+        let raw = '';
+        res.setEncoding('utf8');
+        res.on('data', (chunk) => {
+          raw += chunk;
+        });
+        res.on('end', () => {
+          let parsed: any = {};
+          try {
+            parsed = raw ? JSON.parse(raw) : {};
+          } catch {
+            parsed = {};
+          }
+
+          resolve({
+            tested: true,
+            endpoint: '/v1/messages',
+            model: MODEL,
+            status: res.statusCode ?? 0,
+            ok: (res.statusCode ?? 0) >= 200 && (res.statusCode ?? 0) < 300,
+            status_text: res.statusMessage ?? '',
+            ...(parsed?.error?.type ? { error_type: parsed.error.type } : {}),
+            ...(parsed?.error?.message ? { error_message: parsed.error.message.substring(0, 120) } : {}),
+          });
+        });
+      }
+    );
+
+    req.setTimeout(15000, () => {
+      req.destroy(new Error('Request timed out'));
+    });
+
+    req.on('error', (e: any) => {
+      resolve({
+        tested: true,
+        endpoint: '/v1/messages',
+        model: MODEL,
+        fetch_error: e.message,
+      });
+    });
+
+    req.write(body);
+    req.end();
+  });
+}
 
 /**
  * GET /api/resume/diagnose
@@ -61,29 +129,18 @@ export async function GET() {
     envFileDiag = { exists: false, error: e.message };
   }
 
-  // ─── 3. Test Anthropic connectivity with the runtime key ──────────────────────
+  // ─── 3. Test Anthropic connectivity with the configured runtime model ────────
   let anthropicDiag: Record<string, any> = { tested: false };
   if (trimmed) {
     try {
-      const resp = await fetch('https://api.anthropic.com/v1/models', {
-        headers: {
-          'x-api-key': trimmed,
-          'anthropic-version': '2023-06-01',
-        },
-      });
+      anthropicDiag = await testAnthropicMessages(trimmed);
+    } catch (e: any) {
       anthropicDiag = {
         tested: true,
-        status: resp.status,
-        ok: resp.ok,
-        status_text: resp.statusText,
+        endpoint: '/v1/messages',
+        model: MODEL,
+        fetch_error: e.message,
       };
-      if (!resp.ok) {
-        const body = await resp.json().catch(() => ({}));
-        anthropicDiag.error_type = body?.error?.type;
-        anthropicDiag.error_message = body?.error?.message?.substring(0, 120);
-      }
-    } catch (e: any) {
-      anthropicDiag = { tested: true, fetch_error: e.message };
     }
   }
 
@@ -103,8 +160,16 @@ export async function GET() {
   return NextResponse.json({
     summary:
       anthropicDiag.ok === true
-        ? '✅ Anthropic key is VALID and working'
-        : `❌ Anthropic key is INVALID — ${anthropicDiag.error_type ?? anthropicDiag.fetch_error ?? 'unknown error'}`,
+        ? '✅ Anthropic runtime request succeeded'
+        : anthropicDiag.tested === false
+          ? '❌ ANTHROPIC_API_KEY is not set — add it to .env.local and restart'
+          : anthropicDiag.fetch_error
+            ? `❌ Network error contacting Anthropic — ${anthropicDiag.fetch_error}`
+            : anthropicDiag.error_type === 'not_found_error'
+              ? `❌ Configured model is unavailable — ${anthropicDiag.model}`
+              : anthropicDiag.error_type === 'authentication_error'
+                ? '❌ API key is invalid or expired — get a new key from console.anthropic.com'
+                : `❌ Anthropic request failed — ${anthropicDiag.error_type ?? 'unknown error'}`,
     key_diagnostics: keyDiag,
     env_file_diagnostics: envFileDiag,
     anthropic_test: anthropicDiag,

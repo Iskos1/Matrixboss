@@ -1,7 +1,8 @@
 "use client";
 
-import { experience as defaultExperience } from "@/lib/data";
-import { ExperienceItem } from "@/lib/data";
+import portfolioData from "@/data/portfolio.json";
+import type { ExperienceItem } from "@/lib/portfolio/types";
+const defaultExperience = portfolioData.experience as ExperienceItem[];
 import { ExternalLink } from "lucide-react";
 
 interface ExperienceProps {

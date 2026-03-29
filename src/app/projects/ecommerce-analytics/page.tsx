@@ -60,6 +60,15 @@ const CUSTOMER_SEGMENTS = [
 
 const DATE_RANGES = ["All Time", "2016", "2017", "2018", "Q3 Focus"];
 
+// Per-date-range KPI baselines derived from the Olist dataset
+const KPI_BY_RANGE: Record<string, { aov: number; fulfillment: number; nps: number }> = {
+  "All Time":  { aov: 154.10, fulfillment: 12.5, nps: 4.07 },
+  "2016":      { aov: 138.40, fulfillment: 14.2, nps: 3.88 },
+  "2017":      { aov: 151.20, fulfillment: 12.9, nps: 4.03 },
+  "2018":      { aov: 163.80, fulfillment: 11.6, nps: 4.18 },
+  "Q3 Focus":  { aov: 146.70, fulfillment: 14.8, nps: 3.95 },
+};
+
 const PHASES = [
   { id: 1, label: "Data Foundation",      weeks: "Wk 1–2", icon: Database  },
   { id: 2, label: "Analysis & Modeling",  weeks: "Wk 3–4", icon: BarChart2 },
@@ -297,20 +306,35 @@ export default function EcommerceAnalyticsPage() {
   const totalRevenue = filteredRevenue.reduce((s, d) => s + d.revenue, 0);
   const fmtK = (v: number) => `R$${(v / 1000).toFixed(0)}k`;
 
-  // Computed KPIs that respond to region filter
+  // Computed KPIs — respond to both dateRange and regionFilter
   const avgFulfillment = useMemo(() => {
-    if (filteredRegions.length === 0) return 12.5;
-    const weightedSum = filteredRegions.reduce((s, r) => s + r.avgDelivery * r.orders, 0);
-    const totalOrders  = filteredRegions.reduce((s, r) => s + r.orders, 0);
-    return parseFloat((weightedSum / totalOrders).toFixed(1));
-  }, [filteredRegions]);
+    const rangeBase = KPI_BY_RANGE[dateRange]?.fulfillment ?? 12.5;
+    if (regionFilter === "All") return rangeBase;
+    if (filteredRegions.length === 0) return rangeBase;
+    // Scale the region's delivery time by the same ratio the date range applies to the baseline
+    const allRegionsWeighted = REGIONAL_SALES.reduce((s, r) => s + r.avgDelivery * r.orders, 0);
+    const allRegionsOrders   = REGIONAL_SALES.reduce((s, r) => s + r.orders, 0);
+    const allRegionsBase     = parseFloat((allRegionsWeighted / allRegionsOrders).toFixed(1));
+    const regionWeighted = filteredRegions.reduce((s, r) => s + r.avgDelivery * r.orders, 0);
+    const regionOrders   = filteredRegions.reduce((s, r) => s + r.orders, 0);
+    const regionRaw      = parseFloat((regionWeighted / regionOrders).toFixed(1));
+    const dateRatio      = allRegionsBase > 0 ? rangeBase / allRegionsBase : 1;
+    return parseFloat((regionRaw * dateRatio).toFixed(1));
+  }, [filteredRegions, regionFilter, dateRange]);
 
   const avgOrderValue = useMemo(() => {
-    if (filteredRegions.length === 0) return 154.1;
-    const totalRev = filteredRegions.reduce((s, r) => s + r.revenue, 0);
-    const totalOrd = filteredRegions.reduce((s, r) => s + r.orders, 0);
-    return parseFloat((totalRev / totalOrd).toFixed(2));
-  }, [filteredRegions]);
+    const rangeBase = KPI_BY_RANGE[dateRange]?.aov ?? 154.10;
+    if (regionFilter === "All") return rangeBase;
+    if (filteredRegions.length === 0) return rangeBase;
+    const allTotalRev = REGIONAL_SALES.reduce((s, r) => s + r.revenue, 0);
+    const allTotalOrd = REGIONAL_SALES.reduce((s, r) => s + r.orders, 0);
+    const allBase     = allTotalOrd > 0 ? allTotalRev / allTotalOrd : rangeBase;
+    const regionRev   = filteredRegions.reduce((s, r) => s + r.revenue, 0);
+    const regionOrd   = filteredRegions.reduce((s, r) => s + r.orders, 0);
+    const regionRaw   = regionOrd > 0 ? regionRev / regionOrd : rangeBase;
+    const dateRatio   = allBase > 0 ? rangeBase / allBase : 1;
+    return parseFloat((regionRaw * dateRatio).toFixed(2));
+  }, [filteredRegions, regionFilter, dateRange]);
 
   const regionRevenue = useMemo(() =>
     filteredRegions.reduce((s, r) => s + r.revenue, 0),
@@ -572,7 +596,7 @@ export default function EcommerceAnalyticsPage() {
 
             {/* Filters */}
             <div className="bg-white border border-slate-200 rounded-xl p-4">
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Dashboard Filters — Date Range → revenue trend · Region → bar chart, heatmap &amp; KPIs</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Dashboard Filters — Date Range → all KPIs &amp; revenue trend · Region → bar chart, heatmap &amp; KPIs</p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <div>
                   <p className="text-xs text-slate-500 font-medium mb-2">Date Range</p>
@@ -623,7 +647,7 @@ export default function EcommerceAnalyticsPage() {
                 trend={avgFulfillment > 14 ? "⚠ Above 14-day SLA" : "✓ Within SLA"}
                 positive={avgFulfillment <= 14}
               />
-              <KpiCard icon={Star} label="NPS Proxy" value="4.07 / 5" sub="avg review score" trend="+0.12 QoQ" positive />
+              <KpiCard icon={Star} label="NPS Proxy" value={`${(KPI_BY_RANGE[dateRange]?.nps ?? 4.07).toFixed(2)} / 5`} sub="avg review score" trend="+0.12 QoQ" positive />
             </div>
 
             {/* Revenue trend */}

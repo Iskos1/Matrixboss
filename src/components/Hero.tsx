@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { profile as defaultProfile } from "@/lib/data";
-import { Profile } from "@/lib/data";
+import portfolioData from "@/data/portfolio.json";
+import type { Profile } from "@/lib/portfolio/types";
+const defaultProfile = portfolioData.profile as Profile;
 import { MapPin, ArrowRight, Github, Linkedin, Mail } from "lucide-react";
 
 interface HeroProps {

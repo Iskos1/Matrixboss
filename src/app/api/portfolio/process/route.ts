@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
-import { DataProcessingService } from "@/lib/services/data-processing-service";
-import { handleError, badRequest, json } from "@/lib/api/responses";
+import { DataProcessingService } from "@/lib/portfolio/service";
+import { handleError, badRequest, json } from "@/lib/http/responses";
 
 export async function POST(request: NextRequest) {
   try {

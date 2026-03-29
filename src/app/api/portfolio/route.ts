@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
-import { readJsonFile, writeJsonFile, joinPath } from "@/lib/utils/file-utils";
-import { PATHS } from "@/lib/constants";
-import { handleError, badRequest, json } from "@/lib/api/responses";
+import { readJsonFile, writeJsonFile, joinPath } from "@/lib/storage/file-utils";
+import { PATHS } from "@/lib/config/constants";
+import { handleError, badRequest, json } from "@/lib/http/responses";
 
 const dataPath = joinPath(PATHS.PORTFOLIO_DATA);
 

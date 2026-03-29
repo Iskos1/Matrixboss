@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 import { generateStream, AIAuthError, AIQuotaError, AIModelError } from '@/lib/ai/anthropic';
 import fs from 'fs';
 import path from 'path';
-import { getProjectRoot } from '@/lib/utils/file-utils';
+import { getProjectRoot } from '@/lib/storage/file-utils';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;

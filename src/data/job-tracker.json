@@ -1,6 +1,1175 @@
 {
   "applications": [
     {
+      "id": "job_1774630837346",
+      "savedAt": "2026-03-27T17:00:37.346Z",
+      "company": "Unknown Company",
+      "role": "Supporting the execution of B2B marketing programs across field marketing, social media, content marketing, and event campaign operations for a fintech payment tokenization company.",
+      "jobDescription": "VGS is the world's leader in payment tokenization. Large banks, aspiring fintechs, and growing merchants embed our universal token vault into their technology stack to manage the complexities of payment data tokenization across processors and networks, open banking, card issuance, omnichannel loyalty, PCI compliance, payment orchestration, and more.  We empower our clients and partners by tokenizing sensitive payment data, limiting compliance scope, and consolidating payments to unlock revenue and business opportunities. \n \nVGS provides processor-agnostic tokenization solutions via secure universal token vaults, iframes, mobile SDKs, tokenization proxies, APIs, and data orchestration tooling to support payment acceptance, card issuance, PII and bank account tokenization, and other payments value-added services. Some of the use cases we enable include multi-processor Network Tokenization, Account Updater, payment orchestration, secure settlement file processing, 3DS, and Risk provider connectivity.\nAs we expand our marketing programs across events, content, and digital channels, we are looking for a marketing coordinator who thrives in a fast-paced environment and enjoys bringing events, campaigns, and strategic content initiatives to life.\n\nThe Marketing Coordinator will support the execution of marketing programs across field marketing, social media, content marketing, and event campaign operations.\n\nThis role is highly cross-functional and works closely with senior marketing managers, a graphic designer, and other GTM departments, such as partnerships, sales, and account management, to ensure marketing initiatives are delivered on time, on brand, and with operational coordination.\n\nThe ideal candidate is organized, detail-oriented, proactive, and comfortable juggling multiple projects simultaneously.\n\n\n\nVGS is the world's leader in payment tokenization. Large banks, aspiring fintechs, and growing merchants embed our universal token vault into their technology stack to manage the complexities of payment data tokenization across processors and networks, open banking, card issuance, omnichannel loyalty, PCI compliance, payment orchestration, and more.  We empower our clients and partners by tokenizing sensitive payment data, limiting compliance scope, and consolidating payments to unlock revenue and business opportunities.    VGS provides processor-agnostic tokenization solutions via secure universal token vaults, iframes, mobile SDKs, tokenization proxies, APIs, and data orchestration tooling to support payment acceptance, card issuance, PII and bank account tokenization, and other payments value-added services. Some of the use cases we enable include multi-processor Network Tokenization, Account Updater, payment orchestration, secure settlement file processing, 3DS, and Risk provider connectivity. As we expand our marketing programs across events, content, and digital channels, we are looking for a marketing coordinator who thrives in a fast-paced environment and enjoys bringing events, campaigns, and strategic content initiatives to life. The Marketing Coordinator will support the execution of marketing programs across field marketing, social media, content marketing, and event campaign operations. This role is highly cross-functional and works closely with senior marketing managers, a graphic designer, and other GTM departments, such as partnerships, sales, and account management, to ensure marketing initiatives are delivered on time, on brand, and with operational coordination. The ideal candidate is organized, detail-oriented, proactive, and comfortable juggling multiple projects simultaneously.\n\nWhat you will be doing at VGS...\nCampaign & Project Coordination\nCoordinate marketing campaigns and deliverables across internal stakeholders and external creative resources.\nManage marketing project workflows in Asana, including task creation, timelines, and dependencies.\nCoordinate branded marketing content and event assets with the graphic designer using Figma and Asana.\nTrack and document campaign deliverables, ensuring deadlines and approvals are met.\nMaintain organized documentation of marketing assets, briefs, and project timelines.\nField Marketing & Events Support\nConduct research on industry conferences, sponsorship opportunities, and speaking engagements.\nAssist with the coordination of field marketing programs, including event logistics, outreach campaigns, and event promotion.\nSupport preparation for industry events, including collateral creation, printing and shipping of promotional materials, and event attendee communications.\nHelp coordinate marketing tasks and timelines associated with event campaigns.\nAssist with lead generation preparation and follow-up activities for events and campaigns.\nSocial Media & Communications Support\nAssist in drafting and editing copy for social media posts, blog content, press releases, and marketing communications.\nCoordinate social media campaign assets for platforms including LinkedIn, X (Twitter), Reddit, and Facebook.\nHelp support and organize social media analytics to produce monthly performance summary reports.\nAssist with the coordination of and submissions of content for thought leadership opportunities\nContent & Marketing Operations Support\nSupport the creation and editing of marketing content, including blog posts, news posts, and sales materials.\nAssist with basic SEO/GEO-driven content optimization and research.\nHelp maintain marketing content calendars and publishing schedules.\nSupport website updates and marketing campaign launches in collaboration with Marketing Operations.\n\n\nWhat we are looking for from you (Requirements)...\nExperience supporting B2B SaaS or fintech marketing teams\nFamiliarity with Figma, CMS platforms, or marketing automation tools\nBasic knowledge of SEO, GEO, AEO and digital marketing analytics\nExperience supporting events, webinars, or field marketing programs\nAbility to travel up to 25% for meetings, conferences, and field marketing events\nComfortable working in a deadline-driven, fast-paced environment\nPersonal Attributes\nHighly organized and detail-oriented\nCollaborative team player who enjoys working across functions\nProactive and solution-oriented mindset\nCurious and eager to learn new marketing tools and processes, as well as complex payments technologies\n\n\nWhat you get from us...\n \n• Flexible work hours and flexible PTO\n• Competitive health benefits\n• VGS stock options\n• 401k plan, with employer matching 4% and immediate vesting (available only for US employees)\n• Life & disability insurance\n• Pre-tax flexible spending accounts, dependent and healthcare FSA (available only for US employees)\n• Global parental leave program\n• Employee Assistance Program\n• Home Internet reimbursement\n• New hire home office set up allowance\n• Professional learning reimbursement",
+      "resumeFilename": "tailored_resume_2026_03_27T16_5.pdf",
+      "coverLetterFilename": "tailored_cover_letter_2026_03_27T16_5.pdf",
+      "compatibilityScore": 42,
+      "analysis": {
+        "compatibilityScore": 42,
+        "compatibilityLabel": "Weak Match",
+        "industry": "Fintech / Payment Technology",
+        "roleType": "Marketing Coordinator",
+        "seniorityLevel": "Entry-Level / Junior",
+        "presentSkills": [
+          "Figma (UI/UX prototyping)",
+          "Basic SEO strategy and keyword research",
+          "Content creation and copywriting (informal)",
+          "E-commerce platform management (Shopify)",
+          "Social media awareness",
+          "Email marketing (Klaviyo experience)",
+          "Cross-functional collaboration",
+          "B2B client interaction (Apple)",
+          "Project self-management (Dispomode)",
+          "Basic HTML/CSS/JavaScript",
+          "Conversion rate optimization (CRO) basics",
+          "Analytics awareness (Google Search Console, Ahrefs)"
+        ],
+        "missingSkills": [
+          {
+            "skill": "Marketing project management tools (Asana)",
+            "importance": "critical",
+            "reason": "The JD explicitly requires Asana for managing workflows, task creation, timelines, and dependencies. No evidence of this anywhere in the candidate's profile."
+          },
+          {
+            "skill": "B2B SaaS or Fintech marketing experience",
+            "importance": "critical",
+            "reason": "All of the candidate's marketing experience is in B2C e-commerce (vape store). VGS sells to banks, fintechs, and enterprise merchants. These are completely different buyer personas, sales cycles, and content strategies."
+          },
+          {
+            "skill": "Field marketing and event coordination",
+            "importance": "critical",
+            "reason": "The role heavily involves coordinating industry conferences, sponsorships, collateral printing/shipping, and attendee communications. The candidate has zero documented experience in any of this."
+          },
+          {
+            "skill": "Marketing automation platforms (HubSpot, Marketo, Pardot)",
+            "importance": "critical",
+            "reason": "B2B SaaS marketing runs on marketing automation for lead nurturing, campaign tracking, and CRM integration. Klaviyo is a B2C email tool and does not translate here."
+          },
+          {
+            "skill": "CMS platforms (WordPress, Contentful, Webflow)",
+            "importance": "important",
+            "reason": "The role requires supporting website updates and content publishing. Shopify Liquid is retail-focused and not relevant to a SaaS marketing website stack."
+          },
+          {
+            "skill": "LinkedIn and B2B social media marketing",
+            "importance": "important",
+            "reason": "VGS markets to enterprise buyers on LinkedIn. The candidate's social media experience is entirely consumer-facing with no demonstrated B2B social strategy."
+          },
+          {
+            "skill": "Press release and thought leadership content writing",
+            "importance": "important",
+            "reason": "The role requires drafting press releases and coordinating thought leadership submissions. The candidate shows no professional writing samples or PR experience."
+          },
+          {
+            "skill": "GEO and AEO content optimization",
+            "importance": "important",
+            "reason": "The JD specifically calls out GEO (Generative Engine Optimization) and AEO (Answer Engine Optimization) as required knowledge areas. These are emerging disciplines the candidate shows no familiarity with."
+          },
+          {
+            "skill": "Marketing analytics and performance reporting",
+            "importance": "important",
+            "reason": "The role requires producing monthly social media performance summary reports. The candidate has no documented experience building structured marketing analytics reports."
+          },
+          {
+            "skill": "Payments industry domain knowledge",
+            "importance": "nice-to-have",
+            "reason": "Understanding tokenization, PCI compliance, network tokens, and payment orchestration would significantly accelerate ramp time and credibility when creating content and supporting GTM teams."
+          }
+        ],
+        "experienceGaps": [
+          "Zero formal B2B marketing experience. Every commercial initiative in this profile is consumer-facing. VGS sells to enterprise banks and fintechs — an entirely different world in terms of content, messaging, and campaign strategy.",
+          "No experience supporting a marketing team in any capacity. The role is explicitly a support and coordination function. This candidate has only operated as a solo founder or individual contributor, not as part of a structured marketing department.",
+          "No event logistics experience whatsoever. Coordinating trade show booths, shipping collateral, managing event timelines, and supporting field marketing programs requires hands-on experience the candidate simply does not have.",
+          "The Dispomode venture, while entrepreneurially impressive, operated in a legally restricted consumer market using SEO as the sole channel. This creates a false impression of marketing breadth — it was essentially one-channel B2C growth hacking.",
+          "No demonstrated experience managing stakeholder workflows, creative briefs, or cross-functional project timelines in a corporate or team environment.",
+          "Writing quality is a serious concern. The raw descriptions in the profile contain significant grammatical errors, run-on sentences, and lack professional polish. A Marketing Coordinator who drafts copy for press releases and social media must write at a high standard.",
+          "No internship, co-op, or entry-level marketing role experience. The candidate is missing the foundational professional marketing exposure that would make them competitive for even a junior coordinator role at a B2B fintech."
+        ],
+        "criticalVerdict": "This candidate is fundamentally misaligned with this role. Their technical skills (Python, ML, SQL, cloud architecture) are impressive but completely irrelevant to a marketing coordinator position, and their actual marketing experience is limited to a single B2C e-commerce venture using one channel in a restricted industry. The writing quality visible in their profile descriptions is a disqualifying red flag for a role that requires drafting professional copy for press releases, social media, and executive communications. Without B2B marketing experience, event coordination background, or proficiency in any of the core martech tools this role demands, this candidate would require months of remedial ramp-up that no lean fintech marketing team can afford.",
+        "improvementPlan": [
+          "Complete a HubSpot Marketing Certification (free) immediately — it covers B2B campaign management, lead nurturing, and marketing automation fundamentals that are table stakes for this role.",
+          "Get hands-on with Asana by managing a personal project or volunteering to coordinate a real campaign. The JD explicitly lists Asana proficiency as a core operational requirement.",
+          "Reframe and rewrite all experience descriptions with professional-grade copy. The grammar and writing quality in current descriptions would disqualify you at the first resume screen for a communications-heavy role.",
+          "Pursue a marketing internship or volunteer role specifically in B2B SaaS or fintech — even 3-6 months of real team experience coordinating campaigns, managing timelines, and supporting events would dramatically change your candidacy.",
+          "Study GEO (Generative Engine Optimization) and AEO (Answer Engine Optimization) — these are emerging and explicitly called out in the JD. Getting ahead of them signals genuine market awareness.",
+          "Build a content portfolio: write 3-5 sample B2B blog posts, a mock press release, and sample LinkedIn copy for a fictional fintech product. Tangible writing samples are non-negotiable for marketing coordinator roles.",
+          "Learn a CMS platform (WordPress or Webflow) and get familiar with a B2B-relevant social scheduling tool (Buffer, Sprout Social, or Hootsuite) to close the basic tooling gaps."
+        ],
+        "marketSkillsToLearn": [
+          "HubSpot CRM and Marketing Hub",
+          "Asana or Monday.com project management",
+          "B2B LinkedIn content strategy",
+          "Webflow or WordPress CMS",
+          "Sprout Social or Hootsuite",
+          "Google Analytics 4 (GA4)",
+          "Generative Engine Optimization (GEO)",
+          "Professional B2B copywriting",
+          "Event logistics and field marketing coordination",
+          "Salesforce basics for marketing-sales alignment",
+          "Marketo or Pardot marketing automation"
+        ],
+        "summary": "This candidate has genuine entrepreneurial drive and a surprisingly strong technical foundation, but they are applying to the wrong role entirely. Their skill set maps far more naturally to a data analyst, growth hacker, or technical product role than to a B2B SaaS marketing coordinator. To become competitive for this specific role, they need to pivot their energy toward building formal B2B marketing experience, professional writing skills, and proficiency in the martech stack that enterprise fintech marketing teams actually use."
+      }
+    },
+    {
+      "id": "job_1774630819425",
+      "savedAt": "2026-03-27T17:00:19.425Z",
+      "company": "Unknown Company",
+      "role": "Supporting the execution of multi-channel marketing programs including field marketing, social media, content marketing, and event campaign operations in a fast-paced B2B fintech environment.",
+      "jobDescription": "VGS is the world's leader in payment tokenization. Large banks, aspiring fintechs, and growing merchants embed our universal token vault into their technology stack to manage the complexities of payment data tokenization across processors and networks, open banking, card issuance, omnichannel loyalty, PCI compliance, payment orchestration, and more.  We empower our clients and partners by tokenizing sensitive payment data, limiting compliance scope, and consolidating payments to unlock revenue and business opportunities. \n \nVGS provides processor-agnostic tokenization solutions via secure universal token vaults, iframes, mobile SDKs, tokenization proxies, APIs, and data orchestration tooling to support payment acceptance, card issuance, PII and bank account tokenization, and other payments value-added services. Some of the use cases we enable include multi-processor Network Tokenization, Account Updater, payment orchestration, secure settlement file processing, 3DS, and Risk provider connectivity.\nAs we expand our marketing programs across events, content, and digital channels, we are looking for a marketing coordinator who thrives in a fast-paced environment and enjoys bringing events, campaigns, and strategic content initiatives to life.\n\nThe Marketing Coordinator will support the execution of marketing programs across field marketing, social media, content marketing, and event campaign operations.\n\nThis role is highly cross-functional and works closely with senior marketing managers, a graphic designer, and other GTM departments, such as partnerships, sales, and account management, to ensure marketing initiatives are delivered on time, on brand, and with operational coordination.\n\nThe ideal candidate is organized, detail-oriented, proactive, and comfortable juggling multiple projects simultaneously.\n\n\n\nVGS is the world's leader in payment tokenization. Large banks, aspiring fintechs, and growing merchants embed our universal token vault into their technology stack to manage the complexities of payment data tokenization across processors and networks, open banking, card issuance, omnichannel loyalty, PCI compliance, payment orchestration, and more.  We empower our clients and partners by tokenizing sensitive payment data, limiting compliance scope, and consolidating payments to unlock revenue and business opportunities.    VGS provides processor-agnostic tokenization solutions via secure universal token vaults, iframes, mobile SDKs, tokenization proxies, APIs, and data orchestration tooling to support payment acceptance, card issuance, PII and bank account tokenization, and other payments value-added services. Some of the use cases we enable include multi-processor Network Tokenization, Account Updater, payment orchestration, secure settlement file processing, 3DS, and Risk provider connectivity. As we expand our marketing programs across events, content, and digital channels, we are looking for a marketing coordinator who thrives in a fast-paced environment and enjoys bringing events, campaigns, and strategic content initiatives to life. The Marketing Coordinator will support the execution of marketing programs across field marketing, social media, content marketing, and event campaign operations. This role is highly cross-functional and works closely with senior marketing managers, a graphic designer, and other GTM departments, such as partnerships, sales, and account management, to ensure marketing initiatives are delivered on time, on brand, and with operational coordination. The ideal candidate is organized, detail-oriented, proactive, and comfortable juggling multiple projects simultaneously.\n\nWhat you will be doing at VGS...\nCampaign & Project Coordination\nCoordinate marketing campaigns and deliverables across internal stakeholders and external creative resources.\nManage marketing project workflows in Asana, including task creation, timelines, and dependencies.\nCoordinate branded marketing content and event assets with the graphic designer using Figma and Asana.\nTrack and document campaign deliverables, ensuring deadlines and approvals are met.\nMaintain organized documentation of marketing assets, briefs, and project timelines.\nField Marketing & Events Support\nConduct research on industry conferences, sponsorship opportunities, and speaking engagements.\nAssist with the coordination of field marketing programs, including event logistics, outreach campaigns, and event promotion.\nSupport preparation for industry events, including collateral creation, printing and shipping of promotional materials, and event attendee communications.\nHelp coordinate marketing tasks and timelines associated with event campaigns.\nAssist with lead generation preparation and follow-up activities for events and campaigns.\nSocial Media & Communications Support\nAssist in drafting and editing copy for social media posts, blog content, press releases, and marketing communications.\nCoordinate social media campaign assets for platforms including LinkedIn, X (Twitter), Reddit, and Facebook.\nHelp support and organize social media analytics to produce monthly performance summary reports.\nAssist with the coordination of and submissions of content for thought leadership opportunities\nContent & Marketing Operations Support\nSupport the creation and editing of marketing content, including blog posts, news posts, and sales materials.\nAssist with basic SEO/GEO-driven content optimization and research.\nHelp maintain marketing content calendars and publishing schedules.\nSupport website updates and marketing campaign launches in collaboration with Marketing Operations.\n\n\nWhat we are looking for from you (Requirements)...\nExperience supporting B2B SaaS or fintech marketing teams\nFamiliarity with Figma, CMS platforms, or marketing automation tools\nBasic knowledge of SEO, GEO, AEO and digital marketing analytics\nExperience supporting events, webinars, or field marketing programs\nAbility to travel up to 25% for meetings, conferences, and field marketing events\nComfortable working in a deadline-driven, fast-paced environment\nPersonal Attributes\nHighly organized and detail-oriented\nCollaborative team player who enjoys working across functions\nProactive and solution-oriented mindset\nCurious and eager to learn new marketing tools and processes, as well as complex payments technologies\n\n\nWhat you get from us...\n \n• Flexible work hours and flexible PTO\n• Competitive health benefits\n• VGS stock options\n• 401k plan, with employer matching 4% and immediate vesting (available only for US employees)\n• Life & disability insurance\n• Pre-tax flexible spending accounts, dependent and healthcare FSA (available only for US employees)\n• Global parental leave program\n• Employee Assistance Program\n• Home Internet reimbursement\n• New hire home office set up allowance\n• Professional learning reimbursement",
+      "resumeFilename": "tailored_resume_2026_03_27T16_5.pdf",
+      "coverLetterFilename": "tailored_cover_letter_2026_03_27T16_5.pdf",
+      "compatibilityScore": 42,
+      "analysis": {
+        "compatibilityScore": 42,
+        "compatibilityLabel": "Weak Match",
+        "industry": "Fintech / Payments Technology",
+        "roleType": "Marketing Coordinator",
+        "seniorityLevel": "Entry-Level / Junior",
+        "presentSkills": [
+          "Figma (UI/UX prototyping)",
+          "Basic SEO knowledge (Ahrefs, keyword research, technical SEO)",
+          "Shopify / e-commerce content management",
+          "HTML/CSS (basic web content support)",
+          "Email marketing (Klaviyo)",
+          "Social media awareness",
+          "Content creation and copywriting (informal)",
+          "Cross-functional collaboration",
+          "B2B client interaction (Apple)",
+          "Event/product promotion experience",
+          "Entrepreneurial project management (Dispomode)",
+          "CRO and conversion funnel awareness",
+          "Data analytics (Google Data Analytics cert)"
+        ],
+        "missingSkills": [
+          {
+            "skill": "Asana or equivalent marketing project management tool",
+            "importance": "critical",
+            "reason": "The JD explicitly requires managing marketing workflows in Asana. The candidate shows zero documented experience with this tool or any formal marketing PM platform."
+          },
+          {
+            "skill": "B2B SaaS or Fintech marketing experience",
+            "importance": "critical",
+            "reason": "VGS sells complex payment infrastructure to banks and fintechs. The candidate has zero B2B SaaS marketing background. Their e-commerce and retail experience does not translate to enterprise GTM motions."
+          },
+          {
+            "skill": "Marketing automation platforms (HubSpot, Marketo, Pardot)",
+            "importance": "critical",
+            "reason": "Required for campaign coordination and lead nurturing in B2B SaaS. Klaviyo for a vape store is not equivalent to enterprise marketing automation."
+          },
+          {
+            "skill": "Field marketing and event logistics coordination",
+            "importance": "critical",
+            "reason": "The role requires coordinating industry conferences, sponsorships, speaker engagements, and collateral shipping. Candidate has no documented experience in formal event marketing execution."
+          },
+          {
+            "skill": "LinkedIn / professional social media campaign management",
+            "importance": "important",
+            "reason": "VGS is a B2B company. LinkedIn is the primary channel. Candidate has no evidence of managing professional brand social media accounts or B2B content calendars."
+          },
+          {
+            "skill": "CMS platforms (WordPress, Webflow, etc.)",
+            "importance": "important",
+            "reason": "The role requires website updates and content publishing. Shopify Liquid for a consumer storefront is not equivalent to CMS experience for a SaaS marketing site."
+          },
+          {
+            "skill": "Press release and formal B2B copywriting",
+            "importance": "important",
+            "reason": "The JD requires drafting press releases, blog posts, and professional marketing communications. Candidate shows no formal writing samples or documented corporate copywriting."
+          },
+          {
+            "skill": "GEO / AEO (Generative Engine Optimization / Answer Engine Optimization)",
+            "importance": "important",
+            "reason": "Explicitly listed in the JD. Candidate mentions SEO but shows no awareness of GEO or AEO frameworks which are emerging requirements in modern content marketing."
+          },
+          {
+            "skill": "Social media analytics and monthly reporting",
+            "importance": "important",
+            "reason": "The role requires producing structured performance reports. Candidate has no documented experience running analytics dashboards or reporting for brand social channels."
+          },
+          {
+            "skill": "Payments / fintech domain knowledge",
+            "importance": "nice-to-have",
+            "reason": "Understanding tokenization, PCI compliance, and payment orchestration helps when coordinating content and communicating with technical GTM teams. Candidate has no exposure to this domain."
+          }
+        ],
+        "experienceGaps": [
+          "No formal marketing coordinator or marketing team experience whatsoever — the candidate has never held a marketing title or been embedded in a marketing department",
+          "Zero exposure to B2B SaaS GTM motions — enterprise sales cycles, pipeline-aligned campaigns, and account-based marketing are entirely foreign to this candidate",
+          "The Dispomode e-commerce venture, while entrepreneurially impressive, is a consumer D2C vape business — structurally incompatible with B2B fintech marketing operations",
+          "Apple Product Specialist role was retail sales, not marketing — there is a meaningful difference between selling products on a floor and coordinating integrated B2B marketing programs",
+          "No experience managing external creative resources, vendor relationships, or cross-functional marketing deliverables in an organizational context",
+          "No documented experience with formal content calendars, editorial workflows, or brand governance processes",
+          "No evidence of supporting webinars, conferences, or industry trade show logistics",
+          "Writing quality visible in the technical details sections of the profile is informal and unpolished — a concern for a role requiring professional copywriting and communications"
+        ],
+        "criticalVerdict": "This candidate is fundamentally misaligned with this role. They are a data science and analytics-oriented candidate with entrepreneurial e-commerce experience who has pivoted to apply for a B2B SaaS marketing coordinator position — and the fit simply isn't there. While they show genuine hustle, SEO awareness, and Figma familiarity, they lack every core competency VGS actually needs: formal B2B marketing execution, Asana-driven project coordination, enterprise event logistics, professional copywriting, and fintech domain fluency. The writing quality visible in their own profile documentation also raises a red flag for a communications-heavy role. This candidate would need 12-18 months of deliberate marketing experience before becoming competitive for this specific posting.",
+        "improvementPlan": [
+          "Get formal marketing coordinator experience immediately — apply to entry-level marketing coordinator or marketing assistant roles at any B2B SaaS company, even if smaller or less prestigious than VGS, to build the operational baseline",
+          "Learn Asana and HubSpot thoroughly — complete HubSpot's free Marketing Hub certification and get hands-on with Asana's project management workflows, as these are table-stakes tools for this role",
+          "Build a real B2B content portfolio — start a LinkedIn presence, write 5-10 polished B2B-style blog posts on fintech or payments topics, and document them as writing samples you can show recruiters",
+          "Volunteer or freelance for a fintech or SaaS startup's marketing function — offer to help coordinate one event, manage their content calendar for a month, or draft social posts, even unpaid, to get documented experience",
+          "Study GEO and AEO alongside traditional SEO — complete courses on Search Engine Land or similar platforms covering Answer Engine Optimization since this is an emerging and explicitly listed requirement",
+          "Polish your professional written communication — the informal writing style visible in your current profile will disqualify you for communications-heavy roles; practice concise, structured B2B writing daily"
+        ],
+        "marketSkillsToLearn": [
+          "HubSpot Marketing Hub (campaigns, workflows, lead management)",
+          "Asana project management for marketing teams",
+          "LinkedIn Campaign Manager and B2B social strategy",
+          "Webflow or WordPress CMS for SaaS marketing sites",
+          "B2B email marketing and nurture sequences",
+          "Google Analytics 4 (GA4) and marketing attribution",
+          "Event coordination and field marketing logistics",
+          "Generative Engine Optimization (GEO) and AEO",
+          "Professional B2B copywriting and press release formatting",
+          "Account-Based Marketing (ABM) fundamentals"
+        ],
+        "summary": "This candidate has genuine strengths in data analytics, SEO, and entrepreneurial hustle, but those strengths are almost entirely irrelevant to what VGS needs in a Marketing Coordinator. The profile is better suited for a data analyst or junior business analyst role than a B2B SaaS marketing operations position. Without documented marketing team experience, enterprise tool proficiency, and professional writing ability, this candidate is not yet competitive for this posting."
+      }
+    },
+    {
+      "id": "job_1774629010318",
+      "savedAt": "2026-03-27T16:30:10.318Z",
+      "company": "Unknown Company",
+      "role": "Supporting business operations through data analysis, reporting, documentation, and stakeholder collaboration in an entry-level capacity.",
+      "jobDescription": "Entry Level Business Analyst\nJersey Gardens Blvd, Elizabeth, NJ, USA\nEmployees can work remotely\nFull-time\nCompensation: USD 65,000 - USD 75,000 - yearly\nCompany Description\nNational Software Managment an software Development company of USA is focused on developing a comprehensive workplace that utilizes the unique expertise and viewpoints of our worldwide staff. We appreciate the exclusive qualifications, expertise and ability of each worker and accept variations which include gender, kind, faith, incapability, nationality, age group, physical inclination, ethnic background and exclusive style. Being a multinational firm, we know, treasure and regard the distinctiveness of our staff and promote a collaborative work setting with equal potential for all staff members.\n\nJob Description\nWe are seeking a motivated  Business Analyst to join our team and support business operations through data analysis, reporting, and stakeholder collaboration. This role is ideal for individuals looking to gain hands-on experience in business processes and project support.\n\nResponsibilities:\n\nAssist in gathering and documenting business requirements.\nPrepare reports and summaries for stakeholders.\nSupport business teams in daily operations.\nHelp project managers track progress and tasks.\nContribute to improving business processes.\nProvide insights to support decision-making.\nCollaborate with team members and stakeholders.\nMaintain clear and organized documentation.\nQualifications\nBachelor’s degree in Business, Information Technology, Computer Science, Economics, Finance, or a related field.\n0–2 years of relevant experience.\nAnalytical thinking and problem-solving skills.\nBasic understanding of business processes.\nGood communication skills.\nAdditional Information\nAll your information will be kept confidential according to EEO guidelines.\n\n",
+      "resumeFilename": "tailored_resume_2026_03_27T16_2.pdf",
+      "coverLetterFilename": "tailored_cover_letter_2026_03_27T16_2.pdf",
+      "compatibilityScore": 72,
+      "analysis": {
+        "compatibilityScore": 72,
+        "compatibilityLabel": "Good Match",
+        "industry": "Software / Technology Consulting",
+        "roleType": "Business Analyst",
+        "seniorityLevel": "Entry Level",
+        "presentSkills": [
+          "Business Analysis",
+          "Data Analytics",
+          "SQL",
+          "Excel",
+          "Tableau",
+          "Power BI",
+          "Stakeholder Communication",
+          "Requirements Gathering (project experience)",
+          "Process Optimization",
+          "Business Intelligence",
+          "Documentation",
+          "Data Visualization",
+          "Strategy & Consulting",
+          "KPI Framework Development",
+          "Root Cause Analysis",
+          "Agile User Stories",
+          "Process Mapping",
+          "Cross-functional Collaboration",
+          "CRM & Salesforce awareness",
+          "Python (basic)",
+          "R Programming"
+        ],
+        "missingSkills": [
+          {
+            "skill": "Formal Business Requirements Documentation (BRD/FRD)",
+            "importance": "critical",
+            "reason": "The job explicitly requires gathering and documenting business requirements. The candidate has project-level exposure but no demonstrated professional experience writing formal BRDs or FRDs in a corporate setting."
+          },
+          {
+            "skill": "Project Management Tools (Jira, Confluence, Trello)",
+            "importance": "important",
+            "reason": "Supporting project managers and tracking tasks is a core responsibility. No mention of standard PM collaboration tools that virtually every BA role uses daily."
+          },
+          {
+            "skill": "Formal Stakeholder Reporting",
+            "importance": "important",
+            "reason": "Preparing structured reports and summaries for business stakeholders in a professional corporate environment is required. Academic and entrepreneurial projects are not equivalent to corporate reporting cadences."
+          },
+          {
+            "skill": "Business Process Modeling (BPMN, flowcharts, Visio/Lucidchart)",
+            "importance": "important",
+            "reason": "Process improvement and mapping are listed responsibilities. No evidence of formal process modeling notation or tools used in professional BA work."
+          },
+          {
+            "skill": "Microsoft Office Suite (Word, PowerPoint for business deliverables)",
+            "importance": "nice-to-have",
+            "reason": "Standard corporate communication tools expected at entry-level. Excel is listed but broader Office proficiency for reporting and presentations is not evidenced."
+          }
+        ],
+        "experienceGaps": [
+          "Zero formal corporate work experience as a Business Analyst. The Handshake fellowship is AI training gig work, not BA experience, and Apple was retail sales. Neither translates directly to enterprise BA workflows.",
+          "No demonstrated experience working within a structured SDLC or project lifecycle in a corporate IT or consulting environment.",
+          "No exposure to enterprise software environments where BAs typically operate (ERP systems, ticketing systems, formal change management processes).",
+          "Entrepreneurial e-commerce project shows initiative and real business skills, but it was self-directed with no organizational hierarchy, stakeholder management complexity, or corporate accountability structures.",
+          "Academic projects (Olist, PrimeStop) are solid but reviewers know the difference between classroom analysis and delivering to a real paying stakeholder with shifting priorities and deadlines.",
+          "No evidence of experience in regulated or enterprise IT environments, which this software development company likely operates within."
+        ],
+        "criticalVerdict": "This candidate is genuinely overqualified technically for this entry-level role but underqualified in formal corporate BA experience, which creates an awkward fit. The technical stack — Python, SQL, R, ML, cloud — blows past what this $65-75K entry BA role requires, yet the candidate lacks the professional BA workflow experience (BRDs, stakeholder reporting, PM tool usage) that even junior corporate roles expect on day one. The Apple retail role and AI fellowship are not BA experience by any stretch, and the e-commerce venture, while impressive entrepreneurially, won't be read as equivalent to corporate operations work. That said, the Brazilian E-Commerce Analytics project and the R-based retail strategy work demonstrate real analytical thinking that a hiring manager could get excited about. This candidate should get an interview but needs to reframe their story aggressively around BA deliverables, not technical depth.",
+        "improvementPlan": [
+          "Immediately complete a Business Analysis certification — IIBA Entry Certificate in Business Analysis (ECBA) is the gold standard for entry-level candidates and signals seriousness to hiring managers.",
+          "Build 1-2 portfolio projects that specifically demonstrate formal BA artifacts: write a mock BRD, create a use case document, build a process flow in Lucidchart or Visio for a real or simulated business problem.",
+          "Learn Jira and Confluence through free Atlassian training — these are table stakes tools for any BA working in an agile environment and their absence on a resume is a red flag.",
+          "Reframe the Brazilian E-Commerce Analytics Platform project in resume language to emphasize BA deliverables: requirements gathering, stakeholder reporting, KPI definition, and process improvement — not just SQL and data pipelines.",
+          "Pursue a short internship or freelance BA engagement (even non-profit or startup) to get at least one line of formal BA experience on the resume before applying to corporate roles.",
+          "Condense the resume ruthlessly — the technical depth (ML, NLP, LLMs, cloud) is noise for this role and may cause hiring managers to assume the candidate will leave quickly for a better-paying data science or engineering role."
+        ],
+        "marketSkillsToLearn": [
+          "Jira and Confluence (Agile project tracking)",
+          "Business Requirements Documentation (BRD/FRD writing)",
+          "BPMN process modeling (Lucidchart, Visio, or Draw.io)",
+          "Agile and Scrum methodology fundamentals",
+          "Microsoft PowerPoint for executive stakeholder presentations",
+          "IIBA ECBA certification",
+          "User Story writing and acceptance criteria",
+          "Gap analysis and AS-IS / TO-BE process mapping",
+          "Data storytelling for non-technical audiences",
+          "Basic change management principles"
+        ],
+        "summary": "This candidate brings a genuinely strong technical and analytical foundation — SQL, Python, Tableau, Power BI, real project work — that exceeds what this entry-level BA role technically demands. However, the complete absence of formal corporate BA experience, professional documentation deliverables, and standard BA tooling (Jira, BRDs, process modeling) means they would arrive needing significant onboarding despite their skill depth. With targeted upskilling on BA-specific workflows and one IIBA certification, this candidate could become a highly competitive applicant within 60-90 days."
+      }
+    },
+    {
+      "id": "job_1774595859655",
+      "savedAt": "2026-03-27T07:17:39.655Z",
+      "company": "Unknown Company",
+      "role": "An entry-level Data Scientist role focused on turning public safety operational data into actionable insights through analysis, visualization, and collaboration with government agency customers.",
+      "jobDescription": "Location: New York, NY\n\nType: Full Time\n\nMark43 is approved to hire in Canada, the UK, and 36 U.S. states, including Alabama, Arizona, California (excluding San Francisco), Colorado, Connecticut, Washington D.C., Florida, Georgia, Iowa, Idaho, Illinois, Indiana, Kansas, Massachusetts, Maryland, Maine, Michigan, Minnesota, Missouri, North Carolina, Nebraska, New Hampshire, New Jersey, New Mexico, New York, Ohio, Oklahoma, Oregon, Pennsylvania, South Carolina, Tennessee, Texas, Utah, Virginia, Vermont, Washington, Wisconsin, and West Virginia. Before applying to a remote role, please ensure that you are able to perform the position in one of the states listed above. State locations and specifics are subject to change as our hiring requirements shift. \n\nApplicants must be authorized to work for any employer in the country in which the role is being hired. We are unable to sponsor or take over sponsorship of an employment visa at this time.\n\nMark43’s mission is to empower communities and their governments with new technologies that improve the safety and quality of life for all. We build powerful, scalable, and elegant software that sets a new standard for the tools upon which our first responders rely. Our users are diverse, and we are therefore committed to embracing diversity of thought and experience within our team. \n\nWe are looking for an associate Data Scientist to join our Global Services team. In this role, you will work closely with public safety agencies and internal teams to help turn operational data into meaningful insights. You will contribute to and drive analytical projects that support decision-making, improve operations, and drive real-world impact in the communities our customers serve. This is a great opportunity to apply and grow your technical and consulting skills in a fast-paced, high-impact environment, helping to shape meaningful outcomes in public safety. \n\nWhat You’ll Do \n\nIf you were part of our team, here are some things you would have done last week: \n\nCollaborated with senior team members and customers to break down a key analytical question and identify the data and methodological approach needed to answer it. \nWrote SQL queries and used Python or R to clean, explore, and analyze datasets.  \nBuilt or updated dashboards and visualizations that make complex data easier to understand and act on, working directly with customers to solicit and incorporate feedback.  \nHelped combine multiple datasets, working through data quality challenges to produce reliable outputs.  \nTranslated analytical findings into clear summaries, visuals, and products for non-technical stakeholders.  \nPartnered with Services, Product, and Engineering teams to share customer insights and improve the platform.  \nHelped customers better understand the Mark43 data model and how to use our tools.  \nWhat You’ll Need \n\nWe’re looking for an Associate Data Scientist with 0 to 2 years of professional experience, or equivalent academic or internship experience, working with data. This level of experience is a good fit for someone who is excited to learn on the job, apply and grow  their technical skills in a fast-paced environment, and grow into a more independent contributor over time. \n\nYou should bring: \n\nKnowledge and experience working with Python or R, and interest and ability to learn SQL, for data analysis and manipulation  \nExperience through coursework, internships, or projects building analyses, reports, or visualizations  \nA strong willingness to learn new tools, systems, and the Mark43 data model  \nComfort working with messy or incomplete datasets and a desire to improve data quality  \nBackground in statistics, computer science, economics, data science or similar field and analytical thinking, with curiosity about machine learning techniques  \nAbility to translate analytical insights into clear, compelling communication for both written and verbal audiences \nPublic safety, law enforcement, or crime analysis exposure is a plus but not required. \nPeople who thrive on our team also tend to share the following characteristics: \n\nCurious and eager to learn. You ask questions and actively seek to deepen your understanding of data and its real-world impact  \nCustomer-focused. You care about helping agencies succeed and improving outcomes for the communities they serve  \nComfortable with ambiguity. You are open to tackling problems without clear answers and learning as you go  \nCollaborative and humble. You value feedback and enjoy working across teams to build better solutions  \nOur team is remote friendly within approved states, with opportunities to collaborate in person at our offices in New York, Boston, and Manchester UK. This role may include travel to customer sites to understand their data and operational needs and directly support analytical needs.  \n\nOur Privacy Notice describes how Mark43 uses and protects the personal information of prospective employees during the recruitment process. It informs you about our handling of the personal information you provide to us when you apply for a position in our organization and in general when you express your interest in joining our team.\n\nAs a part of Mark43's security measures all employees must: Engage in appropriate use of the company's electronic information resources; Become knowledgeable about and follow relevant security policies and guidelines; Protect the resources under their control, such as passwords, computers, and data that they create, receive, or download; and Promptly report security-related incidents and violations, and responding to official reports of security incidents involving their systems or accounts.\n\nMark43 is committed to the full inclusion of all qualified individuals. All qualified applicants will receive consideration for employment without regard to race, color, religion, sex disability, age, sexual orientation, gender identity, national origin, veteran status, or genetic information. As part of this commitment, we will ensure that persons with disabilities are provided reasonable accommodations. If reasonable accommodation is needed, please email recruiting@Mark43.com requesting the accommodation. \n\n",
+      "resumeFilename": "tailored_resume_2026_03_27T07_1.pdf",
+      "coverLetterFilename": "tailored_cover_letter_2026_03_27T07_1.pdf",
+      "compatibilityScore": 62,
+      "analysis": {
+        "compatibilityScore": 62,
+        "compatibilityLabel": "Partial Match",
+        "industry": "Public Safety Technology / GovTech",
+        "roleType": "Associate Data Scientist",
+        "seniorityLevel": "Entry-Level (0-2 years)",
+        "presentSkills": [
+          "Python",
+          "R",
+          "SQL",
+          "Pandas",
+          "NumPy",
+          "scikit-learn",
+          "Machine Learning",
+          "Tableau",
+          "Power BI",
+          "Data Analytics",
+          "Data Mining & ETL",
+          "Business Intelligence",
+          "Data Visualization",
+          "Exploratory Data Analysis",
+          "Feature Engineering",
+          "Random Forest / Predictive Modeling",
+          "Statistical Analysis",
+          "NLP & LLMs",
+          "Jupyter",
+          "Git/GitHub",
+          "Business Analysis",
+          "Strategy & Consulting",
+          "Stakeholder Communication",
+          "Cross-functional Collaboration"
+        ],
+        "missingSkills": [
+          {
+            "skill": "Professional data science work experience",
+            "importance": "critical",
+            "reason": "The role asks for 0-2 years of professional experience. The candidate has zero professional data science or analytics employment. Apple retail and a fast food assistant manager role do not count. Academic projects and certifications partially compensate but do not substitute for real-world data pipelines, deadlines, and stakeholder pressure."
+          },
+          {
+            "skill": "Dashboard building in a professional/client-facing context",
+            "importance": "critical",
+            "reason": "The role explicitly requires building and updating dashboards for customers and incorporating their feedback iteratively. The candidate lists Tableau and Power BI but shows no evidence of having actually deployed or maintained dashboards for real clients or business stakeholders beyond coursework."
+          },
+          {
+            "skill": "Data quality management and messy dataset experience",
+            "importance": "important",
+            "reason": "The JD specifically calls out comfort working with messy or incomplete datasets. The candidate's e-commerce project touches on data cleaning, but there is no evidence of sustained, complex data quality work in a professional setting with real operational data."
+          },
+          {
+            "skill": "Public safety / law enforcement domain knowledge",
+            "importance": "important",
+            "reason": "While listed as a plus, candidates with crime analysis or public safety data exposure will be significantly more competitive. This candidate has zero exposure to this domain, which matters when the job requires explaining data models to law enforcement agencies."
+          },
+          {
+            "skill": "Client-facing consulting or agency engagement experience",
+            "importance": "important",
+            "reason": "The Global Services team works directly with public safety agencies. The candidate has customer-facing experience at Apple retail, but B2C product sales is categorically different from analytical consulting engagements with government clients."
+          },
+          {
+            "skill": "SQL at a professional/production level",
+            "importance": "important",
+            "reason": "SQL is listed as a skill and used in the e-commerce project, but there is no evidence of complex multi-table queries, window functions, or performance optimization in a professional data environment. The JD requires SQL fluency for real operational datasets."
+          },
+          {
+            "skill": "Written analytical reporting for non-technical audiences",
+            "importance": "important",
+            "reason": "The role requires translating findings into clear summaries for non-technical government stakeholders. The candidate references this in project descriptions but the raw technicalDetails text in the profile is extremely unpolished, raising red flags about professional written communication quality."
+          },
+          {
+            "skill": "Experience with large-scale operational databases",
+            "importance": "nice-to-have",
+            "reason": "Public safety agencies operate complex CAD, RMS, and records systems. Familiarity with operational database schemas and real-world data at scale is absent from this profile."
+          }
+        ],
+        "experienceGaps": [
+          "Zero professional data science, analytics, or data engineering employment history. The Handshake Generative AI Fellow role is essentially a gig/crowdsourcing task that does not constitute professional data science experience.",
+          "Apple Product Specialist role is entirely B2C retail sales. While it shows customer communication skills, it contributes nothing to the data science qualifications required for this role.",
+          "All technical data work is academic or self-directed projects. No evidence of working under a senior data scientist, receiving code reviews, or delivering analytics in a team environment.",
+          "No experience with government, public sector, or mission-critical software environments where data accuracy has real operational consequences.",
+          "The candidate's written communication quality in the raw profile notes is alarmingly poor for a role that requires translating complex findings to non-technical government stakeholders. This must be addressed before any client-facing work.",
+          "No evidence of presenting analytical findings to real stakeholders, defending methodology under scrutiny, or iterating on analysis based on client feedback.",
+          "Certifications are all very recent (2025-2026) and entry-level, suggesting the candidate is actively pivoting into data science rather than having an established foundation."
+        ],
+        "criticalVerdict": "This candidate is a career changer with the right technical toolkit on paper but almost no professional data science experience to back it up. The academic projects are genuinely decent and show real initiative with Python, R, SQL, and ML, which earns them a shot at entry-level consideration. However, the complete absence of professional analytics employment, the retail-heavy work history, and the alarming quality of unpolished written communication visible in the profile are serious concerns for a client-facing role at a govtech company serving law enforcement agencies. They are competitive enough to get a first-round screening call for an associate role, but they will lose out to candidates who have even one internship or co-op in a real analytics environment.",
+        "improvementPlan": [
+          "Immediately apply for data analyst or junior data scientist internships or contract roles to get at least one line of professional analytics experience on the resume before applying to roles like this.",
+          "Build and publish 2-3 end-to-end portfolio projects specifically involving public safety or government data. The FBI Crime Data Explorer and data.gov have free public safety datasets. Use them. Demonstrate SQL, Python, and Tableau/Power BI together in one cohesive project.",
+          "Practice and document client-facing communication by writing formal analytical reports for your existing projects. Polish them to a professional standard. The raw stream-of-consciousness writing visible in your profile would be disqualifying if a hiring manager saw it.",
+          "Deepen SQL skills beyond basic joins. Complete the Advanced SQL track on DataCamp or Mode Analytics and build queries involving window functions, CTEs, and aggregations on datasets with 500k+ rows.",
+          "Target smaller govtech, civic tech, or nonprofit data roles first to gain the domain exposure this role values. Organizations like Code for America, state government analytics offices, or local public safety agencies often have volunteer or junior analyst opportunities.",
+          "Get comfortable with Power BI and Tableau at a professional level by rebuilding your existing project dashboards and making them publicly accessible with live data connections.",
+          "Clean up and professionalize every visible element of your candidate profile. Grammar, clarity, and conciseness are not optional for a role that requires written communication to government clients."
+        ],
+        "marketSkillsToLearn": [
+          "dbt (data build tool) for analytics engineering",
+          "Advanced SQL with window functions and query optimization",
+          "Snowflake or BigQuery for cloud data warehousing",
+          "Geospatial analysis with GeoPandas or PostGIS (highly relevant for public safety)",
+          "Streamlit or Dash for building interactive data applications",
+          "Statistical hypothesis testing and A/B testing methodology",
+          "Data storytelling and executive presentation design",
+          "LookerStudio or Metabase for BI reporting",
+          "Time series analysis for operational data",
+          "API data ingestion and pipeline automation with Airflow or Prefect"
+        ],
+        "summary": "A technically promising entry-level candidate who has clearly put in self-directed effort to build data science skills through coursework, certifications, and personal projects. However, the profile is dominated by retail sales experience and gig work, with no professional analytics employment whatsoever, which is a significant liability for a client-facing govtech role. With 6-12 months of targeted internship or junior analyst experience and sharpened professional communication, this candidate could be a competitive applicant for this exact type of role."
+      }
+    },
+    {
+      "id": "job_1774595590942",
+      "savedAt": "2026-03-27T07:13:10.942Z",
+      "company": "Unknown Company",
+      "role": "An entry-level data scientist role focused on transforming public safety operational data into actionable insights for government and law enforcement agency customers.",
+      "jobDescription": "Location: New York, NY\n\nType: Full Time\n\nMark43 is approved to hire in Canada, the UK, and 36 U.S. states, including Alabama, Arizona, California (excluding San Francisco), Colorado, Connecticut, Washington D.C., Florida, Georgia, Iowa, Idaho, Illinois, Indiana, Kansas, Massachusetts, Maryland, Maine, Michigan, Minnesota, Missouri, North Carolina, Nebraska, New Hampshire, New Jersey, New Mexico, New York, Ohio, Oklahoma, Oregon, Pennsylvania, South Carolina, Tennessee, Texas, Utah, Virginia, Vermont, Washington, Wisconsin, and West Virginia. Before applying to a remote role, please ensure that you are able to perform the position in one of the states listed above. State locations and specifics are subject to change as our hiring requirements shift. \n\nApplicants must be authorized to work for any employer in the country in which the role is being hired. We are unable to sponsor or take over sponsorship of an employment visa at this time.\n\nMark43’s mission is to empower communities and their governments with new technologies that improve the safety and quality of life for all. We build powerful, scalable, and elegant software that sets a new standard for the tools upon which our first responders rely. Our users are diverse, and we are therefore committed to embracing diversity of thought and experience within our team. \n\nWe are looking for an associate Data Scientist to join our Global Services team. In this role, you will work closely with public safety agencies and internal teams to help turn operational data into meaningful insights. You will contribute to and drive analytical projects that support decision-making, improve operations, and drive real-world impact in the communities our customers serve. This is a great opportunity to apply and grow your technical and consulting skills in a fast-paced, high-impact environment, helping to shape meaningful outcomes in public safety. \n\nWhat You’ll Do \n\nIf you were part of our team, here are some things you would have done last week: \n\nCollaborated with senior team members and customers to break down a key analytical question and identify the data and methodological approach needed to answer it. \nWrote SQL queries and used Python or R to clean, explore, and analyze datasets.  \nBuilt or updated dashboards and visualizations that make complex data easier to understand and act on, working directly with customers to solicit and incorporate feedback.  \nHelped combine multiple datasets, working through data quality challenges to produce reliable outputs.  \nTranslated analytical findings into clear summaries, visuals, and products for non-technical stakeholders.  \nPartnered with Services, Product, and Engineering teams to share customer insights and improve the platform.  \nHelped customers better understand the Mark43 data model and how to use our tools.  \nWhat You’ll Need \n\nWe’re looking for an Associate Data Scientist with 0 to 2 years of professional experience, or equivalent academic or internship experience, working with data. This level of experience is a good fit for someone who is excited to learn on the job, apply and grow  their technical skills in a fast-paced environment, and grow into a more independent contributor over time. \n\nYou should bring: \n\nKnowledge and experience working with Python or R, and interest and ability to learn SQL, for data analysis and manipulation  \nExperience through coursework, internships, or projects building analyses, reports, or visualizations  \nA strong willingness to learn new tools, systems, and the Mark43 data model  \nComfort working with messy or incomplete datasets and a desire to improve data quality  \nBackground in statistics, computer science, economics, data science or similar field and analytical thinking, with curiosity about machine learning techniques  \nAbility to translate analytical insights into clear, compelling communication for both written and verbal audiences \nPublic safety, law enforcement, or crime analysis exposure is a plus but not required. \nPeople who thrive on our team also tend to share the following characteristics: \n\nCurious and eager to learn. You ask questions and actively seek to deepen your understanding of data and its real-world impact  \nCustomer-focused. You care about helping agencies succeed and improving outcomes for the communities they serve  \nComfortable with ambiguity. You are open to tackling problems without clear answers and learning as you go  \nCollaborative and humble. You value feedback and enjoy working across teams to build better solutions  \nOur team is remote friendly within approved states, with opportunities to collaborate in person at our offices in New York, Boston, and Manchester UK. This role may include travel to customer sites to understand their data and operational needs and directly support analytical needs.  \n\nOur Privacy Notice describes how Mark43 uses and protects the personal information of prospective employees during the recruitment process. It informs you about our handling of the personal information you provide to us when you apply for a position in our organization and in general when you express your interest in joining our team.\n\nAs a part of Mark43's security measures all employees must: Engage in appropriate use of the company's electronic information resources; Become knowledgeable about and follow relevant security policies and guidelines; Protect the resources under their control, such as passwords, computers, and data that they create, receive, or download; and Promptly report security-related incidents and violations, and responding to official reports of security incidents involving their systems or accounts.\n\nMark43 is committed to the full inclusion of all qualified individuals. All qualified applicants will receive consideration for employment without regard to race, color, religion, sex disability, age, sexual orientation, gender identity, national origin, veteran status, or genetic information. As part of this commitment, we will ensure that persons with disabilities are provided reasonable accommodations. If reasonable accommodation is needed, please email recruiting@Mark43.com requesting the accommodation. \n\n",
+      "resumeFilename": "tailored_resume_2026_03_27T07_1.pdf",
+      "coverLetterFilename": "tailored_cover_letter_2026_03_27T07_1.pdf",
+      "compatibilityScore": 58,
+      "analysis": {
+        "compatibilityScore": 58,
+        "compatibilityLabel": "Partial Match",
+        "industry": "Public Safety Technology / GovTech",
+        "roleType": "Associate Data Scientist",
+        "seniorityLevel": "Entry-Level (0-2 years)",
+        "presentSkills": [
+          "Python (certified, coursework-level)",
+          "R (certified, project-level via MIS 431)",
+          "SQL (Brazilian e-commerce project)",
+          "Pandas & NumPy",
+          "Machine Learning (scikit-learn, Random Forest via Tidymodels)",
+          "Data Visualization (Tableau, Power BI)",
+          "Exploratory Data Analysis",
+          "Dashboard Building",
+          "Data Cleaning & ETL basics",
+          "Business Analysis & Consulting framing",
+          "Translating insights for non-technical stakeholders",
+          "Cross-functional collaboration",
+          "KPI Modeling",
+          "Root Cause Analysis",
+          "Customer-facing communication (strong Apple experience)"
+        ],
+        "missingSkills": [
+          {
+            "skill": "Professional SQL experience in a data/analytics role",
+            "importance": "critical",
+            "reason": "The JD explicitly requires SQL for data analysis and manipulation. Candidate's SQL appears project/coursework-level only, with no professional deployment against real operational databases."
+          },
+          {
+            "skill": "Professional Python data analysis experience",
+            "importance": "critical",
+            "reason": "Certifications are intro-level (DataCamp Introduction to Python). No professional or internship context shows Python used for real analytical pipelines. The JD needs demonstrated applied usage, not just certificates."
+          },
+          {
+            "skill": "Data storytelling and reporting for government/public sector clients",
+            "importance": "important",
+            "reason": "Mark43 serves law enforcement agencies. Communicating analytical findings to public safety stakeholders is a distinct skill set. Candidate has zero domain exposure here."
+          },
+          {
+            "skill": "Messy/incomplete real-world dataset handling at professional scale",
+            "importance": "important",
+            "reason": "Projects use clean academic or Kaggle-style datasets. The JD specifically calls out comfort with messy, incomplete operational data — a different challenge than structured coursework data."
+          },
+          {
+            "skill": "Statistical analysis and hypothesis testing",
+            "importance": "important",
+            "reason": "No evidence of formal statistical methods, A/B testing, regression analysis, or inferential statistics applied in any project or role."
+          },
+          {
+            "skill": "Public safety, law enforcement, or crime analysis domain knowledge",
+            "importance": "nice-to-have",
+            "reason": "Listed as a plus in the JD. Candidate has zero exposure to this vertical, which limits immediate contribution on customer engagements."
+          },
+          {
+            "skill": "Client-facing data consulting in a technical services context",
+            "importance": "important",
+            "reason": "This is a Global Services role — candidates need experience translating data into actionable insights for external clients. Apple sales experience is adjacent but not equivalent to data consulting."
+          }
+        ],
+        "experienceGaps": [
+          "Zero professional data science or data analyst work experience. All technical skills are academic, self-taught, or certification-based — no internship, co-op, or professional data role to validate applied ability.",
+          "No experience working within a SaaS or enterprise software environment, which is the context Mark43 operates in.",
+          "No demonstrated experience building or maintaining production dashboards for external clients or stakeholders.",
+          "The most recent relevant role (Handshake Generative AI Fellow) is essentially a crowdsourced AI labeling gig — not a data science role. This will not be seen as equivalent professional experience by most hiring managers.",
+          "Burger 7 Assistant Manager role has a completely blank description with placeholder text — this looks unfinished and unprofessional on any submitted application.",
+          "Apple experience (3 years) is legitimate and shows strong communication and client skills, but is entirely in retail sales/tech consulting, not data science or analytics.",
+          "No evidence of collaborative data projects with cross-functional teams in a professional setting, which this role requires heavily.",
+          "No demonstrated experience with multi-dataset joins and data quality remediation at operational scale."
+        ],
+        "criticalVerdict": "This candidate has the foundational toolkit of someone who is actively building toward a data science career — Python, R, SQL, ML exposure, visualization tools — and that is genuinely commendable. However, the honest reality is that every single data skill is academic or self-certified, with no professional validation whatsoever. Mark43's Global Services team needs someone who can sit across from a police department's data team on day one and contribute; this candidate is not there yet. The Apple background shows real client-facing strength and communication skills that are genuinely valuable, but they don't compensate for the absence of any professional data experience. This is a borderline application that needs either a strong internship or a compelling technical portfolio to cross the hiring threshold.",
+        "improvementPlan": [
+          "Complete a data analyst or data science internship ASAP — this is the single most critical gap. Even a 3-month internship transforms this profile from 'student with certs' to 'early professional.'",
+          "Finish and properly document the Burger 7 experience on your profile — a blank description signals carelessness and will get you screened out before a human even reads your skills.",
+          "Build 1-2 SQL-heavy portfolio projects using publicly available government or crime datasets (e.g., FBI UCR, NYC OpenData, Police Data Initiative) to directly signal public safety domain awareness.",
+          "Deepen Python skills beyond DataCamp intro level — build a complete end-to-end data pipeline project using Pandas, NumPy, and matplotlib/seaborn on a messy real-world dataset and publish it on GitHub with clean documentation.",
+          "Take a formal statistics course (Coursera Stanford Stats, or similar) covering regression, hypothesis testing, and probability — you have ML tools but no demonstrated statistical reasoning foundation.",
+          "Create a Tableau or Power BI dashboard using public safety data and publish it publicly (Tableau Public) — this directly mirrors what this role does and shows initiative in the target domain.",
+          "Target roles explicitly titled 'Data Analyst' or 'Junior Business Analyst' as stepping stones — they are more accessible with your current profile and will provide the professional validation Mark43 requires."
+        ],
+        "marketSkillsToLearn": [
+          "dbt (data build tool) — increasingly standard in analytics engineering pipelines",
+          "Advanced SQL (window functions, CTEs, performance tuning)",
+          "Looker or Metabase — common BI tools in SaaS/GovTech environments",
+          "Geospatial analysis (GeoPandas, PostGIS) — highly relevant for public safety analytics",
+          "Apache Spark basics — for large-scale data processing",
+          "Statistical modeling (regression, time series forecasting)",
+          "Data pipeline orchestration (Airflow basics)",
+          "Git/GitHub for collaborative data projects with proper version control practices",
+          "Streamlit — for building lightweight data apps to showcase analytical work"
+        ],
+        "summary": "This candidate is a motivated early-career professional with a solid self-built technical foundation in Python, R, SQL, and data visualization, complemented by genuinely strong client communication skills from Apple. However, the complete absence of professional data experience — every analytical skill is academic or certification-based — is a significant barrier for a role that requires immediate contribution to customer-facing data engagements at public safety agencies. With a targeted internship, stronger portfolio projects using government/crime data, and deeper statistical foundations, this candidate could become competitive for this exact role type within 6-12 months."
+      }
+    },
+    {
+      "id": "job_1774592790545",
+      "savedAt": "2026-03-27T06:26:30.545Z",
+      "company": "Unknown Company",
+      "role": "Building and maintaining Power BI reports and dashboards to replace existing WebFOCUS reports while supporting data-driven decision-making across the organization.",
+      "jobDescription": "Power BI Analytics Developer\nContractor\nTampa, FL, US\nYesterday\nRequisition ID: 1147\n\nApply\nSalary Range:\n$33.00 To $38.00 Hourly\nDEPARTMENT: Data Insights and Innovation \n\nJOB TITLE: Power BI Analytics Developer\n\nJOB CODE: PBIAD\n\nREPORTS TO: Manager, Advanced Analytics\n\nFLSA STATUS: Non-Exempt\n\nEMPLOYMENT TYPE: Contract to hire\n\nJOB PURPOSE:\n\nThis role at Arbitration Forums is as unique as it is rewarding because of the AF IPAAL Values (Integrity, Passion, Accountability, Achievement, Leadership) and TRI Model (Trust, Respect, Inclusion). \n\nThis role will serve as a launchpad for a data career for candidates who are passionate about data. As a Power BI Analytics Developer on our Data Insights & Innovation team, the candidate will be a key player from day one. The role offers hands-on experience in building real reports and dashboards using Microsoft Power BI that users need to make critical decisions. The candidate will work closely with senior analysts and business stakeholders to design, develop, and maintain interactive Power BI reports and dashboards. \n\nThis is an excellent opportunity for the candidate to gain real-world experience in the full lifecycle of analytics development, from data modeling to visualization, in a dynamic and supportive environment.\n\nDEPARTMENTAL EXPECTATION OF EMPLOYEE\n\nAdheres to AF Policy and Procedures and the AF IPAAL Values and TRI Model \nActs as a role model within and outside AF. \nPerforms duties as workload necessitates. \nMaintains a positive and respectful attitude. \nCommunicates regularly with the departmental leader about department issues. \nDemonstrates flexible and efficient time management and ability to prioritize workload. \nConsistently reports to work on time, prepared to perform duties of the position. \nMeets Department productivity standards. \nESSENTIAL DUTIES AND RESPONSIBILITIES \n\nAssist in development of Power BI reports and dashboards to replace existing reports and dashboards in WebFOCUS\nPerform data validation and quality checks to ensure the accuracy and reliability of reports.\nAssist in development of clear, compelling, and user-friendly visualizations that tell a story and facilitate data-driven decision-making.\nDocument data sources, report logic, and development processes to ensure knowledge sharing and maintainability\nKEY OPPORTUNITIES\n\nHands-on experience with the Microsoft Power BI and potentially connecting to various data sources\nA deep understanding of how data analytics drives key business decisions across different functions\nExperience working in a professional Agile/Scrum environment, managing tasks, and meeting deadlines.\nMentorship from experienced data professionals and opportunities for networking.\nQUALIFICATIONS \n\nCurrently pursuing a Bachelor’s degree in Data Analytics, Computer Science, Engineering, Mathematics, Statistics, Renewable Energy, or a related field.\nBasic experience with Microsoft Power BI, Tableau, or a similar data visualization tool.\nUnderstanding of database concepts and data modeling.\nBasic knowledge of SQL.\nStrong analytical and problem-solving skills with attention to detail.\nAbility to work collaboratively in a fast-paced, team-oriented environment.\nExcellent verbal and written communication skills.\nAMERICANS WITH DISABILITY SPECIFICATIONS \n\nPHYSICAL DEMANDS\n\nThe physical demands described here are representative of those that must be met by an employee to successfully perform the essential functions of this job. \n\nWhile performing the duties of this job, the employee is occasionally required to stand; walk; sit; use hands to finger, handle, or feel objects, tools, or controls; reach with hands and arms; climb stairs; balance; stoop, kneel, crouch or crawl; talk or hear; taste or smell. The employee must occasionally lift and/or move up to 25 pounds. Specific vision abilities required by the job include close vision, distance vision, color vision, peripheral vision, depth perception, and the ability to adjust focus. \n\nWORK ENVIRONMENT\n\nThis is a fully remote position requiring reliable high-speed internet access and a dedicated workspace. \n\nReasonable accommodations may be made to enable individuals with disabilities to perform the essential functions. \n\n",
+      "resumeFilename": "tailored_resume_2026_03_27T06_2.pdf",
+      "coverLetterFilename": "tailored_cover_letter_2026_03_27T06_2.pdf",
+      "compatibilityScore": 62,
+      "analysis": {
+        "compatibilityScore": 62,
+        "compatibilityLabel": "Partial Match",
+        "industry": "Insurance / Legal / Arbitration Services",
+        "roleType": "Business Intelligence / Data Visualization",
+        "seniorityLevel": "Entry-Level / Junior",
+        "presentSkills": [
+          "Power BI (listed as skill)",
+          "Tableau (listed as skill)",
+          "SQL (basic knowledge confirmed)",
+          "Data Analytics",
+          "Business Intelligence",
+          "Data Visualization",
+          "ETL / Data Pipeline experience (Brazilian E-Commerce project)",
+          "Data Modeling (SQL project with 5-table joins)",
+          "Python",
+          "Excel",
+          "KPI Framework development",
+          "Agile awareness (project tags)",
+          "Communication skills (demonstrated across roles)",
+          "Business Analysis",
+          "Currently pursuing Bachelor's degree (implied by coursework/capstone projects)"
+        ],
+        "missingSkills": [
+          {
+            "skill": "Demonstrated Power BI project work",
+            "importance": "critical",
+            "reason": "Power BI is listed as a skill but zero projects, portfolio pieces, or job experiences actually showcase Power BI usage. Having it on a skills list without evidence is a serious red flag for any technical screener."
+          },
+          {
+            "skill": "DAX (Data Analysis Expressions)",
+            "importance": "critical",
+            "reason": "DAX is the core formula language for Power BI report and measure development. Any real Power BI developer needs this. No evidence of DAX knowledge anywhere in the profile."
+          },
+          {
+            "skill": "Power Query / M Language",
+            "importance": "critical",
+            "reason": "Power Query is how data transformation happens inside Power BI. Without this, the candidate cannot perform even basic data shaping tasks the role requires."
+          },
+          {
+            "skill": "Data source connectivity in Power BI",
+            "importance": "important",
+            "reason": "The role specifically calls out connecting to various data sources. No evidence the candidate has connected Power BI to databases, APIs, or enterprise data sources."
+          },
+          {
+            "skill": "WebFOCUS or legacy BI migration experience",
+            "importance": "important",
+            "reason": "The role explicitly involves replacing WebFOCUS reports with Power BI equivalents. Understanding legacy BI tools and migration workflows is directly relevant."
+          },
+          {
+            "skill": "Relational database querying in enterprise context",
+            "importance": "important",
+            "reason": "SQL knowledge exists but is only demonstrated in academic/project settings. No evidence of querying production databases or enterprise data warehouses."
+          },
+          {
+            "skill": "Data validation and quality assurance processes",
+            "importance": "important",
+            "reason": "The role explicitly lists data validation and quality checks as a core duty. No evidence of formal QA workflows or data validation methodology in the candidate profile."
+          },
+          {
+            "skill": "Report documentation practices",
+            "importance": "nice-to-have",
+            "reason": "The role requires documenting data sources, report logic, and development processes. No evidence of technical documentation habits or experience."
+          }
+        ],
+        "experienceGaps": [
+          "No verifiable, demonstrated Power BI work in any project or professional context — the tool appears only in a skills list, which is insufficient for a role where it is the primary deliverable",
+          "All data analytics experience is academic or project-based; zero professional BI development experience in a corporate or enterprise environment",
+          "No experience working within an Agile/Scrum team in a data or BI context — Agile appears as a project tag but no actual sprint, backlog, or Scrum participation is described",
+          "No domain experience in insurance, legal services, arbitration, or financial services industries which are the operational context for this role",
+          "Current professional experience (Apple Product Specialist, Handshake AI Fellow, Burger 7) has no meaningful overlap with BI development or dashboard creation for business stakeholders",
+          "No evidence of collaborating with business stakeholders to gather requirements and translate them into BI reports — a core soft skill for this role",
+          "Degree field and completion status are unclear — the job requires pursuing a Bachelor's in a relevant field and the candidate's enrollment status is ambiguous"
+        ],
+        "criticalVerdict": "This candidate has the right foundational toolkit on paper — SQL, Power BI listed, data analytics background, and solid project experience — but the critical problem is that Power BI, the single most important skill for this role, has zero demonstrated usage anywhere in their actual work. Recruiters and hiring managers will immediately see the disconnect between a skills list that includes Power BI and a project portfolio with no Power BI dashboards, reports, or visualizations. The Brazilian E-Commerce SQL project is genuinely impressive and shows real analytical capability, but this role needs someone who can open Power BI, connect to a data source, write DAX measures, and ship a dashboard — and there is no evidence this candidate can do that yet. With 2-3 months of focused Power BI practice and one solid portfolio project, this candidate becomes meaningfully competitive for this exact role given the entry-level nature of the position.",
+        "improvementPlan": [
+          "Build 2-3 Power BI portfolio projects immediately — take your existing Brazilian E-Commerce SQL dataset and rebuild the entire analysis as a Power BI report with slicers, DAX measures, and interactive visuals, then publish to Power BI Service and link it publicly",
+          "Complete Microsoft's free Power BI learning path on Microsoft Learn and earn the PL-300 (Microsoft Power BI Data Analyst) certification — this is the industry-standard credential that signals real competence and would dramatically strengthen this application",
+          "Learn DAX fundamentals specifically: calculated columns, measures, CALCULATE, FILTER, and time intelligence functions — use SQLBI's free DAX resources or the book 'The Definitive Guide to DAX'",
+          "Practice Power Query data transformation by connecting Power BI to real data sources including SQL Server, Excel files, and CSVs, and documenting your transformation steps as if writing for a teammate",
+          "Add a dedicated Power BI section to your portfolio website with screenshots or embedded reports — visual proof matters more than any skills list for a visualization-focused role",
+          "Clarify and prominently feature your degree program, major, and expected graduation date in all application materials — the job specifically requires a candidate currently pursuing a relevant Bachelor's degree and this information is buried or missing"
+        ],
+        "marketSkillsToLearn": [
+          "DAX (Data Analysis Expressions)",
+          "Power Query / M Language",
+          "PL-300 Microsoft Power BI Data Analyst Certification",
+          "Power BI Service and workspace management",
+          "Azure Synapse Analytics / Azure SQL Database",
+          "Data warehouse concepts (star schema, snowflake schema, fact and dimension tables)",
+          "Row-Level Security (RLS) in Power BI",
+          "Incremental data refresh in Power BI",
+          "Paginated Reports (Power BI Report Builder)",
+          "dbt (data build tool) for SQL transformation pipelines"
+        ],
+        "summary": "This is a candidate with genuine analytical curiosity, a strong SQL foundation, and real project depth — but they are applying for a Power BI Developer role without a single demonstrable Power BI deliverable in their portfolio, which is the core job requirement. The role is entry-level and explicitly designed as a launchpad, so the bar is not impossibly high, but even an entry-level BI developer needs to show they can build something in the primary tool. A focused 60-90 day sprint to build and publish real Power BI projects, pursue the PL-300 certification, and learn DAX would transform this from a borderline pass to a strong hire."
+      }
+    },
+    {
+      "id": "job_1774592466165",
+      "savedAt": "2026-03-27T06:21:06.165Z",
+      "company": "Unknown Company",
+      "role": "Build and deploy AI agents using low-code/no-code platforms to automate and enhance Finance and Supply Chain operations through generative AI integration.",
+      "jobDescription": "Generative AI Business Analyst\nLocation:  US\nPosting Date:  Mar 26, 2026\nJob ID:  13909\nAbout our group:\n\nIn this highly visible role, you will support the analysis and development of AI-driven solutions across Finance and Supply Chain functions. Leveraging low-code/no-code platforms, you will help build and deploy AI agents that integrate with existing enterprise systems, enhancing accessibility, usability, and overall operational efficiency. \n\nAbout the role - you will:\n\nCollaborate closely with Finance and Supply Chain business and IT stakeholders to identify high-impact AI use cases\nDesign and develop AI agents using low-code/no-code platforms such as Copilot Studio and n8n  \nPartner with AI business leads and IT AI champions to drive adoption of deployed AI solutions  \nEnable seamless integration of large language models (LLMs) with existing enterprise platforms  \nBuild strong cross-functional relationships to effectively work with diverse teams across the organization \nAbout you:\n\nExcellent organizational skills with attention to detail and effective time management  \nExcellent verbal and written communication skills \nYour experience includes:\n\nFoundational understanding of generative AI tools, concepts, and techniques  \nFamiliarity with SQL and data querying  \nKnowledge of finance and supply chain processes  \nCurrently pursuing a Bachelor’s degree in Computer Science, Business Administration, Finance, Supply Chain, or a related field, and returning to classes in Fall 2026.\nLocation:\nRemote United States\n\n \n\nSeagate is able to offer virtual employment for this position in the following states: AL, AZ, CO, CT, FL, GA, ID, IL, IN, KS, KY, MA, MD, MI, MN, MO, NC, NH, NJ, NM, NY, NV, OH, OK, OR, PA, SC, SD, TN, TX, UT, VA, WA, WI, WY. \n\n \n\nThe estimated base wage range for this position is $22 - $30/hr. The individual base wage is based on work location and additional factors, including job-related skills, experience, and relevant education or training. Seagate offers comprehensive benefits to its eligible Interns, including, but not limited to, medical, dental, vision, and participation in the employee stock purchase plan.  Seagate also offers Interns 12 paid holidays and a minimum of 48 hours of paid sick leave.  The benefits for this position are based on a 24 to 40-hour-per-week schedule for a full calendar year and may differ depending on work location and tenure with the Company.\n\n \n\nLocation: Remote United States\nTravel: None",
+      "resumeFilename": "tailored_resume_2026_03_27T06_2.pdf",
+      "coverLetterFilename": "tailored_cover_letter_2026_03_27T06_2.pdf",
+      "compatibilityScore": 62,
+      "analysis": {
+        "compatibilityScore": 62,
+        "compatibilityLabel": "Partial Match",
+        "industry": "Technology / Enterprise AI",
+        "roleType": "Generative AI Business Analyst (Internship)",
+        "seniorityLevel": "Intern / Entry-Level",
+        "presentSkills": [
+          "Generative AI fundamentals (hands-on model training via Handshake fellowship)",
+          "NLP & LLMs understanding",
+          "Prompt engineering",
+          "SQL and data querying",
+          "Business analysis",
+          "Data analytics",
+          "Process optimization",
+          "Cross-functional communication",
+          "Python",
+          "Machine learning concepts",
+          "Azure (cloud familiarity relevant to Copilot Studio ecosystem)",
+          "Business intelligence (Tableau, Power BI)",
+          "Currently pursuing relevant Bachelor's degree",
+          "Strategy and consulting experience",
+          "AI model evaluation and quality assessment",
+          "Data visualization",
+          "ETL and data pipelines"
+        ],
+        "missingSkills": [
+          {
+            "skill": "Copilot Studio (Microsoft)",
+            "importance": "critical",
+            "reason": "This is explicitly named in the JD as a primary tool for building AI agents. Zero evidence of any hands-on experience with this platform. It is non-negotiable for the role."
+          },
+          {
+            "skill": "n8n (workflow automation platform)",
+            "importance": "critical",
+            "reason": "Explicitly listed alongside Copilot Studio as a required low-code/no-code platform. Candidate shows no familiarity with workflow automation tools of this type."
+          },
+          {
+            "skill": "Low-code/No-code AI agent development",
+            "importance": "critical",
+            "reason": "The entire role centers on building and deploying AI agents via low-code platforms. Candidate's experience is in traditional coding and model training, not agent orchestration pipelines."
+          },
+          {
+            "skill": "Finance domain knowledge",
+            "importance": "important",
+            "reason": "Role explicitly targets Finance and Supply Chain functions. No evidence of finance process knowledge beyond a personal budgeting project. Enterprise finance workflows are a different universe."
+          },
+          {
+            "skill": "Supply Chain domain knowledge",
+            "importance": "important",
+            "reason": "Supply chain is the other core business domain for this role. Candidate has zero documented exposure to supply chain processes, systems, or terminology."
+          },
+          {
+            "skill": "LLM integration with enterprise systems",
+            "importance": "important",
+            "reason": "Role requires enabling seamless LLM integration with existing enterprise platforms (ERP, CRM, etc.). Candidate understands LLMs conceptually but has no enterprise integration experience."
+          },
+          {
+            "skill": "Power Platform / Microsoft 365 ecosystem",
+            "importance": "important",
+            "reason": "Copilot Studio lives within the Microsoft Power Platform. No demonstrated experience with Power Automate, Power Apps, or the broader M365 ecosystem that underpins this role."
+          },
+          {
+            "skill": "AI adoption and change management",
+            "importance": "nice-to-have",
+            "reason": "Role requires driving user adoption of deployed AI solutions. Candidate has sales and consulting experience but no documented AI change management or stakeholder enablement work."
+          }
+        ],
+        "experienceGaps": [
+          "No hands-on experience building or deploying AI agents in any platform — the Handshake fellowship is data labeling and model evaluation, not agent development",
+          "Zero enterprise environment exposure — Apple retail and food service are consumer-facing roles, not enterprise IT or business process contexts",
+          "No demonstrated knowledge of Finance or Supply Chain business processes at an enterprise level",
+          "The Handshake 'Generative AI Fellow' role, while relevant in title, is essentially a gig-based data annotation job — it will not impress enterprise-focused hiring managers at Seagate without clear framing",
+          "No experience collaborating with IT stakeholders, business leads, or AI champions in a corporate setting",
+          "Projects are strong academically but lack real-world enterprise deployment context that this role demands",
+          "No experience with Microsoft Power Platform stack which is central to the Copilot Studio toolchain"
+        ],
+        "criticalVerdict": "This candidate has a genuinely interesting profile for an intern — solid SQL, real Gen AI exposure, business analysis coursework, and a diverse skill set — but they are missing the two most critical tool requirements (Copilot Studio and n8n) with zero evidence of low-code AI agent development experience. The Handshake fellowship is relevant but will read as gig work to a Seagate recruiter, not structured AI development. The Finance and Supply Chain domain gaps are also real problems since this role is specifically embedded in those functions. This is a borderline candidate who could be competitive with 4-6 weeks of targeted upskilling on the Microsoft Power Platform stack.",
+        "improvementPlan": [
+          "Immediately start Microsoft Copilot Studio: get hands-on by building at least one functional AI agent using a free Microsoft 365 developer account — document it as a project with screenshots and outcomes",
+          "Complete Microsoft's free 'Copilot Studio Fundamentals' learning path on Microsoft Learn and earn the associated badge to signal platform credibility",
+          "Build a simple automation workflow in n8n (free, self-hostable) that integrates an LLM with a data source — even a personal finance or inventory use case will demonstrate the concept",
+          "Take a free or low-cost Supply Chain fundamentals course (APICS has free resources; Coursera has supply chain specializations) to develop credible domain vocabulary",
+          "Reframe the Handshake fellowship on resume: emphasize the prompt engineering, output evaluation methodology, and quality standards — not just the tasks. Use language like 'designed evaluation frameworks' not 'chose the best picture'",
+          "Build one capstone project that combines Copilot Studio + a Finance or Supply Chain dataset and publish it to GitHub with documentation — this directly mirrors the job requirements and will stand out",
+          "Study LLM integration patterns with enterprise platforms (Dynamics 365, SAP basics) via YouTube and Microsoft documentation to speak intelligently about enterprise AI deployment"
+        ],
+        "marketSkillsToLearn": [
+          "Microsoft Copilot Studio",
+          "Power Automate (Power Platform)",
+          "n8n or Make (formerly Integromat) for workflow automation",
+          "AI agent orchestration frameworks (LangChain, AutoGen basics)",
+          "Retrieval-Augmented Generation (RAG) architecture concepts",
+          "Microsoft Azure AI Services (Azure OpenAI integration)",
+          "ERP fundamentals (SAP or Dynamics 365 basics)",
+          "Supply Chain Management fundamentals",
+          "AI governance and responsible AI frameworks",
+          "Enterprise change management for AI adoption"
+        ],
+        "summary": "Candidate is a motivated Business/MIS student with genuine Gen AI exposure, strong SQL skills, and a diverse background spanning tech sales, data analytics, and academic projects. However, the two most critical technical requirements — Copilot Studio and n8n — are completely absent from their profile, and there is no demonstrated Finance or Supply Chain domain knowledge. With 4-6 weeks of focused upskilling on the Microsoft Power Platform and one solid agent-building project, this candidate could become genuinely competitive; right now they are a partial fit who needs to close specific, identifiable gaps before applying."
+      }
+    },
+    {
+      "id": "job_1774588281401",
+      "savedAt": "2026-03-27T05:11:21.401Z",
+      "company": "Unknown Company",
+      "role": "Leverage statistical modeling and data analysis to generate actionable insights for NCAA collegiate sports programs navigating the transfer portal across football, baseball, and basketball.",
+      "jobDescription": "The company operates in the sports data science and analytics space, focusing on long-term partnerships with emerging professional talent. Its core model provides financial support and career resources to individuals early in their professional journey, in exchange for a share of future earnings over a defined period. They also work with many well-known NCAA programs utilizing data science and analytics to evaluate player value and fit in the new and evolving transfer portal.\n\n\nEmployee testimonials:\n\n\"Casual yet collaborative environment with a great work/life balance.\"\n\"Company is revolutionizing the use of data science in the sports industry!\"\n\"Culture that truly values and supports its employees.\"\n\n\nTitle: Sports Data Scientist\n\nLocation: Remote\n\nSalary: $90,000 - $120,000\n\n\n\nOur client is seeking a Sports Data Scientist to help us add value to their NCAA basketball clients.\nThis position is an exciting opportunity to leverage data analysis to provide actionable insights, support decision-making within the NCAA collegiate football, baseball and basketball transfer portal. The ideal candidate will have a passion for sports analytics, specifically in football, baseball or basketball, a strong foundation in statistical data analysis and data visualization, along with deep sports knowledge.\n\n\nKey Responsibilities\n\nBuild predictive models utilizing insights from client and sport knowledge\nConduct exploratory data analysis to identify data-driven insights on the transfer portal to collegiate programs\nAnswer ad-hoc questions regarding transfer targeting\nEnsure data integrity and accuracy across several data sources\nBuild predictive models utilizing insights from client and sport knowledge\n\n\nQualifications\n\nBachelor’s degree in Statistics, Computer Science, Data Science, or a related field\nProgramming experience\nProficiency with Python (pandas, polars, numpy) and SQL\nExperience generating data visualizations programmatically\nDeep Understanding of sports\nStrong communication skills and ability to convey complex data concepts to nontechnical audiences\nStrong self-motivation and curiosity to challenge traditional sports beliefs •\nAttention to detail for accurate and timely report delivery",
+      "resumeFilename": "tailored_resume_2026_03_27T05_1.pdf",
+      "coverLetterFilename": "tailored_cover_letter_2026_03_27T05_1.pdf",
+      "compatibilityScore": 38,
+      "analysis": {
+        "compatibilityScore": 38,
+        "compatibilityLabel": "Weak Match",
+        "industry": "Sports Data Science & Analytics",
+        "roleType": "Data Scientist",
+        "seniorityLevel": "Junior to Mid-Level",
+        "presentSkills": [
+          "Python",
+          "SQL",
+          "Pandas",
+          "NumPy",
+          "scikit-learn",
+          "R",
+          "Machine Learning (academic/project level)",
+          "Data Visualization (Tableau, Power BI)",
+          "Exploratory Data Analysis",
+          "Data Mining & ETL",
+          "Business Intelligence",
+          "Jupyter Notebooks",
+          "Git/GitHub",
+          "Strong communication skills",
+          "Google Data Analytics Certification",
+          "Google Business Intelligence Certification"
+        ],
+        "missingSkills": [
+          {
+            "skill": "Sports Domain Knowledge (NCAA Basketball, Football, Baseball)",
+            "importance": "critical",
+            "reason": "The entire job is built around understanding college sports, transfer portal dynamics, and player evaluation. Zero demonstrated sports analytics knowledge means the candidate cannot perform the core function of this role."
+          },
+          {
+            "skill": "Transfer Portal Analytics",
+            "importance": "critical",
+            "reason": "The role explicitly requires understanding of NCAA transfer portal mechanics and using data to evaluate player fit. This is not general ML — it requires sports-specific context the candidate has never shown."
+          },
+          {
+            "skill": "Player Performance Modeling / Sports Metrics",
+            "importance": "critical",
+            "reason": "Building predictive models for athlete valuation requires familiarity with sports statistics (PER, WAR, advanced basketball metrics, etc.). No evidence this candidate knows any of this."
+          },
+          {
+            "skill": "Polars",
+            "importance": "important",
+            "reason": "Explicitly listed in the job requirements alongside pandas. Candidate lists pandas and numpy but no polars experience."
+          },
+          {
+            "skill": "Programmatic Data Visualization (matplotlib, seaborn, plotly)",
+            "importance": "important",
+            "reason": "Job requires generating visualizations programmatically in Python. Candidate's viz experience appears to be Tableau/Power BI dashboards and JS charting — not Python-native visualization libraries used in data science workflows."
+          },
+          {
+            "skill": "Ad-Hoc Analytical Reporting for Non-Technical Stakeholders",
+            "importance": "important",
+            "reason": "Delivering fast-turnaround transfer portal insights to coaching staffs requires translating complex model outputs into sport-language narratives. Candidate has no demonstrated experience doing this in a sports or time-sensitive analytics context."
+          },
+          {
+            "skill": "Sports Data APIs / Data Sources (Synergy, SportRadar, ESPN API, etc.)",
+            "importance": "nice-to-have",
+            "reason": "Familiarity with sports-specific data pipelines and vendors is a significant practical advantage. No evidence the candidate has ingested or worked with sports datasets."
+          }
+        ],
+        "experienceGaps": [
+          "Zero professional or project-based experience in sports analytics of any kind — no fantasy sports models, no NCAA datasets, no sports performance analysis. This is the single biggest disqualifier.",
+          "No evidence of building predictive models in a production or client-facing context. All ML work appears to be academic coursework projects, not deployed or business-driving models.",
+          "Most recent 'data science' work is AI model training for Handshake — reading scripts into a microphone and selecting furniture removal outputs. This is labeled tasks work, not data science, and will raise serious credibility concerns with hiring managers.",
+          "Apple retail experience (3 years, the bulk of professional history) is entirely non-technical from a data science perspective and adds little weight to this application.",
+          "No demonstrated experience with multi-source data integration or ensuring data integrity across multiple data pipelines in a professional setting.",
+          "Certifications are all entry-level (DataCamp intro courses, Google Analytics fundamentals). They signal effort but do not compensate for lack of real project depth or sports domain expertise.",
+          "No graduate degree or advanced statistics background — while not explicitly required, competitors for this role will have applied stats, econometrics, or sports analytics graduate credentials."
+        ],
+        "criticalVerdict": "This candidate has the foundational Python/SQL/ML toolkit that checks boxes on paper, but they are fundamentally not a sports data scientist — they are a career-changer with retail and AI labeling work trying to pivot into a highly specialized niche. The complete absence of sports domain knowledge, transfer portal familiarity, or any sports analytics project work is a near-automatic disqualifier for a role where that context IS the job. Hiring managers at a sports analytics firm will see through the resume in under 60 seconds. Until this candidate can demonstrate they actually understand basketball metrics, NCAA eligibility rules, and player valuation frameworks, they will not be competitive for this role.",
+        "improvementPlan": [
+          "Build a sports analytics portfolio project immediately: scrape or download NCAA basketball transfer portal data (available via sports-reference.com, Kaggle, or BartTorvik) and build a player fit/valuation model. Publish it on GitHub with a write-up.",
+          "Learn sports-specific statistics: study advanced basketball metrics (TS%, BPM, VORP, offensive/defensive ratings), understand what makes a good transfer target, and learn how scouts think about positional fit.",
+          "Complete a Polars tutorial and replace one pandas project with a polars implementation to close that specific technical gap listed in the JD.",
+          "Switch visualization work to Python-native libraries (matplotlib, seaborn, plotly) and rebuild at least one existing project's charts programmatically rather than using Tableau/Power BI.",
+          "Enroll in a sports analytics course: CMU's Sports Analytics course (free online), or Coursera's Sports Performance Analytics from University of Michigan — these add credibility and domain vocabulary.",
+          "Rewrite the resume to completely remove the Burger 7 placeholder, ruthlessly trim the Apple retail description, and reframe the Handshake AI role honestly — calling it 'AI model training' when it was script reading and image selection will destroy credibility with a technical hiring panel.",
+          "Seek out sports analytics communities (SSAC, Kaggle sports competitions, r/sportsanalytics) and contribute publicly to demonstrate genuine passion and domain engagement."
+        ],
+        "marketSkillsToLearn": [
+          "Polars (Python)",
+          "Advanced NCAA/NBA basketball statistics and metrics",
+          "Sports data APIs (SportsRadar, ESPN API, BartTorvik, KenPom)",
+          "Survival analysis and time-series modeling for player development",
+          "Plotly / Dash for interactive sports dashboards",
+          "Web scraping (BeautifulSoup, Selenium) for sports data acquisition",
+          "XGBoost / LightGBM for tabular sports prediction models",
+          "Natural Language Processing for scouting report analysis",
+          "dbt (data build tool) for analytics engineering pipelines",
+          "Streamlit for building shareable sports analytics apps"
+        ],
+        "summary": "This candidate has a functional but entry-level data science toolkit and demonstrates genuine effort through certifications and personal projects, but has zero sports domain experience and no sports analytics work to show — which is the core requirement of this role. Their actual professional background is Apple retail and AI data labeling, neither of which translates meaningfully to NCAA transfer portal analytics. To be competitive, they need 2-3 focused sports analytics projects, deep immersion in basketball/football statistics, and a resume that honestly represents their current level rather than overstating it."
+      }
+    },
+    {
+      "id": "job_1774588201353",
+      "savedAt": "2026-03-27T05:10:01.353Z",
+      "company": "Unknown Company",
+      "role": "Apply statistical modeling and data science to support NCAA collegiate programs in evaluating and targeting transfer portal prospects across football, baseball, and basketball.",
+      "jobDescription": "The company operates in the sports data science and analytics space, focusing on long-term partnerships with emerging professional talent. Its core model provides financial support and career resources to individuals early in their professional journey, in exchange for a share of future earnings over a defined period. They also work with many well-known NCAA programs utilizing data science and analytics to evaluate player value and fit in the new and evolving transfer portal.\n\n\nEmployee testimonials:\n\n\"Casual yet collaborative environment with a great work/life balance.\"\n\"Company is revolutionizing the use of data science in the sports industry!\"\n\"Culture that truly values and supports its employees.\"\n\n\nTitle: Sports Data Scientist\n\nLocation: Remote\n\nSalary: $90,000 - $120,000\n\n\n\nOur client is seeking a Sports Data Scientist to help us add value to their NCAA basketball clients.\nThis position is an exciting opportunity to leverage data analysis to provide actionable insights, support decision-making within the NCAA collegiate football, baseball and basketball transfer portal. The ideal candidate will have a passion for sports analytics, specifically in football, baseball or basketball, a strong foundation in statistical data analysis and data visualization, along with deep sports knowledge.\n\n\nKey Responsibilities\n\nBuild predictive models utilizing insights from client and sport knowledge\nConduct exploratory data analysis to identify data-driven insights on the transfer portal to collegiate programs\nAnswer ad-hoc questions regarding transfer targeting\nEnsure data integrity and accuracy across several data sources\nBuild predictive models utilizing insights from client and sport knowledge\n\n\nQualifications\n\nBachelor’s degree in Statistics, Computer Science, Data Science, or a related field\nProgramming experience\nProficiency with Python (pandas, polars, numpy) and SQL\nExperience generating data visualizations programmatically\nDeep Understanding of sports\nStrong communication skills and ability to convey complex data concepts to nontechnical audiences\nStrong self-motivation and curiosity to challenge traditional sports beliefs •\nAttention to detail for accurate and timely report delivery",
+      "resumeFilename": "tailored_resume_2026_03_27T05_0.pdf",
+      "coverLetterFilename": "tailored_cover_letter_2026_03_27T05_0.pdf",
+      "compatibilityScore": 42,
+      "analysis": {
+        "compatibilityScore": 42,
+        "compatibilityLabel": "Weak Match",
+        "industry": "Sports Data Science & Analytics",
+        "roleType": "Data Scientist",
+        "seniorityLevel": "Entry to Mid-Level",
+        "presentSkills": [
+          "Python",
+          "SQL",
+          "Pandas",
+          "NumPy",
+          "R",
+          "Machine Learning (scikit-learn)",
+          "Data Visualization (Tableau, Power BI)",
+          "Exploratory Data Analysis",
+          "Predictive Modeling (Random Forest via academic project)",
+          "Business Intelligence",
+          "Data Mining & ETL",
+          "Git/GitHub",
+          "Jupyter Notebooks",
+          "Strong communication skills",
+          "Google Data Analytics Certification"
+        ],
+        "missingSkills": [
+          {
+            "skill": "Sports Domain Knowledge (NCAA Basketball/Football/Baseball)",
+            "importance": "critical",
+            "reason": "The entire role is built around understanding player evaluation, transfer portal dynamics, and collegiate sports. There is zero evidence this candidate follows, understands, or has analyzed sports data. This is not a generic data science role."
+          },
+          {
+            "skill": "Sports-specific data sources (Synergy, Sports Reference, ESPN API, StatHead)",
+            "importance": "critical",
+            "reason": "Sports data scientists work with domain-specific data pipelines. The candidate shows no familiarity with any sports data provider or platform, which is table stakes for this role."
+          },
+          {
+            "skill": "Player valuation / performance modeling",
+            "importance": "critical",
+            "reason": "Building predictive models for athlete evaluation requires sport-specific feature engineering knowledge (PER, WAR equivalents, recruiting ratings, efficiency metrics). No evidence of this anywhere in the profile."
+          },
+          {
+            "skill": "Transfer portal analysis or recruitment analytics",
+            "importance": "critical",
+            "reason": "The core deliverable of this job is transfer portal targeting. The candidate has never worked on anything close to this use case."
+          },
+          {
+            "skill": "Polars",
+            "importance": "important",
+            "reason": "Explicitly listed in job requirements. Candidate lists pandas/numpy but no polars experience."
+          },
+          {
+            "skill": "Programmatic data visualization for sports reporting",
+            "importance": "important",
+            "reason": "The job requires generating visualizations programmatically (matplotlib, plotly, seaborn). Candidate has Tableau/Power BI which are GUI tools, not code-first visualization."
+          },
+          {
+            "skill": "Statistical modeling for sports (Bayesian inference, regression analysis on athletic performance)",
+            "importance": "important",
+            "reason": "Sports analytics requires applied statistics beyond ML classification. No evidence of regression-based player projection or probabilistic modeling."
+          },
+          {
+            "skill": "Ad-hoc sports analytics reporting",
+            "importance": "nice-to-have",
+            "reason": "Role requires answering rapid, unstructured questions from coaching staff. Candidate has no demonstrated experience delivering insights under time pressure to non-technical sports stakeholders."
+          }
+        ],
+        "experienceGaps": [
+          "Zero professional data science work experience. Current 'data science' role is an AI training gig recording voice scripts and selecting furniture removal outputs — this is not data science and will not impress a sports analytics hiring manager.",
+          "No sports analytics projects whatsoever. None. The candidate's projects cover e-commerce, financial tools, cloud architecture, and retail strategy. Sports is completely absent.",
+          "No experience with athletic performance data, player statistics, or sports-specific metrics at any level — professional, collegiate, or recreational.",
+          "The most recent substantive role is Apple retail sales (Sep 2021 - Jun 2024). While communication skills transfer, this background does not signal data science credibility.",
+          "Certifications are entry-level (DataCamp Python Intro, Google Analytics). These are self-study credentials that do not substitute for applied sports analytics experience.",
+          "No evidence of working with coaching staffs, athletic departments, or sports organizations in any capacity.",
+          "Academic projects use R and tidymodels for retail analytics — relevant for data science broadly, but no sports context demonstrated.",
+          "The 'Analyzing Big Data with R' cert is dated 2026, which is a future year — this raises a red flag about profile accuracy."
+        ],
+        "criticalVerdict": "This candidate has a functional technical foundation in Python, SQL, and basic ML, but is fundamentally misaligned with this role. The job requires deep sports knowledge and domain-specific analytics experience — the candidate has none. A sales background at Apple and an AI gig selecting furniture images does not bridge that gap. Hiring managers at sports analytics firms will toss this resume in under 10 seconds without a single sports project or credential to anchor the application.",
+        "improvementPlan": [
+          "Build 2-3 sports analytics portfolio projects immediately — analyze NCAA transfer portal data (available on public sources), build a player evaluation model using basketball-reference.com data, or replicate an existing sports study and publish it on GitHub/Medium.",
+          "Get sport-specific: pick one sport (basketball aligns directly with this JD) and go deep. Learn common metrics (TS%, PER, BPM, RAPTOR), study how teams evaluate transfers, and understand what coaches actually care about.",
+          "Learn Polars — it's explicitly required and takes 1-2 weeks to pick up if you already know pandas.",
+          "Replace GUI visualization tools with code-first libraries: learn matplotlib, seaborn, and plotly so you can generate visualizations programmatically as the job requires.",
+          "Pursue sports analytics-specific credentials: MIT Sloan Sports Analytics Conference materials, SSAC courses, or the SportsTech courses on Coursera. Generic Google certs don't move the needle here.",
+          "Contribute to open-source sports analytics projects on GitHub (nba_api, py-retrosheet, cfbd Python client) to demonstrate real engagement with sports data ecosystems.",
+          "Clean up the resume profile — future-dated certifications (2026), placeholder roles (Burger 7 with no content), and vague project descriptions all undermine credibility with detail-oriented data hiring managers."
+        ],
+        "marketSkillsToLearn": [
+          "Polars",
+          "Plotly / Matplotlib / Seaborn (programmatic visualization)",
+          "Sports reference APIs (nba_api, cfbd, Sportradar)",
+          "Expected Value modeling in sports contexts",
+          "Bayesian statistics for player projection",
+          "Streamlit or Dash for building sports analytics dashboards",
+          "Web scraping (BeautifulSoup, Scrapy) for sports data collection",
+          "dbt (data build tool) for analytics engineering",
+          "Sport-specific metrics and KPI frameworks (PER, WAR, EPA, xG)",
+          "XGBoost / LightGBM for tabular sports prediction tasks"
+        ],
+        "summary": "This candidate has the raw technical building blocks (Python, SQL, basic ML) but lacks the sports domain expertise that is the entire point of this role. With zero sports analytics projects, no sports data source experience, and a work history dominated by retail sales and AI voice recording, this candidate would not survive the first resume screen at a serious sports analytics firm. The gap is not insurmountable — but it requires 3-6 months of deliberate, sports-focused portfolio building before this application becomes credible."
+      }
+    },
+    {
+      "id": "job_1774458158635",
+      "savedAt": "2026-03-25T17:02:38.635Z",
+      "company": "Unknown Company",
+      "role": "A full-time, in-person public service internship supporting White House and Office of the Vice President operations through research, writing, communications, event staffing, and administrative execution across multiple specialized offices.",
+      "jobDescription": "White House Internship Program — Synthesized Job Description\n\nJob Title: White House Intern\nLocation: Washington, DC\nWork Model: Full-time, in person\nProgram Length: 10–12 weeks\nProgram Type: Public service leadership internship supporting offices within the White House and Office of the Vice President.\n\nPosition Overview\n\nThe White House Internship Program seeks highly motivated young leaders who are committed to public service, demonstrate leadership in their communities, and are aligned with the mission of the Trump Administration. Interns support fast-paced White House operations through research, writing, communications, meeting support, event staffing, constituent or stakeholder coordination, and administrative execution. The ideal candidate is professional, discreet, organized, mission-driven, and able to contribute in a high-pressure environment with strong attention to detail.\n\nWhat the White House Is Looking For\nStrong commitment to public service.\nDemonstrated leadership in school, work, or the community.\nCommitment to the mission of the Trump Administration.\nExcellent written and verbal communication skills, especially for memos, correspondence, research support, and professional interaction. This is reflected in intern assignments such as writing memos, handling inquiries, and staffing meetings and events.\nStrong organizational skills, follow-through, discretion, and the ability to manage time-sensitive work. The Staff Secretary office specifically calls for attention to detail, proactive mentality, organizational ability, editing, and interpersonal skills.\nAbility to work in a fast-paced political and operational environment. The Press Office description explicitly notes a fast-paced, ever-changing environment and expectation to follow the 24-hour news cycle.\nWillingness to perform both substantive and administrative work, including research, event support, outreach, scheduling support, correspondence, and office operations.\nCore Responsibilities\n\nDepending on office placement, interns may:\n\nConduct policy, legislative, political, or communications research.\nDraft or support memos, correspondence, briefing materials, and office documents.\nManage incoming inquiries and help facilitate responses to constituents, organizations, or public officials.\nAttend meetings, support internal coordination, and provide administrative follow-through.\nStaff events and assist with outreach, public engagement, or stakeholder relationship management.\nAssist with communications, digital content, media support, or speech research in communications-facing offices.\nSupport scheduling, advance, travel, visitors, or operational logistics in execution-focused offices.\nIdeal Candidate Profile\n\nThe strongest candidates will typically show:\n\nClear interest in government, public service, policy, communications, or national leadership.\nEvidence of leadership, responsibility, and service orientation.\nStrong writing, editing, and research ability.\nProfessional maturity, judgment, and discretion. This is a reasonable inference from the security screening requirement and the sensitivity of White House work.\nAbility to operate effectively in a highly structured and politically aligned environment.\nOffice-specific strengths such as media awareness, digital content creation, legislative research, stakeholder outreach, event coordination, or detail-heavy editing and review.\nBasic Eligibility\n\nApplicants must:\n\nBe U.S. citizens.\nBe at least 18 years old.\nPass drug testing and security screening.\nAgree to work full-time in person.\nBe either currently enrolled and have completed two semesters before the internship start date, or have graduated from an undergraduate or graduate program no more than two years before the internship start date, or qualify through the listed veteran pathway.\nOffice-Specific Signals\n\nDifferent offices emphasize different strengths:\n\nLegislative Affairs: legislative research, Capitol Hill awareness, staffing legislative events.\nPublic Liaison / Intergovernmental Affairs: relationship-building, outreach, event coordination, communication with organizations and officials.\nCommunications / Press: messaging, research, digital/broadcast work, media relations, comfort with the news cycle.\nSpeechwriting: research and support for presidential speeches.\nStaff Secretary: elite attention to detail, editing, organization, memo review, proactive execution.\nDigital Strategy: digital content creation, design, and online engagement.\nAdvance / Scheduling / Travel / Visitors: logistics, coordination, event execution, and operational support.\nAI-Friendly Summary Prompt\n\nUse this if you want a compressed version for your model:\n\n“Evaluate this candidate for the White House Internship Program using these criteria: commitment to public service, demonstrated community leadership, commitment to the mission of the Trump Administration, strong writing/research/organizational ability, professionalism, discretion, and ability to work full-time in person in a fast-paced environment. Assess fit for offices such as Legislative Affairs, Public Liaison, Communications, Press, Speechwriting, Staff Secretary, Digital Strategy, and Advance based on evidence of research, writing, stakeholder communication, event support, operational coordination, and attention to detail.”\n\nFor you, the strongest office matches based on your background are probably Public Liaison, Intergovernmental Affairs, Presidential Correspondence, Legislative Affairs, or Staff Secretary-style work, because your profile leans toward client communication, structured analysis, writing, coordination, and process discipline. That last sentence is my inference from your background, not an official White House statement.\n\nI can turn this into a scoring rubric your AI can use on your resume.",
+      "resumeFilename": "tailored_resume_2026_03_25T17_0.pdf",
+      "coverLetterFilename": "tailored_cover_letter_2026_03_25T17_0.pdf",
+      "compatibilityScore": 28,
+      "analysis": {
+        "compatibilityScore": 28,
+        "compatibilityLabel": "Weak Match",
+        "industry": "Government / Public Service / Political Operations",
+        "roleType": "Public Service Internship / Policy & Communications Support",
+        "seniorityLevel": "Entry-Level / Internship",
+        "presentSkills": [
+          "Client-facing communication and stakeholder engagement (Apple B2B)",
+          "Verbal communication and consultative interaction",
+          "Sales methodology and needs assessment",
+          "Basic organizational and follow-through skills",
+          "Research and analytical thinking (academic projects)",
+          "Business analysis and strategy frameworks (capstone, retail project)",
+          "Event and operational support (retail environment)",
+          "Adaptability in fast-paced environments",
+          "Some leadership indicators (seasonal-to-permanent promotion, assistant manager role)"
+        ],
+        "missingSkills": [
+          {
+            "skill": "Demonstrated commitment to public service",
+            "importance": "critical",
+            "reason": "Zero evidence of civic engagement, volunteerism, community leadership, or public service orientation anywhere in the profile. This is the first listed requirement and a non-negotiable cultural filter for the program."
+          },
+          {
+            "skill": "Political alignment with Trump Administration mission",
+            "importance": "critical",
+            "reason": "No evidence of political awareness, ideological alignment, or engagement with conservative policy priorities. This is an explicitly stated requirement and an automatic screen-out criterion."
+          },
+          {
+            "skill": "Professional memo and correspondence writing",
+            "importance": "critical",
+            "reason": "The White House requires interns to draft memos, briefing documents, and formal correspondence. The candidate's own writing samples in the profile contain run-on sentences, grammatical errors, capitalization issues, and unprofessional structure — which is a direct disqualifier for a writing-heavy role."
+          },
+          {
+            "skill": "Policy research and analysis",
+            "importance": "critical",
+            "reason": "No evidence of engagement with legislation, federal policy, regulatory frameworks, or government operations. Academic projects are entirely commercial and technical in nature."
+          },
+          {
+            "skill": "Government or legislative process knowledge",
+            "importance": "critical",
+            "reason": "No understanding of how federal agencies, the Executive Office of the President, or Congress function. Required for nearly every office placement."
+          },
+          {
+            "skill": "Discretion and institutional judgment",
+            "importance": "critical",
+            "reason": "Candidate self-disclosed insubordination and chronic tardiness at Apple. In a White House environment with security clearances and zero tolerance for unprofessional behavior, this is a serious red flag."
+          },
+          {
+            "skill": "Communications and media literacy",
+            "importance": "important",
+            "reason": "Press, Communications, and Digital offices require awareness of the 24-hour news cycle, media relations, and political messaging. No evidence of any media, journalism, or communications background."
+          },
+          {
+            "skill": "Stakeholder and constituent outreach in a government context",
+            "importance": "important",
+            "reason": "While Apple B2B sales has surface-level parallels to stakeholder engagement, government stakeholder communication requires entirely different norms, formality, and institutional knowledge."
+          },
+          {
+            "skill": "Legislative research and Capitol Hill awareness",
+            "importance": "important",
+            "reason": "Legislative Affairs office requires knowledge of pending legislation, congressional procedure, and Hill relationships. Completely absent from profile."
+          },
+          {
+            "skill": "Event staffing and advance work",
+            "importance": "nice-to-have",
+            "reason": "While the candidate has retail event exposure, White House advance and event logistics operate under strict protocols that require specific orientation."
+          }
+        ],
+        "experienceGaps": [
+          "Zero public service experience — no government internships, civic organizations, campaigns, nonprofits, or community leadership roles documented anywhere",
+          "No political experience of any kind — no campaign volunteering, party involvement, political student organizations, or engagement with any level of government",
+          "Writing quality is a critical gap — the candidate's unedited writing samples reveal consistent grammar failures, fragmented structure, and a lack of professional polish that directly contradicts the memo-writing demands of this role",
+          "Self-disclosed professional conduct issues — admitting to consistent tardiness and defiance of management at Apple is disqualifying for a high-security, high-discipline environment like the White House",
+          "No academic coursework or demonstrated interest in political science, public policy, international relations, or government — the academic background is entirely business/technology focused",
+          "Technical skills portfolio (Python, ML, SQL, cloud architecture) is almost entirely irrelevant to any White House office placement",
+          "No demonstrated leadership in a civic or community context — the 'leadership' on this profile is limited to commercial sales performance",
+          "Burger 7 Assistant Manager role has no dates, no description, and adds nothing meaningful to the profile"
+        ],
+        "criticalVerdict": "This candidate is not a realistic fit for the White House Internship Program. The profile is built almost entirely around data science, AI, and commercial sales — none of which are relevant to the core requirements of this role. More critically, the candidate has zero public service background, zero demonstrated political awareness or alignment, and the unedited writing samples in their own profile reveal serious deficiencies in professional written communication — the single most important operational skill for White House intern work. The self-disclosed insubordination and chronic tardiness at Apple would likely result in immediate disqualification during the character screening process for a role requiring a security clearance and operating at the highest level of the federal government.",
+        "improvementPlan": [
+          "Get civically engaged immediately — volunteer for a political campaign, a federal agency internship program (congressional offices, local government), or a policy-focused nonprofit to build credible public service experience",
+          "Dramatically improve professional writing — take a formal business writing or policy writing course, practice drafting one-page policy memos weekly, and get feedback from professors or professionals; your current unedited writing would be screened out on sight",
+          "Build political and policy literacy — read major policy publications daily (Politico, The Hill, RealClearPolitics), take political science or public policy courses, and demonstrate genuine understanding of the legislative and executive branch functions",
+          "Address the conduct red flags head-on — before applying to any government program, you need a clean, consistent record of punctuality, professionalism, and deference to institutional authority; these are non-negotiable in federal environments",
+          "Join a student government, civic leadership program, or policy debate team to build a paper trail of community leadership that this application currently lacks entirely",
+          "Reframe your Apple experience in government-relevant language — your B2B stakeholder communication and consultative skills have marginal transferability to Public Liaison or Intergovernmental Affairs, but only if you can articulate them professionally and concisely"
+        ],
+        "marketSkillsToLearn": [
+          "Policy memo writing and briefing document structure",
+          "Legislative research tools (Congress.gov, CRS reports, GovTrack)",
+          "Political communications and message discipline",
+          "Federal government operations and Executive Branch structure",
+          "Stakeholder outreach in a constituent services or intergovernmental context",
+          "Event coordination and advance logistics",
+          "Media monitoring and news cycle awareness",
+          "Formal correspondence and executive-level written communication"
+        ],
+        "summary": "This candidate is a data-and-technology professional with a commercial sales background — a profile that is almost entirely misaligned with the White House Internship Program's core requirements of public service commitment, policy knowledge, professional writing, and political alignment. The technical skills are irrelevant to every available office placement, and the candidate's own unedited writing reveals communication deficiencies that are disqualifying for a role centered on memos, briefings, and professional correspondence. Without a significant pivot toward civic engagement, policy education, and demonstrably improved written communication, this candidate would not clear an initial application screen."
+      }
+    },
+    {
+      "id": "job_1774454084936",
+      "savedAt": "2026-03-25T15:54:44.936Z",
+      "company": "Unknown Company",
+      "role": "A paid 10-week summer internship at GDIT focused on business analysis, data analytics, and process improvement to support government and defense clients.",
+      "jobDescription": "Type of Requisition:\n\nRegular\nClearance Level Must Currently Possess:\n\nNone\nClearance Level Must Be Able to Obtain:\n\nNone\nPublic Trust/Other Required:\n\nNone\nJob Family:\n\nInterns\nJob Qualifications:\n\nSkills:\n\nGroup Problem Solving, Microsoft Office, Team Player\nCertifications:\n\nNone\nExperience:\n\n0 + years of related experience\nUS Citizenship Required:\n\nNo\nJob Description:\n\nGDIT Summer Internship Program – Summer 2026 Business Analysis Associate Internship \n \n\n \n\nSponsorship is not available for this role. \n\n \n\nAt GDIT, our people are our business. We pride ourselves on the work our innovators do to support and secure some of the most complex government, defense, and intelligence projects across the world. We wouldn’t be successful without our ability to attract new talent to join our team. \n\n \n\nWhat sets a GDIT internship experience apart from other organizations in the industry? \n\n \n\nGDIT’s Summer Internship Program is designed with you in mind!  Our internship provides you the opportunity to be a part of a collaborative team that is helping to solve our clients’ most challenging matters. Throughout GDIT’s 10-week Summer Internship Program, you will have the opportunity to do the following: \n\n \n\nWork side-by-side with GDIT professionals delivering work for clients.  \n\nCollaborate with a team of peers to research and propose solutions to a current business challenge.  \n\nParticipate in a mentoring circle led by an early career champion. \n\nInteract with GDIT leaders. \n\nParticipate in professional development. \n\n \n\nHow You’ll Make this Internship Opportunity Your Own \n\n \n\nOur Business Analysis Summer Internship is designed to make a direct impact on a broad variety of projects and help to co-create and deliver successful solutions to GDIT’s clients. As a Business Analyst Intern, you’ll play a key part in driving company success by solving complex problems that enable insights into operational performance. \n\n \n\nA Day in the Life  \n\n \n\nUse modeling and analytics to understand how business decisions impact our bottom line. \n\nLearn how to leverage new tools and technologies. \n\nCollect and analyze information by reviewing databases, interpreting reports, and communicating evaluations with key team members. \n\nProduce reporting on an as needed basis (daily, weekly, monthly) \n\nCommunicate complex data through comprehensive methods. \n\nCalculate and evaluate business metrics to meet ongoing organizational or client informational needs. \n\nAssist in the research and assessment of business goals, objectives and needs to align information technology solutions with business initiatives. \n\nAssist in planning and designing business processes. \n\nFormulate recommendations to improve and support business activities. \n\nVarious duties that enhance the productivity and procedures of the company \n\n \nThe Must-Haves \n\n \n\nCurrently enrolled in an associate's, bachelor's or master's degree program in Business Administration, Finance, Statistics, Economic, Computer Engineering or related discipline from a United States-based college or university.  \n\nBasic understanding of Microsoft Office products (e.g., Word, PowerPoint, SharePoint, Excel, and Teams) \n\n \n\nWhat You’ll Need to Deliver your best every day \n\n \n\nStrong interpersonal and written communication skills. \n\nAbility to build meaningful relationships with manager and members of your team in a remote environment. \n\nMust be able to prioritize tasks, be self-aware enough to identify and correct your mistakes, and not be afraid to ask for help when needed. \n\nPassion for problem-solving and desire to develop into a strong business leader. \n\nBe active in seeking out ways to develop yourself and gain new knowledge personally and professionally. \n\nIntuitiveness with an ability to identify and solve complex problems related to rapidly changing technology.  \n\nA sense of genuine, intellectual curiosity and a nimble mindset \n\n \n\nWhat you Offer as a Stand-Out Candidate \n\n \n\nPrevious work experience related to your field of study. \n\nProficiency in Excel, specifically data analysis, pivot tables, VLOOKUPs, and charts \n\nBroad knowledge of project management and data analytics \n\nAnalytical and quantitative skills: working with and synthesizing big data into actionable insights. \n\nComfortable using data software to conduct analyses and synthesize findings. \n\nSome knowledge of Python (Python concepts, data structures such as lists, dictionaries and control flow)\n\n \n\nGDIT interns are paid and full-time (40 hours/week) for 10 consecutive weeks. Applicants should have a minimum of one semester remaining in their studies after their internship concludes. Take the first step and apply today! \n\n \n\nNote: We receive a high volume of applications and review them on a rolling basis. We encourage you to apply as soon as possible. Our goal is to follow up with you within two weeks of your application. \n\n \n\n#GDITInternship \n\nThe likely hourly rate for this position is between $22.95 - $31.05. This is not, however, a guarantee of compensation or salary. Rather, salary will be set based on experience, geographic location and possibly contractual requirements and could fall outside of this range.\nScheduled Weekly Hours:\n\n40\nTravel Required:\n\nNone\nTelecommuting Options:\n\nRemote\nWork Location:\n\nUSA VA Falls Church\nAdditional Work Locations:\n\nTotal Rewards at GDIT:\n\nOur benefits package for all US-based employees includes a variety of medical plan options, some with Health Savings Accounts, dental plan options, a vision plan, and a 401(k) plan offering the ability to contribute both pre and post-tax dollars up to the IRS annual limits and receive a company match. To encourage work/life balance, GDIT offers employees full flex work weeks where possible and a variety of paid time off plans, including vacation, sick and personal time, holidays, paid parental, military, bereavement and jury duty leave. To ensure our employees are able to protect their income, other offerings such as short and long-term disability benefits, life, accidental death and dismemberment, personal accident, critical illness and business travel and accident insurance are provided or available. We regularly review our Total Rewards package to ensure our offerings are competitive and reflect what our employees have told us they value most.\nWe are GDIT. A global technology and professional services company that delivers consulting, technology and mission services to every major agency across the U.S. government, defense and intelligence community. Our 30,000 experts extract the power of technology to create immediate value and deliver solutions at the edge of innovation. We operate across 50 countries worldwide, offering leading capabilities in digital modernization, AI/ML, Cloud, Cyber and application development. Together with our clients, we strive to create a safer, smarter world by harnessing the power of deep expertise and advanced technology.\nJoin our Talent Community to stay up to date on our career opportunities and events at\ngdit.com/tc.\n\nEqual Opportunity Employer / Individuals with Disabilities / Protected Veterans",
+      "resumeFilename": "tailored_resume_2026_03_25T15_5.pdf",
+      "coverLetterFilename": "tailored_cover_letter_2026_03_25T15_5.pdf",
+      "compatibilityScore": 80,
+      "analysis": {
+        "compatibilityScore": 80,
+        "compatibilityLabel": "Strong Match",
+        "industry": "Government IT & Professional Services",
+        "roleType": "Business Analysis Internship",
+        "seniorityLevel": "Entry-Level / Student Intern",
+        "presentSkills": [
+          "Python (certified via DataCamp, used in projects)",
+          "Excel (Microsoft Excel Professional Certification 2026, including data analysis)",
+          "SQL (used in Brazilian E-Commerce Analytics Platform)",
+          "Data Analytics (Google Data Analytics Specialization)",
+          "Business Intelligence (Google BI Specialization 2026)",
+          "Business Analysis (project work + explicit skill)",
+          "Data Visualization (Tableau, Power BI, Recharts, Chart.js)",
+          "R Programming (certified, used in ML project)",
+          "KPI Framework Development",
+          "Root Cause Analysis",
+          "Process Optimization",
+          "Strategy & Consulting (BUS 498 Capstone)",
+          "Client-Facing Communication (Apple B2B experience)",
+          "Problem-Solving (multiple end-to-end projects)",
+          "Cloud Fundamentals (AWS, Azure project)"
+        ],
+        "missingSkills": [
+          {
+            "skill": "Microsoft Office Suite Proficiency (Word, PowerPoint, SharePoint, Teams)",
+            "importance": "critical",
+            "reason": "The JD explicitly lists these as must-haves. Excel is covered but no evidence of SharePoint, Teams, or professional PowerPoint deck production for business reporting."
+          },
+          {
+            "skill": "Formal Business Process Documentation",
+            "importance": "important",
+            "reason": "The role requires planning and designing business processes with documented deliverables. The candidate shows analytical work but no explicit process mapping artifacts (BPMN, swimlane diagrams, formal BRDs)."
+          },
+          {
+            "skill": "Government or Enterprise IT Context",
+            "importance": "nice-to-have",
+            "reason": "GDIT serves defense and intelligence clients. Zero exposure to government IT environment, compliance frameworks, or federal business analysis conventions is a gap for standing out among applicants."
+          },
+          {
+            "skill": "Project Management Methodology (Agile/Scrum formally applied)",
+            "importance": "nice-to-have",
+            "reason": "JD mentions broad knowledge of project management. Agile user stories appear in one project tag but there is no evidence of structured sprint work, Jira, or formal PM methodology application."
+          }
+        ],
+        "experienceGaps": [
+          "Written communication quality is a serious concern. The raw profile text is riddled with grammatical errors, run-on sentences, and informal language. A Business Analyst role demands precise, professional written communication to produce reports, stakeholder briefs, and data narratives. This is the single biggest red flag for this candidate.",
+          "No direct internship or co-op experience in a corporate analytical or consulting environment. The Apple role is client-facing sales, not analysis. The Handshake AI role is task-based gig work. Neither provides exposure to the structured BA workflow this role demands.",
+          "The Burger 7 Assistant Manager role is completely blank with no details. Recruiters notice this immediately. It creates a credibility question about what is being hidden or left unfinished.",
+          "No demonstrated experience producing formal business reports, executive summaries, or structured data presentations for organizational stakeholders, which is explicitly listed in the day-in-the-life responsibilities.",
+          "Minimum one semester remaining post-internship is a hard requirement. Candidate enrollment status and expected graduation date are not stated anywhere in the profile, which is a screening liability."
+        ],
+        "criticalVerdict": "This candidate has a genuinely impressive technical skill stack for an internship applicant, well exceeding the minimum bar on Python, Excel, SQL, and data analytics. However, the single most disqualifying risk is the quality of written communication visible throughout the raw profile, which is alarmingly poor for a role that centers on communicating complex data to stakeholders. The Apple experience demonstrates strong interpersonal skills and client relationship building, which is a real asset, but the profile as submitted would raise red flags with any serious recruiter before the skills even get evaluated. Fix the communication quality problem first, everything else is very manageable.",
+        "improvementPlan": [
+          "Immediately clean up all written materials. Every project description, role description, and summary must be rewritten in polished, professional prose with zero grammatical errors. This is non-negotiable for a BA role. Use Grammarly or have someone proofread everything.",
+          "Fill in the Burger 7 Assistant Manager role completely. Even basic operational experience with inventory, scheduling, or team coordination is relevant to process optimization narratives. Leaving it blank is worse than anything you could write.",
+          "Explicitly state enrollment status, university name (George Mason is implied), degree program, and expected graduation date at the top of your application materials. GDIT has a hard eligibility requirement here and recruiters will not chase you for it.",
+          "Build one clean, formal business analysis deliverable, ideally a short requirements document or process flow diagram from your E-Commerce project, and be prepared to walk through it. This closes the gap between having analytical skills and demonstrating BA-specific work product.",
+          "Tailor your cover letter to specifically reference GDIT's government and defense client context. Connect your multi-cloud architecture project and BI work directly to the mission-driven language in the JD. Generic applications get filtered out in high-volume pipelines like this one."
+        ],
+        "marketSkillsToLearn": [
+          "Microsoft SharePoint and Teams (essential in virtually every government contractor environment)",
+          "JIRA or Azure DevOps for Agile backlog and sprint tracking",
+          "Business Requirements Document (BRD) and Functional Requirements Document (FRD) writing conventions",
+          "Power Automate for process automation workflows",
+          "Looker or additional BI tools beyond Power BI and Tableau",
+          "Basic data storytelling frameworks (Pyramid Principle, SCQA) for executive communication"
+        ],
+        "summary": "This candidate is technically overqualified for the minimum requirements of a summer BA internship and brings genuinely differentiated skills in Python, SQL, BI tooling, and data analytics backed by real project work. The critical vulnerability is not the skillset but the communication quality and polish of the application materials, which currently do not reflect the professional standard the role demands. Sharpen the writing, complete the profile, and this candidate is a competitive applicant who should advance past initial screening."
+      }
+    },
+    {
       "id": "job_1774330124101",
       "savedAt": "2026-03-24T05:28:44.101Z",
       "company": "Unknown Company",

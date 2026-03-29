@@ -1,10 +1,10 @@
 import { NextRequest } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import { ResumeService } from '@/lib/services/resume-service';
-import { compileLatex, cleanupLatexArtifacts } from '@/lib/utils/latex-utils';
-import { joinPath } from '@/lib/utils/file-utils';
-import { handleError, badRequest, json } from '@/lib/api/responses';
+import { ResumeService } from '@/lib/resume/service';
+import { compileLatex, cleanupLatexArtifacts } from '@/lib/resume/latex';
+import { joinPath } from '@/lib/storage/file-utils';
+import { handleError, badRequest, json } from '@/lib/http/responses';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 180; // 3 min — 3-step AI pipeline + LaTeX compilation

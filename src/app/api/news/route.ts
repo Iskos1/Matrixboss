@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { generateJson } from '@/lib/ai/anthropic';
 import portfolioData from '@/data/portfolio.json';
 
@@ -12,11 +12,10 @@ const SUBREDDITS: Record<string, string> = {
   business: 'startups',
 };
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const category = searchParams.get('category') || 'tech';
+export async function GET(request: NextRequest) {
+  const category = request.nextUrl.searchParams.get('category') || 'tech';
   const subreddit = SUBREDDITS[category] || 'technology';
-  const useAi = searchParams.get('ai') !== 'false';
+  const useAi = request.nextUrl.searchParams.get('ai') !== 'false';
 
   try {
     // 1. Fetch raw news from Reddit

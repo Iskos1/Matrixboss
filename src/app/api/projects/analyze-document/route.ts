@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { generate, parseAIJson } from '@/lib/ai/anthropic';
-import { fileExists, joinPath } from '@/lib/utils/file-utils';
-import { handleError, badRequest, notFound, json } from '@/lib/api/responses';
+import { fileExists, joinPath } from '@/lib/storage/file-utils';
+import { handleError, badRequest, notFound, json } from '@/lib/http/responses';
 import fs from 'fs';
 import path from 'path';
 import pdf from 'pdf-parse';

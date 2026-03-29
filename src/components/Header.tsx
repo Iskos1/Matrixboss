@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
-import { profile as defaultProfile } from "@/lib/data";
-import { Profile, SocialLink } from "@/lib/data";
+import portfolioData from "@/data/portfolio.json";
+import type { Profile, SocialLink } from "@/lib/portfolio/types";
+const defaultProfile = portfolioData.profile as Profile;
 
 interface HeaderProps {
   profile?: Profile;

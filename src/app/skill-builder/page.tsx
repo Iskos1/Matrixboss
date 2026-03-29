@@ -6,7 +6,7 @@ import PathSelector from "@/components/SkillBuilder/PathSelector";
 import ProjectRoadmap from "@/components/SkillBuilder/ProjectRoadmap";
 import ProjectGuide from "@/components/SkillBuilder/ProjectGuide";
 import ProgressDashboard from "@/components/SkillBuilder/ProgressDashboard";
-import { skillPaths, type SkillPath } from "@/lib/skill-paths";
+import { skillPaths, type SkillPath } from "@/lib/skills/paths";
 import {
   Home,
   BarChart3,

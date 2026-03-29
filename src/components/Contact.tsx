@@ -1,7 +1,9 @@
 "use client";
 
-import { profile as defaultProfile, socialLinks as defaultSocialLinks } from "@/lib/data";
-import { Profile, SocialLink } from "@/lib/data";
+import portfolioData from "@/data/portfolio.json";
+import type { Profile, SocialLink } from "@/lib/portfolio/types";
+const defaultProfile = portfolioData.profile as Profile;
+const defaultSocialLinks = portfolioData.socialLinks as SocialLink[];
 import { Github, Linkedin, Twitter, Globe, Mail } from "lucide-react";
 
 interface ContactProps {

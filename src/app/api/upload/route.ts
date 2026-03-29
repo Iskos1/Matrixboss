@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 import { existsSync } from "fs";
-import { handleError, badRequest, json } from "@/lib/api/responses";
+import { handleError, badRequest, json } from "@/lib/http/responses";
 
 export async function POST(request: NextRequest) {
   try {

@@ -1,5 +1,5 @@
 import { generate } from '@/lib/ai/anthropic';
-import { handleError, json } from '@/lib/api/responses';
+import { handleError, json } from '@/lib/http/responses';
 
 /**
  * GET /api/resume/validate-key

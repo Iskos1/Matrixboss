@@ -12,7 +12,7 @@ import {
   BarChart3,
   Star,
 } from "lucide-react";
-import { type SkillPath } from "@/lib/skill-paths";
+import { type SkillPath } from "@/lib/skills/paths";
 
 interface Stats {
   totalPaths: number;

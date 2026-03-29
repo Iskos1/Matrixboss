@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import { getProjectRoot } from '@/lib/utils/file-utils';
+import { getProjectRoot } from '@/lib/storage/file-utils';
 import { generate } from '@/lib/ai/anthropic';
-import { handleError, badRequest, json } from '@/lib/api/responses';
+import { handleError, badRequest, json } from '@/lib/http/responses';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 120;

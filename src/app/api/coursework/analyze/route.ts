@@ -1,9 +1,9 @@
 import { NextRequest } from "next/server";
 import fs from "fs/promises";
 import path from "path";
-import { joinPath } from "@/lib/utils/file-utils";
-import { CourseworkService } from "@/lib/services/coursework-service";
-import { handleError, badRequest, json } from "@/lib/api/responses";
+import { joinPath } from "@/lib/storage/file-utils";
+import { CourseworkService } from "@/lib/coursework/service";
+import { handleError, badRequest, json } from "@/lib/http/responses";
 
 export async function POST(request: NextRequest) {
   try {

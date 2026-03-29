@@ -10,8 +10,8 @@ import Footer from "@/components/Footer";
 import AdminButton from "@/components/AdminButton";
 import PortfolioChat from "@/components/PortfolioChat";
 import NewsletterButton from "@/components/NewsletterButton";
-import { readJsonFile, joinPath } from "@/lib/utils/file-utils";
-import { PATHS } from "@/lib/constants";
+import { readJsonFile, joinPath } from "@/lib/storage/file-utils";
+import { PATHS } from "@/lib/config/constants";
 
 async function getPortfolioData() {
   try {
