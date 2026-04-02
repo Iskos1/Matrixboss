@@ -248,6 +248,13 @@ async function selectAndTailor(jobDescription: string, jobAnalysis: JobAnalysis,
 
   const prompt = `You are an expert resume writer and ATS optimization specialist. Select the BEST content from this candidate's background and write powerful, tailored bullet points for the specific job.
 
+CRITICAL — ONE-PAGE BUDGET: The final resume MUST fit on a single A4 page. This is the hard constraint that overrides everything else.
+  • Work experience: EXACTLY 2 entries maximum (pick the 2 most relevant)
+  • Projects: EXACTLY 2 entries maximum (pick the 2 most relevant)
+  • Bullets per entry: EXACTLY 3 bullets maximum — no exceptions
+  • Skills: max 4 categories, max 5 skills each
+  • Certifications: max 3
+
 ═══ JOB ANALYSIS ═══
 Role Focus: ${jobAnalysis.primary_focus}
 Seniority: ${jobAnalysis.seniority_level}
@@ -266,8 +273,8 @@ ${jobDescription}
 ${JSON.stringify(candidateData, null, 2)}
 
 ═══ INSTRUCTIONS ═══
-1. Pick the 2-3 most relevant work experience entries and 3-4 most relevant projects.
-2. Write 3-4 bullets per entry: action verb + what + result/metric (10-18 words max, one idea).
+1. Pick the 2 most relevant work experience entries and the 2 most relevant projects (hard limit — do not exceed).
+2. Write exactly 3 bullets per entry: action verb + what + result/metric (10-18 words max, one idea per bullet).
 3. Distribute ATS keywords naturally. Never fabricate metrics.
 4. Entry-level professional tone: avoid Spearheaded, Orchestrated, Championed.
 5. Section order MUST be ["work_experience", "projects"].
@@ -341,6 +348,12 @@ async function refineContent(jobAnalysis: JobAnalysis, jobDescription: string, d
 
   const prompt = `You are a resume refinement specialist. Improve this draft to achieve a fit score of 85+.
 
+CRITICAL — ONE-PAGE BUDGET (do NOT violate):
+  • Do NOT add new work experience or project entries beyond what is already in the draft
+  • Do NOT exceed 3 bullets per entry
+  • Only improve or replace existing bullets — never add a 4th bullet to any entry
+  • Keep bullets 10-18 words max
+
 Current fit score: ${qualityReport.fit_score}/100 — Target: 85+
 ATS coverage: ${qualityReport.ats_keyword_coverage}% — Target: 70%+
 
@@ -352,7 +365,7 @@ JOB FOCUS: ${jobAnalysis.primary_focus}
 CURRENT DRAFT:
 ${JSON.stringify(draft, null, 2)}
 
-Fix every gap. Weave missing ATS keywords naturally. Keep bullets 10-18 words, action verb first.
+Fix every gap by rewriting existing bullets — not adding new ones. Weave missing ATS keywords naturally.
 Do NOT fabricate metrics. Return COMPLETE updated JSON with same structure.
 
 Return JSON ONLY:`;
@@ -449,6 +462,33 @@ Instructions:
   return (await generate(prompt, { disableThinking: true })).text;
 }
 
+// ─── One-page hard cap ────────────────────────────────────────────────────────
+// Applied after the AI pipeline to guarantee the LaTeX stays within one page.
+// Limits: 2 work experience entries, 2 projects, 3 bullets each.
+
+const ONE_PAGE = { maxJobs: 2, maxProjects: 2, maxBullets: 3, maxSkillCategories: 4, maxSkillsPerCategory: 5 } as const;
+
+function enforceOnePageLimit(content: TailoredContent): TailoredContent {
+  const trimBullets = (bullets: any[]) => (bullets ?? []).slice(0, ONE_PAGE.maxBullets);
+
+  const jobs = (content.selected_work_experience ?? [])
+    .filter(j => j.include !== false)
+    .slice(0, ONE_PAGE.maxJobs)
+    .map(j => ({ ...j, bullets: trimBullets(j.bullets) }));
+
+  const projects = (content.selected_projects ?? [])
+    .filter(p => p.include !== false)
+    .slice(0, ONE_PAGE.maxProjects)
+    .map(p => ({ ...p, bullets: trimBullets(p.bullets) }));
+
+  const skillEntries = Object.entries(content.selected_skills ?? {})
+    .slice(0, ONE_PAGE.maxSkillCategories)
+    .map(([cat, skills]) => [cat, (skills as string[]).slice(0, ONE_PAGE.maxSkillsPerCategory)]);
+  const skills = Object.fromEntries(skillEntries);
+
+  return { ...content, selected_work_experience: jobs, selected_projects: projects, selected_skills: skills };
+}
+
 // ─── Public: LaTeX generation (deterministic) ─────────────────────────────────
 
 function readTemplatePreamble(): string {
@@ -478,90 +518,132 @@ function readTemplatePreamble(): string {
 
 export function generateLatexResume(tailoredContent: TailoredContent): string {
   const { personal_info, education } = loadResumeData();
+  const content = enforceOnePageLimit(tailoredContent);
   let latex = readTemplatePreamble();
 
-  latex += `\n\n\\pagestyle{empty}\n\n\\begin{center}\n    {\\LARGE \\textbf{${escapeLatex(personal_info.name)}}} \\\\\n    \\vspace{2pt}\n    {\\small ${escapeLatex(personal_info.email)} \\ | \\ ${escapeLatex(personal_info.phone)} \\ | \\ \\href{${personal_info.github.url}}{${escapeLatex(personal_info.github.display)}} \\ | \\ \\href{${personal_info.linkedin.url}}{${escapeLatex(personal_info.linkedin.display)}}}\n\\end{center}\n\n`;
+  // ── Header ─────────────────────────────────────────────────────────────────
+  latex += `\n\n\\pagestyle{empty}\n\n`;
+  latex += `\\begin{center}\n`;
+  latex += `    {\\LARGE \\textbf{\\textcolor{navyblue}{${escapeLatex(personal_info.name)}}}} \\\\[4pt]\n`;
+  latex += `    {\\small\n`;
+  latex += `      \\textcolor{accentblue}{\\faEnvelope}~\\href{mailto:${personal_info.email}}{${escapeLatex(personal_info.email)}}\n`;
+  latex += `      ~\\textcolor{navyblue}{$|$}~\n`;
+  latex += `      \\textcolor{accentblue}{\\faPhone}~${escapeLatex(personal_info.phone)}\n`;
+  latex += `      ~\\textcolor{navyblue}{$|$}~\n`;
+  if (personal_info.location) {
+    latex += `      \\textcolor{accentblue}{\\faMapMarker*}~${escapeLatex(personal_info.location)}\n`;
+    latex += `      ~\\textcolor{navyblue}{$|$}~\n`;
+  }
+  latex += `      \\textcolor{accentblue}{\\faGithub}~\\href{${personal_info.github.url}}{${escapeLatex(personal_info.github.display)}}\n`;
+  latex += `      ~\\textcolor{navyblue}{$|$}~\n`;
+  latex += `      \\textcolor{accentblue}{\\faLinkedin}~\\href{${personal_info.linkedin.url}}{${escapeLatex(personal_info.linkedin.display)}}\n`;
+  latex += `    }\n`;
+  latex += `\\end{center}\n\n`;
+  latex += `\\vspace{2pt}\n\n`;
 
-  const skillEntries = Object.entries(tailoredContent.selected_skills).filter(([, s]) => s?.length > 0);
+  // ── Education ──────────────────────────────────────────────────────────────
+  latex += `\\section{Education}\n\n`;
+  latex += `\\jobentry{${escapeLatex(education.institution)}}{${escapeLatex(education.location || '')}}{${escapeLatex(education.degree)}}{${escapeLatex(education.graduation_date)}}\n\n`;
+  if (education.coursework?.length > 0) {
+    latex += `\\vspace{2pt}\n`;
+    latex += `\\noindent\\hspace{6pt}\\textcolor{accentblue}{\\textbf{Relevant Coursework:}} ${education.coursework.map(escapeLatex).join(', ')}.\n\n`;
+  }
+
+  // ── Technical Skills ───────────────────────────────────────────────────────
+  const skillEntries = Object.entries(content.selected_skills).filter(([, s]) => s?.length > 0);
   if (skillEntries.length > 0) {
-    latex += `\\section{Skills}\n\\begin{itemize}\n`;
+    latex += `\\section{Technical Skills}\n\n`;
+    latex += `\\begin{itemize}[leftmargin=0pt, label={}, itemsep=2pt]\n`;
     for (const [cat, skills] of skillEntries) {
-      latex += `    \\item \\textbf{${escapeLatex(cat)}:} ${(skills as string[]).map(escapeLatex).join(', ')}\n`;
+      latex += `  \\item \\textbf{${escapeLatex(cat)}:} ${(skills as string[]).map(escapeLatex).join(', ')}\n`;
     }
     latex += `\\end{itemize}\n\n`;
   }
 
-  // Work Experience always first
-  const includedJobs = tailoredContent.selected_work_experience.filter(j => j.include !== false && j.bullets?.length > 0);
+  // ── Work Experience (always first) ─────────────────────────────────────────
+  const includedJobs = content.selected_work_experience.filter(j => j.include !== false && j.bullets?.length > 0);
   if (includedJobs.length > 0) {
     latex += `\\section{Work Experience}\n\n`;
     includedJobs.forEach((job, i) => {
-      if (i > 0) latex += `\\vspace{4pt}\n\n`;
-      latex += `\\noindent\n\\textbf{${escapeLatex(job.company)}} \\hfill ${escapeLatex(job.location)} \\\\\n`;
-      latex += `\\textit{${escapeLatex(job.title)}} \\hfill ${escapeLatex(job.date)}\n\\begin{itemize}\n`;
+      if (i > 0) latex += `\\vspace{5pt}\n\n`;
+      latex += `\\jobentry{${escapeLatex(job.company)}}{${escapeLatex(job.location || '')}}{${escapeLatex(job.title)}}{${escapeLatex(job.date)}}\n`;
+      latex += `\\begin{itemize}\n`;
       for (const b of job.bullets) latex += `    \\item ${escapeLatex(b.tailored_text)}\n`;
       latex += `\\end{itemize}\n\n`;
     });
   }
 
-  // Projects always second
-  const includedProjects = tailoredContent.selected_projects.filter(p => p.include !== false && p.bullets?.length > 0);
+  // ── Project Work (always second) ───────────────────────────────────────────
+  const includedProjects = content.selected_projects.filter(p => p.include !== false && p.bullets?.length > 0);
   if (includedProjects.length > 0) {
     latex += `\\section{Project Work}\n\n`;
     includedProjects.forEach((p, i) => {
-      if (i > 0) latex += `\\vspace{4pt}\n\n`;
-      latex += `\\noindent\n`;
-      if (p.role) {
-        latex += `\\textbf{${escapeLatex(p.title)}} \\hfill ${escapeLatex(p.date)} \\\\\n\\textit{${escapeLatex(p.role)}}\n`;
-      } else {
-        latex += `\\textbf{${escapeLatex(p.title)}} \\hfill ${escapeLatex(p.date)}\n`;
-      }
+      if (i > 0) latex += `\\vspace{5pt}\n\n`;
+      latex += `\\jobentry{${escapeLatex(p.title)}}{}{${escapeLatex(p.role || '')}}{${escapeLatex(p.date)}}\n`;
       latex += `\\begin{itemize}\n`;
       for (const b of p.bullets) latex += `    \\item ${escapeLatex(b.tailored_text)}\n`;
       latex += `\\end{itemize}\n\n`;
     });
   }
 
-  const certs = tailoredContent.selected_certifications ?? [];
+  // ── Certifications ─────────────────────────────────────────────────────────
+  const certs = content.selected_certifications ?? [];
   if (certs.length > 0) {
-    latex += `\\section{Certifications}\n\\noindent\n`;
-    latex += certs.map(c => `\\textbf{${escapeLatex(c.name)}} (${escapeLatex(c.year)})`).join(' \\ | \\ ') + '\n\n';
+    latex += `\\section{Certifications}\n\n`;
+    latex += `\\begin{center}\n`;
+    latex += certs.map((c, i) =>
+      `\\certbadge{${escapeLatex(c.name)}}{\\ ${escapeLatex(c.year)}}${i < certs.length - 1 ? ' \\hspace{6pt}' : ''}`
+    ).join('\n') + '\n';
+    latex += `\\end{center}\n\n`;
   }
 
-  latex += `\\section{Education}\n\\noindent\n`;
-  latex += `\\textbf{${escapeLatex(education.institution)}} \\hfill ${escapeLatex(education.location)} \\\\\n`;
-  latex += `\\textit{${escapeLatex(education.degree)}} \\hfill ${escapeLatex(education.graduation_date)} \\\\\n`;
-  latex += `{\\small \\textbf{Relevant Coursework:} ${education.coursework.map(escapeLatex).join(', ')}.}\n\n`;
   latex += `\\end{document}\n`;
-
   return latex;
 }
 
 export function generateLatexCoverLetter(coverLetterBody: string): string {
   const { personal_info } = loadResumeData();
-  return `\\documentclass[11pt, a4paper]{article}
-\\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+  return `\\documentclass[10pt, a4paper]{article}
+\\usepackage[a4paper, top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
 \\usepackage{fontspec}
 \\usepackage[english]{babel}
-\\setmainfont{IBMPlexSans}[Extension=.otf,UprightFont=*-Regular,BoldFont=*-Bold,ItalicFont=*-Italic,BoldItalicFont=*-BoldItalic]
-\\pagestyle{empty}
-\\usepackage{parskip}
-\\setlength{\\parindent}{0pt}
-\\setlength{\\parskip}{10pt}
+\\setmainfont{IBMPlexSans-Regular.otf}[
+  Path           = /usr/local/texlive/2025/texmf-dist/fonts/opentype/ibm/plex/,
+  BoldFont       = IBMPlexSans-Bold.otf,
+  ItalicFont     = IBMPlexSans-Italic.otf,
+  BoldItalicFont = IBMPlexSans-BoldItalic.otf,
+]
 \\usepackage{xcolor}
+\\definecolor{navyblue}{RGB}{10, 36, 99}
+\\definecolor{accentblue}{RGB}{30, 80, 160}
 \\definecolor{linkblue}{RGB}{0, 0, 139}
 \\usepackage{hyperref}
-\\hypersetup{colorlinks=true,linkcolor=linkblue,filecolor=linkblue,urlcolor=linkblue}
+\\hypersetup{colorlinks=true,urlcolor=linkblue,linkcolor=linkblue}
+\\usepackage{fontawesome5}
+\\usepackage{titlesec}
+\\usepackage{microtype}
+\\usepackage{parskip}
+\\setlength{\\parindent}{0pt}
+\\setlength{\\parskip}{9pt}
+\\pagestyle{empty}
 
 \\begin{document}
 
 \\begin{center}
-    {\\Large \\textbf{${escapeLatex(personal_info.name)}}} \\\\
-    \\vspace{2pt}
-    {\\small ${escapeLatex(personal_info.email)} \\ | \\ ${escapeLatex(personal_info.phone)}} \\\\
-    {\\small \\href{${personal_info.linkedin.url}}{${escapeLatex(personal_info.linkedin.display)}} \\ | \\ \\href{${personal_info.github.url}}{${escapeLatex(personal_info.github.display)}}}
+    {\\LARGE \\textbf{\\textcolor{navyblue}{${escapeLatex(personal_info.name)}}}} \\\\[4pt]
+    {\\small
+      \\textcolor{accentblue}{\\faEnvelope}~\\href{mailto:${personal_info.email}}{${escapeLatex(personal_info.email)}}
+      ~\\textcolor{navyblue}{$|$}~
+      \\textcolor{accentblue}{\\faPhone}~${escapeLatex(personal_info.phone)}
+      ~\\textcolor{navyblue}{$|$}~
+      \\textcolor{accentblue}{\\faLinkedin}~\\href{${personal_info.linkedin.url}}{${escapeLatex(personal_info.linkedin.display)}}
+      ~\\textcolor{navyblue}{$|$}~
+      \\textcolor{accentblue}{\\faGithub}~\\href{${personal_info.github.url}}{${escapeLatex(personal_info.github.display)}}
+    }
 \\end{center}
 
+\\vspace{6pt}
+{\\color{accentblue}\\hrule height 1pt}
 \\vspace{14pt}
 
 ${escapeLatex(coverLetterBody)}

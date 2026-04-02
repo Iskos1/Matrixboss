@@ -10,40 +10,13 @@ import Footer from "@/components/Footer";
 import AdminButton from "@/components/AdminButton";
 import PortfolioChat from "@/components/PortfolioChat";
 import NewsletterButton from "@/components/NewsletterButton";
-import { readJsonFile, joinPath } from "@/lib/storage/file-utils";
-import { PATHS } from "@/lib/config/constants";
-
-async function getPortfolioData() {
-  try {
-    const dataPath = joinPath(PATHS.PORTFOLIO_DATA);
-    return readJsonFile(dataPath);
-  } catch (error) {
-    console.error("Failed to load portfolio data:", error);
-    // Return null to indicate failure, which we can handle in the component
-    return null;
-  }
-}
+import staticPortfolioData from "@/data/portfolio.json";
 
 export default async function Home() {
-  const data = await getPortfolioData();
-
-  // If data loading fails, we can either:
-  // 1. Show an error message (useful for debugging)
-  // 2. Fall back to static data (current behavior, but might show stale content)
-  // Let's try to be helpful if data is missing, especially in dev/admin context
-  if (!data && process.env.NODE_ENV === 'development') {
-      return (
-        <div className="p-10 text-center">
-            <h1 className="text-2xl font-bold text-red-600 mb-4">Error Loading Portfolio Data</h1>
-            <p className="text-slate-600 mb-4">Could not read portfolio data from {PATHS.PORTFOLIO_DATA}.</p>
-            <p className="text-sm text-slate-500">Check server console for details.</p>
-        </div>
-      );
-  }
-
-  // Fallback to empty object if data is null (will trigger default props in components)
-  // This ensures the site doesn't crash in production if something goes wrong
-  const safeData = data || {};
+  // Use the statically-bundled JSON so this page always works on Vercel
+  // (fs.readFileSync is unreliable in serverless environments without explicit
+  // outputFileTracingIncludes coverage for every route).
+  const safeData: any = staticPortfolioData || {};
 
   return (
     <>

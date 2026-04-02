@@ -1,6 +1,389 @@
 {
   "applications": [
     {
+      "id": "job_1775113955682",
+      "savedAt": "2026-04-02T07:12:35.682Z",
+      "company": "Unknown Company",
+      "role": "Evaluating and scoring AI-generated responses for accuracy, safety, and usefulness in government and nonprofit domain contexts.",
+      "jobDescription": "Role Overview\nMercor is collaborating with a leading AI lab to contract experienced professionals for an AI model evaluation project. Contractors will assess the quality, accuracy, and safety of AI-generated responses for subjects that pertain to government and non-profits. The project offers an opportunity to directly improve the reliability of AI systems in high-stakes contexts where inaccurate information carries serious risk.\n\nKey Responsibilities\n\nWrite realistic prompts that reflect how professionals and consumers seek domain-specific guidance\n\nEvaluate AI-generated responses for factual accuracy, regulatory or clinical correctness, and practical usefulness\n\nIdentify fabricated claims, incorrect references, or misleading reasoning across model outputs\n\nScore and rank multiple model responses using structured rubrics across dimensions\n\nProvide written justifications with specific evidence for each evaluation\n\nIdeal Qualifications\n\nProfessional experience applying domain expertise in a practitioner or advisory capacity\n\nFamiliarity with industry-specific standards, regulations, or clinical guidelines\n\nStrong written communication and critical reasoning skills\n\nMore About the Opportunity\n\nExpected commitment: ~20 hours/week\nApplication Process\n\nSubmit your resume to begin\n\nComplete the Model Response Evaluation assessment\n\nWe consider all qualified applicants without regard to legally protected characteristics and provide reasonable accommodations upon request.\n\n",
+      "resumeFilename": "tailored_resume_2026_04_02T07_1.pdf",
+      "coverLetterFilename": "tailored_cover_letter_2026_04_02T07_1.pdf",
+      "compatibilityScore": 42,
+      "analysis": {
+        "compatibilityScore": 42,
+        "compatibilityLabel": "Weak Match",
+        "industry": "AI / Technology",
+        "roleType": "AI Model Evaluator / Domain Expert Contractor",
+        "seniorityLevel": "Mid-Level",
+        "presentSkills": [
+          "AI Model Training (Handshake fellowship - voice and vision)",
+          "Prompt Engineering",
+          "Quality Assessment of AI outputs",
+          "NLP & LLMs familiarity",
+          "Written communication",
+          "Critical reasoning",
+          "Business analysis",
+          "Regulatory & Legal Compliance awareness (Dispomode)",
+          "Data analytics",
+          "Strong cross-domain adaptability"
+        ],
+        "missingSkills": [
+          {
+            "skill": "Government & Nonprofit Domain Expertise",
+            "importance": "critical",
+            "reason": "The role explicitly targets government and nonprofit sectors. The candidate has zero professional experience in public policy, government operations, nonprofit management, grant writing, public administration, or civic regulatory frameworks. This is the single biggest disqualifier."
+          },
+          {
+            "skill": "Domain-Specific Regulatory Knowledge (Government/Nonprofit)",
+            "importance": "critical",
+            "reason": "The job requires familiarity with industry-specific standards, regulations, or clinical guidelines relevant to government and nonprofits. The candidate's only compliance exposure is vape industry e-commerce law — entirely irrelevant here."
+          },
+          {
+            "skill": "Structured Rubric-Based Evaluation",
+            "importance": "critical",
+            "reason": "The role requires scoring and ranking multiple model responses across structured dimensions with written evidence-backed justifications. The candidate's AI evaluation work at Handshake was basic output selection tasks, not rigorous multi-dimensional rubric evaluation."
+          },
+          {
+            "skill": "Factual Accuracy Verification in High-Stakes Contexts",
+            "importance": "critical",
+            "reason": "The job specifically calls out 'high-stakes contexts where inaccurate information carries serious risk.' The candidate has no demonstrated experience auditing factual claims in policy, legal, healthcare, or government contexts."
+          },
+          {
+            "skill": "Professional Practitioner or Advisory Experience in Target Domain",
+            "importance": "critical",
+            "reason": "The ideal profile is someone who has worked as a practitioner or advisor in government or nonprofit sectors. The candidate's background is retail sales, restaurant service, construction, teaching, and e-commerce — none of which align."
+          },
+          {
+            "skill": "Identifying Fabricated Claims and Misleading Reasoning in AI Output",
+            "importance": "important",
+            "reason": "The role requires detecting hallucinations, incorrect references, and flawed reasoning in AI responses. The candidate's Handshake work involved selecting best image outputs — a fundamentally different and far less analytical task."
+          },
+          {
+            "skill": "Technical Writing for Evaluation Justifications",
+            "importance": "important",
+            "reason": "The role demands written justifications with specific evidence per evaluation. While the candidate shows verbosity, the quality of written communication in the profile is inconsistent, informal, and riddled with grammatical issues — a red flag for this deliverable."
+          },
+          {
+            "skill": "Policy Analysis or Public Sector Knowledge",
+            "importance": "important",
+            "reason": "Evaluating AI responses about government and nonprofits requires understanding of how these entities operate, how policy is formed, and what constitutes accurate vs. misleading guidance in civic contexts."
+          }
+        ],
+        "experienceGaps": [
+          "Zero professional experience in government, public administration, public policy, or nonprofit operations — the core domain this contract covers",
+          "The Handshake AI fellowship involved low-complexity tasks (reading scripts, selecting best image outputs) — not the rigorous analytical evaluation this role demands",
+          "No demonstrated experience auditing or fact-checking information in regulated, high-stakes environments where errors have serious consequences",
+          "No background writing domain-specific prompts that reflect how government professionals or nonprofit practitioners actually seek guidance",
+          "The candidate's experience is heavily consumer-facing and commercial (Apple retail, Yard House, Home Depot) with no advisory, research, or policy background",
+          "Written communication quality throughout the profile is informal and error-prone — this role requires precise, evidence-backed analytical writing",
+          "No demonstrated experience with structured evaluation frameworks, rubrics, or comparative scoring methodologies",
+          "Academic background not stated clearly — unclear whether any coursework or study in public policy, political science, public health, or nonprofit management exists"
+        ],
+        "criticalVerdict": "This candidate is a motivated generalist with broad commercial experience and some surface-level AI training exposure, but they fundamentally lack the domain expertise this role is built around. Mercor is not looking for someone who selected furniture-removal outputs or read scripts into a microphone — they want practitioners who deeply understand how government agencies operate, what regulatory frameworks govern nonprofits, and what accurate vs. fabricated information looks like in those contexts. The candidate's only relevant qualification is the Handshake AI fellowship, and even that is a stretch given the simplicity of those tasks compared to what this contract requires. Without a government, policy, legal, or nonprofit professional background, this candidate cannot reliably evaluate AI-generated responses in high-stakes civic contexts and should not be positioned for this specific role.",
+        "improvementPlan": [
+          "Build genuine domain expertise: Take free courses on government operations (e.g., Coursera's public policy programs, Khan Academy civics), nonprofit management (Nonprofit Ready, CFP coursework), or public administration to develop the foundational knowledge evaluators need",
+          "Volunteer or intern with a nonprofit or government-adjacent organization to gain real practitioner exposure that can be cited in applications",
+          "Practice structured AI evaluation: Use platforms like Scale AI, Surge AI, or Appen to build hands-on experience with rubric-based model evaluation tasks that mirror what this role requires",
+          "Dramatically improve written communication quality — the informal, stream-of-consciousness writing style visible throughout this profile would disqualify you at the written justification stage of the evaluation work",
+          "Complete a professional writing or technical writing course (Coursera, edX) to develop the precise, evidence-based analytical writing this role demands",
+          "Target AI evaluation roles that match your actual background — computer vision evaluation, e-commerce AI, retail/hospitality AI — where your commercial experience is genuinely relevant domain knowledge",
+          "Document specific examples of identifying errors, inconsistencies, or misleading information in any context to build a credible 'critical reasoning' narrative"
+        ],
+        "marketSkillsToLearn": [
+          "Public policy analysis and government regulatory frameworks",
+          "Nonprofit compliance and grant management fundamentals",
+          "RLHF (Reinforcement Learning from Human Feedback) evaluation methodologies",
+          "Structured analytical writing and formal evaluation rubric design",
+          "AI safety and alignment principles",
+          "Fact-checking and source verification methodologies",
+          "Legal research fundamentals (government regulations, statutes)",
+          "Public health or social services domain knowledge (common nonprofit verticals)",
+          "Red-teaming and adversarial prompt evaluation techniques",
+          "Data annotation quality assurance best practices"
+        ],
+        "summary": "This candidate has genuine enthusiasm for AI and a diverse commercial background, but is a poor match for this specific contract because it requires deep government and nonprofit domain expertise that is entirely absent from their profile. The Handshake AI fellowship is the only relevant credential, but its task complexity (image selection, script reading) falls well short of the rigorous factual auditing and rubric-based evaluation this role demands. The candidate should target AI evaluation opportunities in domains where their actual experience — retail, hospitality, e-commerce, consumer technology — constitutes real practitioner knowledge."
+      }
+    },
+    {
+      "id": "job_1775113578016",
+      "savedAt": "2026-04-02T07:06:18.016Z",
+      "company": "Unknown Company",
+      "role": "Evaluating and scoring AI-generated responses for accuracy, safety, and usefulness in government and non-profit domain contexts.",
+      "jobDescription": "Role Overview\nMercor is collaborating with a leading AI lab to contract experienced professionals for an AI model evaluation project. Contractors will assess the quality, accuracy, and safety of AI-generated responses for subjects that pertain to government and non-profits. The project offers an opportunity to directly improve the reliability of AI systems in high-stakes contexts where inaccurate information carries serious risk.\n\nKey Responsibilities\n\nWrite realistic prompts that reflect how professionals and consumers seek domain-specific guidance\n\nEvaluate AI-generated responses for factual accuracy, regulatory or clinical correctness, and practical usefulness\n\nIdentify fabricated claims, incorrect references, or misleading reasoning across model outputs\n\nScore and rank multiple model responses using structured rubrics across dimensions\n\nProvide written justifications with specific evidence for each evaluation\n\nIdeal Qualifications\n\nProfessional experience applying domain expertise in a practitioner or advisory capacity\n\nFamiliarity with industry-specific standards, regulations, or clinical guidelines\n\nStrong written communication and critical reasoning skills\n\nMore About the Opportunity\n\nExpected commitment: ~20 hours/week\nApplication Process\n\nSubmit your resume to begin\n\nComplete the Model Response Evaluation assessment\n\nWe consider all qualified applicants without regard to legally protected characteristics and provide reasonable accommodations upon request.\n\n",
+      "resumeFilename": "tailored_resume_2026_04_02T07_0.pdf",
+      "coverLetterFilename": "tailored_cover_letter_2026_04_02T07_0.pdf",
+      "compatibilityScore": 42,
+      "analysis": {
+        "compatibilityScore": 42,
+        "compatibilityLabel": "Weak Match",
+        "industry": "Artificial Intelligence / Government & Non-Profit Sector",
+        "roleType": "AI Model Evaluator / Domain Expert Contractor",
+        "seniorityLevel": "Mid-Level Practitioner",
+        "presentSkills": [
+          "AI model training experience (Handshake Generative AI Fellow)",
+          "Prompt engineering",
+          "Quality assessment of AI outputs",
+          "Multimodal AI evaluation (voice and vision)",
+          "Written communication",
+          "NLP & LLMs familiarity",
+          "Machine learning fundamentals",
+          "Critical reasoning",
+          "Regulatory & legal compliance awareness (e-commerce context)",
+          "Business analysis",
+          "Data analytics",
+          "Structured rubric-based evaluation (implicit from QA-reviewed AI tasks)"
+        ],
+        "missingSkills": [
+          {
+            "skill": "Government or non-profit domain expertise",
+            "importance": "critical",
+            "reason": "The entire project centers on evaluating AI responses in government and non-profit contexts. The candidate has zero professional experience in policy, public administration, grant management, nonprofit operations, or regulatory frameworks specific to these sectors. This is the core qualification requirement."
+          },
+          {
+            "skill": "Familiarity with government regulations, statutes, or public policy frameworks",
+            "importance": "critical",
+            "reason": "The job explicitly requires familiarity with industry-specific standards and regulations. The candidate's only regulatory exposure is vape industry legal compliance — entirely irrelevant here."
+          },
+          {
+            "skill": "Practitioner-level advisory experience in a specialized domain",
+            "importance": "critical",
+            "reason": "The ideal candidate is described as a practitioner or advisor — think policy analysts, public administrators, nonprofit directors, grant writers, or healthcare compliance officers. This candidate's background is retail, hospitality, and e-commerce — none of which qualify."
+          },
+          {
+            "skill": "Structured rubric-based AI response scoring with written justifications",
+            "importance": "important",
+            "reason": "While the candidate has done AI output selection tasks, their Handshake work was selecting best image outputs — not writing detailed, evidence-backed justifications evaluating factual accuracy and regulatory correctness of text responses."
+          },
+          {
+            "skill": "Identifying fabricated claims or hallucinations in AI-generated text",
+            "importance": "important",
+            "reason": "The candidate has no demonstrated experience evaluating factual accuracy of AI text responses, spotting citation fabrication, or assessing misleading reasoning in domain-specific content."
+          },
+          {
+            "skill": "Professional prompt writing for domain-specific guidance scenarios",
+            "importance": "important",
+            "reason": "Candidate's prompt engineering is focused on image regeneration, not crafting realistic professional-grade queries that reflect how government or nonprofit professionals seek guidance."
+          },
+          {
+            "skill": "Academic or professional background in public policy, public administration, law, or nonprofit management",
+            "importance": "important",
+            "reason": "Without subject matter expertise in the target domain, the candidate cannot reliably evaluate whether AI responses are factually accurate, clinically correct, or regulatorily sound for government/nonprofit use cases."
+          }
+        ],
+        "experienceGaps": [
+          "Zero experience working in government, public sector, nonprofit organizations, or any adjacent advisory capacity — this is the foundational domain requirement for the entire role",
+          "No demonstrated ability to evaluate factual accuracy or regulatory correctness of AI-generated text responses — existing AI work was limited to image selection and voice script recording",
+          "No background in policy analysis, grant compliance, public administration, social services, or any field where government/nonprofit AI guidance would be assessed",
+          "Written justification quality is unclear — the candidate's written communication samples in the profile are informal, grammatically inconsistent, and lack the analytical precision required for structured evaluations submitted to an AI lab",
+          "No experience working with scoring rubrics across multiple evaluative dimensions for text-based AI outputs",
+          "Education background appears to be business/MIS focused with no coursework or training in public policy, governance, or nonprofit management"
+        ],
+        "criticalVerdict": "This candidate does not meet the core qualification for this role: domain expertise in government or non-profit contexts. The job is not hiring for general AI familiarity — it is hiring practitioners who can catch regulatory errors, policy inaccuracies, and misleading guidance in high-stakes AI outputs for the public sector. The candidate's AI experience is real but shallow — image furniture removal and voice script reading — which is categorically different from evaluating the factual and regulatory soundness of text-based policy guidance. Without subject matter expertise in the target domain, this candidate would be guessing at whether AI responses are accurate, which is exactly the failure mode this project is designed to prevent.",
+        "improvementPlan": [
+          "Pursue volunteer or internship experience with a nonprofit organization or local government agency to build legitimate domain knowledge in public sector operations, grant compliance, or policy implementation",
+          "Complete a structured online course in public policy, nonprofit management, or government administration (Coursera's 'Introduction to Public Policy' or similar) to develop the domain vocabulary and regulatory awareness needed",
+          "Practice AI response evaluation by using publicly available RLHF datasets or platforms like Scale AI, Surge AI, or Labelbox to build experience writing structured, evidence-backed justifications for text-based AI outputs",
+          "Significantly improve formal written communication — the writing samples in this profile are too informal and grammatically inconsistent for a role that requires precise, evidence-backed written evaluations submitted to an AI lab",
+          "Build a portfolio of domain-specific prompt writing — craft 20-30 realistic prompts that reflect how a nonprofit program officer or government analyst would seek guidance, then evaluate AI responses against authoritative sources",
+          "Target AI evaluation roles in domains where you already have practitioner experience (retail technology, e-commerce, hospitality operations) while building toward government/nonprofit credentials over 12-18 months"
+        ],
+        "marketSkillsToLearn": [
+          "RLHF (Reinforcement Learning from Human Feedback) evaluation methodologies",
+          "Red-teaming and adversarial prompt testing for AI safety",
+          "Government regulatory frameworks (APA, OMB Circulars, nonprofit IRS compliance)",
+          "Structured analytical writing and evidence-based argumentation",
+          "Public policy analysis frameworks",
+          "Grant writing and nonprofit compliance standards",
+          "AI hallucination detection and factual verification techniques",
+          "Domain-specific rubric design for AI output scoring"
+        ],
+        "summary": "This candidate has genuine but narrow AI experience — primarily image output selection and voice recording — which does not translate to the domain-expert evaluation work this role demands. The fundamental disqualifier is the complete absence of government or nonprofit practitioner experience, which is the entire basis on which this contractor role is predicated. The candidate should pursue domain-building in the public sector before applying to roles like this one."
+      }
+    },
+    {
+      "id": "job_1775113399481",
+      "savedAt": "2026-04-02T07:03:19.481Z",
+      "company": "Unknown Company",
+      "role": "Evaluating and scoring AI-generated responses for accuracy, safety, and usefulness in government and non-profit domain contexts.",
+      "jobDescription": "Role Overview\nMercor is collaborating with a leading AI lab to contract experienced professionals for an AI model evaluation project. Contractors will assess the quality, accuracy, and safety of AI-generated responses for subjects that pertain to government and non-profits. The project offers an opportunity to directly improve the reliability of AI systems in high-stakes contexts where inaccurate information carries serious risk.\n\nKey Responsibilities\n\nWrite realistic prompts that reflect how professionals and consumers seek domain-specific guidance\n\nEvaluate AI-generated responses for factual accuracy, regulatory or clinical correctness, and practical usefulness\n\nIdentify fabricated claims, incorrect references, or misleading reasoning across model outputs\n\nScore and rank multiple model responses using structured rubrics across dimensions\n\nProvide written justifications with specific evidence for each evaluation\n\nIdeal Qualifications\n\nProfessional experience applying domain expertise in a practitioner or advisory capacity\n\nFamiliarity with industry-specific standards, regulations, or clinical guidelines\n\nStrong written communication and critical reasoning skills\n\nMore About the Opportunity\n\nExpected commitment: ~20 hours/week\nApplication Process\n\nSubmit your resume to begin\n\nComplete the Model Response Evaluation assessment\n\nWe consider all qualified applicants without regard to legally protected characteristics and provide reasonable accommodations upon request.\n\n",
+      "resumeFilename": "tailored_resume_2026_04_02T07_0.pdf",
+      "coverLetterFilename": "tailored_cover_letter_2026_04_02T07_0.pdf",
+      "compatibilityScore": 42,
+      "analysis": {
+        "compatibilityScore": 42,
+        "compatibilityLabel": "Weak Match",
+        "industry": "AI / Government & Nonprofit Sector",
+        "roleType": "AI Model Evaluator / Domain Expert Contractor",
+        "seniorityLevel": "Mid-Level",
+        "presentSkills": [
+          "AI model training and evaluation (Handshake Generative AI Fellow)",
+          "Prompt engineering",
+          "Quality assessment of AI outputs",
+          "Written communication",
+          "NLP and LLM familiarity",
+          "Critical reasoning and structured analysis",
+          "Data analytics and business intelligence",
+          "Regulatory and legal compliance awareness (e-commerce context)",
+          "Machine learning fundamentals",
+          "Market research and data analysis"
+        ],
+        "missingSkills": [
+          {
+            "skill": "Government sector domain expertise",
+            "importance": "critical",
+            "reason": "The job explicitly targets government and nonprofit subject matter. This candidate has zero demonstrated experience in public policy, federal/state regulations, government programs, or nonprofit operations. Without this, they cannot reliably evaluate whether AI responses are factually or regulatory correct in this domain."
+          },
+          {
+            "skill": "Policy, regulatory, or legal framework knowledge in government/nonprofit context",
+            "importance": "critical",
+            "reason": "Evaluators must identify fabricated claims or incorrect regulatory information specific to government and nonprofit contexts. The candidate's only compliance exposure is vape e-commerce — a completely different regulatory environment with no transferable depth here."
+          },
+          {
+            "skill": "Structured rubric-based evaluation methodology",
+            "importance": "important",
+            "reason": "The role requires scoring and ranking AI responses across multiple dimensions using structured rubrics. While the candidate has done basic QA in AI training tasks, there is no evidence of formal, multi-dimensional evaluation framework experience."
+          },
+          {
+            "skill": "Professional advisory or practitioner experience in government/nonprofit",
+            "importance": "critical",
+            "reason": "The ideal qualifier is someone who has worked as a practitioner or advisor in the domain. This candidate's background is retail, hospitality, e-commerce, and general AI training — none of which qualifies as domain expertise for government or nonprofit evaluation."
+          },
+          {
+            "skill": "Technical fact-checking and citation verification skills",
+            "importance": "important",
+            "reason": "Evaluators must identify fabricated references and misleading reasoning in AI outputs. There is no demonstrated experience in academic, policy, or technical fact-checking beyond general business contexts."
+          },
+          {
+            "skill": "Familiarity with industry-specific standards for government programs",
+            "importance": "critical",
+            "reason": "Government and nonprofit contexts involve specific standards like OMB circulars, federal grant regulations, IRS nonprofit compliance, or agency-specific guidelines. The candidate shows no knowledge of any of these frameworks."
+          }
+        ],
+        "experienceGaps": [
+          "No government sector experience whatsoever — no public policy, federal agencies, municipal government, or nonprofit organizations in the entire work history",
+          "AI evaluation experience is narrow and task-level (image furniture removal, voice script recording) — not the sophisticated, multi-dimensional response evaluation this role demands",
+          "No experience writing domain-specific professional prompts that reflect how government or nonprofit practitioners actually seek guidance",
+          "No demonstrated ability to evaluate factual accuracy in high-stakes regulatory or policy contexts where errors carry serious consequences",
+          "Work history is heavily weighted toward retail, food service, and e-commerce — industries with zero domain overlap with this role's subject matter",
+          "The Handshake AI Fellow role, while relevant in spirit, is a junior crowdsourced gig with 100K+ contributors — it does not constitute the professional domain expertise this job is seeking",
+          "No nonprofit management, grant writing, compliance, or public administration background",
+          "Academic projects are business/tech focused with no public sector angle"
+        ],
+        "criticalVerdict": "This candidate has genuine enthusiasm for AI and some legitimate entry-level model evaluation experience, but they fundamentally lack the domain expertise this role is built around. Mercor and the AI lab need people who can evaluate government and nonprofit AI responses with the authority of a practitioner — think former policy analysts, nonprofit directors, grant compliance officers, or public administrators. A candidate whose deepest domain expertise is vape e-commerce SEO and lumber sales at Home Depot simply cannot reliably identify whether an AI is giving incorrect guidance on federal grant regulations, IRS 501(c)(3) compliance, or government program eligibility. The AI training skills are a partial positive, but they do not compensate for the complete absence of the core domain knowledge this role requires.",
+        "improvementPlan": [
+          "Build genuine government/nonprofit domain knowledge: Take structured courses on public administration, nonprofit management, or federal policy through platforms like Coursera (Johns Hopkins Nonprofit Management, Georgetown Government programs) or pursue a relevant certification",
+          "Volunteer or intern with a nonprofit organization to gain firsthand practitioner experience with nonprofit compliance, grant management, or program evaluation — this creates the domain credibility the role demands",
+          "Study key government and nonprofit regulatory frameworks: OMB Uniform Guidance for federal grants, IRS nonprofit compliance requirements, state-level nonprofit regulations, and common federal agency program structures",
+          "Develop formal AI evaluation skills beyond basic QA: Study RLHF methodologies, learn how professional red-teaming and model evaluation rubrics are constructed, and seek out more rigorous AI evaluation gigs on platforms like Scale AI or Surge AI",
+          "Build a portfolio of structured AI response evaluations with written justifications demonstrating the ability to assess factual accuracy, regulatory correctness, and reasoning quality in policy-adjacent contexts",
+          "Leverage the data analytics background to pursue government data or policy analysis projects — USASpending.gov, data.gov datasets — to build a bridge between existing technical skills and the government domain"
+        ],
+        "marketSkillsToLearn": [
+          "Public policy analysis and evaluation",
+          "Federal grant compliance and OMB Uniform Guidance",
+          "Nonprofit governance and IRS 501(c)(3) regulations",
+          "RLHF and AI alignment evaluation methodologies",
+          "Structured adversarial prompt writing for domain-specific AI testing",
+          "Government program eligibility and benefits administration knowledge",
+          "Technical writing for policy and regulatory contexts",
+          "Red-teaming and safety evaluation for AI systems"
+        ],
+        "summary": "This candidate is an energetic generalist with a mix of AI training exposure, technical skills, and diverse work experience, but they are the wrong type of candidate for this specific role. The position demands a domain expert in government and nonprofit contexts who can evaluate AI outputs for regulatory and policy accuracy — and this candidate has no meaningful exposure to either sector. The AI evaluation experience from Handshake is too superficial and task-level to substitute for the practitioner-level domain authority this role requires."
+      }
+    },
+    {
+      "id": "job_1775111233715",
+      "savedAt": "2026-04-02T06:27:13.715Z",
+      "company": "Unknown Company",
+      "role": "Annotating and categorizing diverse datasets using predefined taxonomies and rubrics to support the training and improvement of AI systems.",
+      "jobDescription": "Mercor is collaborating with a leading AI lab to contract detail-oriented generalists for a data annotation project. Contractors will support the development of AI systems by categorizing and labeling diverse datasets using predefined taxonomies. The project offers an opportunity to directly contribute to the accuracy, reliability, and performance of next-generation AI models.\n\nKey Responsibilities\nSynthesize information from large volumes of data\n\nAnnotate and categorize text, images, and other data according to detailed guidelines\n\nApply predefined rubrics and taxonomies to produce structured, high-quality outputs\n\nFlag inconsistencies, ambiguities, or errors in datasets\n\nContribute to the improvement of AI systems through consistent annotation work\n\nIdeal Qualifications\nAbility to synthesize complex or high-volume information into structured formats\n\nStrong critical reasoning, reading comprehension, and written communication skills\n\nPrior experience applying rubrics, taxonomies, or standardized guidelines (preferred but not required)\n\nA college degree and experience with data annotation projects\n\nMore About the Opportunity\nExpected commitment: ~20 hours/week\nApplication Process\nSubmit your resume to begin\n\nComplete a Training Assessment\n\nWe consider all qualified applicants without regard to legally protected characteristics and provide reasonable accommodations upon request.\n\nContract and Payment Terms\nYou will be engaged as an independent contractor.\nThis is a fully remote role that can be completed on your own schedule.\nProjects can be extended, shortened, or concluded early depending on needs and performance.\nYour work at Mercor will not involve access to confidential or proprietary information from any employer, client, or institution.\nPayments are weekly on Stripe or Wise based on services rendered.\nPlease note: We are unable to support H1-B or STEM OPT candidates at this time.\nAbout Mercor\nMercor partners with leading AI labs and enterprises to train frontier models using human expertise. You will work on projects that focus on training and enhancing AI systems. You will be paid competitively, collaborate with leading researchers, and help shape the next generation of AI systems in your area of expertise.\n\nEarn up to $120 by referring\nShare the referral link below, and earn up to $120 for each successful referral through this unique link. There's no limit on how many people you can refer. Restrictions may apply. Learn more",
+      "resumeFilename": "tailored_resume_2026_04_02T06_2.pdf",
+      "coverLetterFilename": "tailored_cover_letter_2026_04_02T06_2.pdf",
+      "compatibilityScore": 82,
+      "analysis": {
+        "compatibilityScore": 82,
+        "compatibilityLabel": "Good Match",
+        "industry": "AI / Data Annotation",
+        "roleType": "Data Annotation Contractor",
+        "seniorityLevel": "Entry to Mid-Level",
+        "presentSkills": [
+          "AI model training (direct Handshake Generative AI Fellow experience)",
+          "Quality assessment of AI outputs",
+          "Prompt engineering",
+          "Reading comprehension and written communication",
+          "Attention to detail (100% accuracy script recording requirement)",
+          "Applying structured rubrics and evaluation criteria",
+          "Synthesizing complex information",
+          "Critical reasoning",
+          "NLP and LLM familiarity",
+          "Data analytics and data manipulation",
+          "Python, R, SQL for data work",
+          "College-level education (George Mason University coursework evident)",
+          "Remote work capability",
+          "Independent contractor mindset (founded own business)",
+          "Multimodal AI evaluation (voice and vision domains)",
+          "Adaptability across diverse tasks and domains",
+          "Google Data Analytics Specialization",
+          "Machine learning foundations"
+        ],
+        "missingSkills": [
+          {
+            "skill": "Formal data annotation platform experience (Labelbox, Scale AI, CVAT, Prodigy)",
+            "importance": "important",
+            "reason": "Most professional annotation projects use dedicated tooling. No evidence the candidate has used industry-standard annotation platforms beyond Handshake's internal system."
+          },
+          {
+            "skill": "Taxonomy and ontology application at scale",
+            "importance": "important",
+            "reason": "The JD specifically calls out applying predefined taxonomies and rubrics across large datasets. Candidate's experience is narrow — two task types at Handshake — not broad taxonomy-based categorization work."
+          },
+          {
+            "skill": "Image and text multi-class labeling experience",
+            "importance": "important",
+            "reason": "Candidate's computer vision work was limited to furniture removal selection tasks. Structured multi-class labeling of text and images per detailed annotation guidelines is not explicitly demonstrated."
+          },
+          {
+            "skill": "Inconsistency and error flagging in datasets",
+            "importance": "nice-to-have",
+            "reason": "The JD calls out flagging ambiguities and errors in datasets as a core responsibility. No documented experience in dataset QA or audit workflows beyond receiving QA grades, not performing them."
+          },
+          {
+            "skill": "High-volume throughput annotation work",
+            "importance": "important",
+            "reason": "Mercor projects require sustained ~20hr/week annotation output. Candidate's AI work at Handshake appears task-based and episodic rather than high-volume sustained annotation pipelines."
+          }
+        ],
+        "experienceGaps": [
+          "Handshake AI Fellow role is the only directly relevant experience, and the written descriptions suggest relatively low task volume and limited breadth of annotation types — two task types described in detail, both fairly narrow in scope",
+          "No demonstrated experience working with predefined annotation guidelines or style guides from a client lab — the JD implies strict adherence to external rubrics, not self-directed evaluation",
+          "Written communication quality in the candidate's own profile narrative is inconsistent — numerous grammatical errors, informal tone, and run-on sentences could raise red flags about written output quality for annotation work requiring precision",
+          "No explicit experience annotating text datasets, which is a core component of the JD alongside images",
+          "College degree is implied by coursework references but not confirmed as completed — JD states 'a college degree' as a qualification",
+          "No prior work with leading AI labs directly (Anthropic, OpenAI, Google DeepMind, etc.) outside of tool usage"
+        ],
+        "criticalVerdict": "This candidate is a legitimate contender for this role, primarily because of the direct Handshake Generative AI Fellow experience — that is a real, relevant credential that most applicants will not have. However, the scope of that AI work appears narrow and low-volume, and the candidate's own written communication in their profile shows concerning inconsistencies in grammar, clarity, and precision — which is a yellow flag for a role where written accuracy and attention to detail are the entire job. The technical skills (Python, ML, NLP) are overkill for this role and won't be evaluated, but the annotation-specific depth is thin. This candidate can clear the Training Assessment if they take it seriously and demonstrate the precision their profile currently undersells.",
+        "improvementPlan": [
+          "Clean up all written materials immediately — the grammar and informal writing in your profile descriptions will hurt you if any human reviewer sees them; annotation work demands precision and your own self-presentation contradicts that",
+          "Document your Handshake AI work in structured, quantified terms: how many tasks completed, what accuracy rates were achieved, what feedback you received from QA reviewers — specificity will differentiate you",
+          "Get hands-on with a public annotation platform such as Label Studio or Prodigy to demonstrate familiarity with industry-standard tooling before the Training Assessment",
+          "Practice applying structured rubrics to text classification tasks — find open annotation exercises on platforms like Surge AI, Toloka, or Appen to build breadth beyond the two task types you've done",
+          "Confirm and explicitly state your college degree status — if completed, list it clearly; the JD requires it and ambiguity is a disqualifier",
+          "Prepare for the Training Assessment by reviewing annotation best practices: inter-annotator agreement concepts, edge case handling, and how to document ambiguity — these are likely to be tested"
+        ],
+        "marketSkillsToLearn": [
+          "Labelbox and Scale AI platform proficiency",
+          "RLHF (Reinforcement Learning from Human Feedback) annotation workflows",
+          "Text classification and named entity recognition labeling",
+          "Inter-annotator agreement and Cohen's Kappa understanding",
+          "Bounding box and segmentation annotation for computer vision",
+          "Annotation quality assurance and auditing methodologies",
+          "Instruction-following evaluation for LLM outputs",
+          "Structured data labeling with JSON and XML schema compliance"
+        ],
+        "summary": "This candidate has a genuine edge over most applicants due to direct hands-on AI model training experience at Handshake, including prompt engineering and multimodal output evaluation. However, the annotation experience is narrow in task variety and the candidate's own written communication quality raises legitimate concerns about the precision required for sustained annotation work. With targeted preparation — especially cleaning up written output quality and broadening annotation tooling exposure — this candidate has a solid shot at passing the Training Assessment and landing the contract."
+      }
+    },
+    {
       "id": "job_1774630837346",
       "savedAt": "2026-03-27T17:00:37.346Z",
       "company": "Unknown Company",

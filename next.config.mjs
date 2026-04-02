@@ -30,6 +30,8 @@ const nextConfig = {
         './src/templates/**',
         './src/data/**',
       ],
+      // Include portfolio data for the homepage server component
+      '/': ['./src/data/**'],
     },
   },
   webpack: (config, { dev, isServer }) => {

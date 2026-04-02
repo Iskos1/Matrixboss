@@ -1,0 +1,1145 @@
+# AI Portfolio & Resume Tailoring Engine — Complete Technical Breakdown
+
+**Built by Jawad Iskandar**  
+**Stack:** Next.js 14 · TypeScript 5 · React 18 · Anthropic Claude API · XeLaTeX · Tailwind CSS  
+**Purpose:** A fully self-built, AI-powered personal portfolio platform with an autonomous resume tailoring engine, streaming chat assistant, job tracker, skill gap analyzer, interview prep coach, coursework analyzer, AI-curated news feed, and a complete content management system.
+
+---
+
+## Table of Contents
+
+1. [The Story — Why I Built This](#1-the-story--why-i-built-this)
+2. [What The Platform Does](#2-what-the-platform-does)
+3. [System Architecture Overview](#3-system-architecture-overview)
+4. [Technology Stack](#4-technology-stack)
+5. [The AI Resume Tailoring Engine — Deep Dive](#5-the-ai-resume-tailoring-engine--deep-dive)
+6. [The Centralized AI Client](#6-the-centralized-ai-client)
+7. [LaTeX PDF Compilation System](#7-the-latex-pdf-compilation-system)
+8. [Data Architecture](#8-data-architecture)
+9. [The Admin Content Management System](#9-the-admin-content-management-system)
+10. [Streaming Chat Assistant](#10-streaming-chat-assistant)
+11. [Job Tracker & Skill Gap Analyzer](#11-job-tracker--skill-gap-analyzer)
+12. [Interview Prep Coach](#12-interview-prep-coach)
+13. [Coursework Analyzer](#13-coursework-analyzer)
+14. [AI-Curated News Feed](#14-ai-curated-news-feed)
+15. [Skill Builder](#15-skill-builder)
+16. [Project Enhancer](#16-project-enhancer)
+17. [API Surface — All 18 Endpoints](#17-api-surface--all-18-endpoints)
+18. [Service Layer & Design Patterns](#18-service-layer--design-patterns)
+19. [Security Architecture](#19-security-architecture)
+20. [File & Directory Structure](#20-file--directory-structure)
+21. [What I Learned Building This](#21-what-i-learned-building-this)
+
+---
+
+## 1. The Story — Why I Built This
+
+Job applications are broken for students and recent graduates. You spend hours tailoring a resume for one company, then another hour writing a cover letter, and by the time you apply you are not even sure if your resume will make it past the ATS (Applicant Tracking System) filter that automatically screens out resumes before a human ever sees them.
+
+I decided to solve this problem for myself by building a system that does the entire job application process automatically and intelligently. The goal was clear: paste in a job description, press one button, and get back a professionally formatted, ATS-optimized, job-specific PDF resume and a personalized cover letter — both grounded in my real experience and tailored to the exact language and values of the company I am applying to.
+
+That goal grew into this platform. What started as a resume tool became a full AI-powered portfolio and career management system. Along the way I built a streaming chat assistant, a job tracker, a skill gap analyzer, an interview prep coach, a coursework analyzer, and an AI-curated news feed — each one solving a specific problem in the job search process.
+
+Every line of code in this system was written by me. There are no templates, no starter kits, no pre-built admin panels. This is an original, full-stack application engineered from scratch.
+
+---
+
+## 2. What The Platform Does
+
+The platform has nine distinct AI-powered features and one content management system:
+
+| Feature | What It Does |
+|---|---|
+| **Resume Tailoring Engine** | Autonomous 6-step AI pipeline that researches the company, analyzes the JD, rewrites your resume, scores it, refines gaps, and compiles a PDF |
+| **Cover Letter Generator** | Generates a complete, personalized cover letter grounded in company research and tailored resume content |
+| **Streaming Chat Assistant** | Real-time AI chatbot that knows your entire portfolio and can navigate the site on command |
+| **Job Tracker** | Save, track, and manage job applications with compatibility scores and application status |
+| **Skill Gap Analyzer** | Compares your portfolio against any JD and gives a brutally honest 0–100 score with a specific improvement plan |
+| **Interview Prep Coach** | Generates STAR-format answers to application and interview questions tailored to the specific job and company |
+| **Coursework Analyzer** | Upload university PDFs or images and AI converts them into structured portfolio project entries |
+| **AI News Feed** | Fetches Reddit tech news, scores each article for relevance to your profile, and surfaces the top 9 |
+| **Skill Builder** | Structured multi-path learning system with project roadmaps, step tracking, and daily streak |
+| **Admin CMS** | Password-protected content management system for managing every piece of portfolio content |
+
+---
+
+## 3. System Architecture Overview
+
+The platform is built on **Next.js 14 with the App Router**. This means the same codebase handles both the frontend (React components) and the backend (API routes on Node.js). There is no separate backend server.
+
+```
+Browser (React / Tailwind CSS)
+        │
+        │  HTTP requests
+        ▼
+Next.js 14 App Router (Node.js runtime)
+        │
+        ├── /app/page.tsx              ← Public portfolio homepage
+        ├── /app/admin/page.tsx        ← Admin CMS (password-protected)
+        ├── /app/skill-builder/page.tsx ← Skill Builder app
+        ├── /app/newsletter/page.tsx   ← AI News Feed
+        │
+        └── /app/api/                  ← All backend API routes
+                ├── resume/tailor      ← 6-step AI pipeline
+                ├── resume/compile     ← LaTeX → PDF
+                ├── chat               ← Streaming AI chat
+                ├── jobs/              ← Job tracker + analysis
+                ├── portfolio/         ← CMS read/write
+                ├── projects/          ← Project enhancement
+                ├── coursework/        ← Document analysis
+                ├── news/              ← Reddit + AI curation
+                └── upload/            ← File handling
+                        │
+                        ▼
+              src/lib/ai/anthropic.ts  ← Centralized AI client
+                        │
+                        ▼
+              Anthropic Claude claude-sonnet-4-5 API
+```
+
+**Key architectural decision:** The Anthropic API key lives only on the server. The browser never touches it. All AI calls go through Next.js API routes, which act as a secure proxy. This is enforced at the code level — a `isStaticDeployment()` check blocks all AI features if the app is running as a static export (e.g., on GitHub Pages) where there is no server to proxy through.
+
+---
+
+## 4. Technology Stack
+
+### Frontend
+| Technology | Version | Purpose |
+|---|---|---|
+| Next.js | 14.2.35 | Framework (App Router, API routes, SSR) |
+| React | 18 | UI component library |
+| TypeScript | 5 | Static typing throughout |
+| Tailwind CSS | 3.4.1 | Utility-first CSS styling |
+| Lucide-React | 0.563.0 | Icon library (200+ icons used) |
+
+### AI & Processing
+| Technology | Version | Purpose |
+|---|---|---|
+| @anthropic-ai/sdk | 0.78.0 | Anthropic Claude API client |
+| pdf-parse | 2.4.5 | Extract text from PDF files |
+| @mozilla/readability | 0.6.0 | Extract article content from web pages |
+| jsdom | 28.1.0 | Parse HTML in Node.js (for news reader) |
+
+### PDF Generation
+| Technology | Purpose |
+|---|---|
+| XeLaTeX (TeX Live) | Compiles LaTeX source code into professional PDF documents |
+| IBM Plex Sans | OpenType font used in the resume template |
+
+### Data Storage
+| Method | What is Stored |
+|---|---|
+| `src/data/portfolio.json` | All portfolio content (projects, experience, skills, certifications) |
+| `src/data/resume_data.json` | Personal info, education, pre-written metric bullets |
+| `src/data/job-tracker.json` | Job application records (auto-created on first save) |
+| `generated/` directory | Timestamped LaTeX and PDF output files |
+| `localStorage` (browser) | Skill Builder progress, streaks, session time |
+
+---
+
+## 5. The AI Resume Tailoring Engine — Deep Dive
+
+This is the most technically complex part of the platform. It runs when you call `POST /api/resume/tailor` and has a maximum duration of **180 seconds** because it makes up to 6 sequential Claude API calls plus two LaTeX compilations.
+
+### The Data Merge — Before Any AI Runs
+
+Before the pipeline starts, `ResumeService.loadResumeData()` builds the complete candidate data object by merging two JSON files:
+
+```
+portfolio.json                    resume_data.json
+    │                                   │
+    ├── skills (grouped by category)    ├── personal_info (name, email, phone)
+    ├── projects (with technicalDetails)├── education
+    ├── experience (flattened roles)    └── pre-written bullets (with real metrics)
+    ├── certifications                          │
+    └── leadership                             merged into projects & experience
+                                               by title/company keyword matching
+```
+
+The result is a `ResumeData` object where every project and every job has:
+- The full `description` paragraph
+- The `technicalDetails` narrative (the granular how-it-was-built detail)
+- The `key_features` list
+- The `tags` array (skills used)
+- `pre_written_bullets` from `resume_data.json` (bullets with real metrics that the AI references)
+
+This merged object is what the AI receives as its "source of truth" for every bullet it writes.
+
+---
+
+### Step 0 — Company & Role Research (`researchCompanyAndRole`)
+
+**Input:** Company name, role name, full job description text  
+**Output:** `CompanyResearch` JSON object  
+**Fatal if fails:** No — pipeline continues without research
+
+This step asks Claude to build a detailed intelligence profile about the company and role. The prompt positions Claude as a professional career researcher and asks it to synthesize its training knowledge about the company with specific signals from the job description.
+
+The output is a structured JSON with these fields:
+
+```typescript
+interface CompanyResearch {
+  company_name: string;
+  industry: string;
+  company_overview: string;          // 2–3 sentence market position summary
+  mission_and_values: string[];      // Core company values
+  culture_signals: string[];         // JD phrases that signal culture
+  role_context: string;              // What this role typically does and why it matters
+  ideal_candidate_profile: string;   // Background, mindset, work style they want
+  language_to_mirror: string[];      // JD phrases — understood by impression, not copied verbatim
+  accomplishments_to_emphasize: string[]; // What types of achievements resonate most
+  keywords_to_include: string[];     // Critical ATS filter keywords
+  tone: string;                      // formal | professional | startup | technical | business
+}
+```
+
+The `language_to_mirror` field is the most important one. The prompt explicitly instructs Claude: *do not copy these phrases verbatim into bullets — instead, understand what quality or value each phrase signals, then demonstrate that quality through the candidate's own authentic experience.* This is what makes the tailoring feel natural rather than a copy-paste of JD language.
+
+---
+
+### Step 1 — Job Description Analysis (`analyzeJobDescription`)
+
+**Input:** Full job description text  
+**Output:** `JobAnalysis` JSON object  
+**Fatal if fails:** Yes — pipeline aborts
+
+This step does structured extraction from the JD:
+
+```typescript
+interface JobAnalysis {
+  technical_skills: string[];   // e.g. ["Python", "SQL", "Tableau"]
+  soft_skills: string[];        // e.g. ["communication", "cross-functional collaboration"]
+  experience_areas: string[];   // e.g. ["data analysis", "cloud", "consulting"]
+  ats_keywords: string[];       // Critical filter terms
+  primary_focus: string;        // 1 sentence: what this role is fundamentally about
+  seniority_level: string;      // entry | mid | senior
+}
+```
+
+This output feeds into every subsequent step. The ATS keywords are checked in the verdict step; the primary focus shapes bullet selection in the tailoring step; the seniority level enforces language rules.
+
+---
+
+### Step 2 — Content Tailoring (`tailorContent`)
+
+**Input:** `JobAnalysis` + `CompanyResearch` + full merged `ResumeData`  
+**Output:** `TailoredContent` JSON object  
+**Fatal if fails:** Yes
+
+This is the largest and most complex prompt in the system. The full prompt sent to Claude is approximately 3,000 tokens before any candidate data is attached. It contains:
+
+1. **Company & Role Intelligence block** — the full `CompanyResearch` output formatted as clear sections with explicit instructions on how to use each field
+2. **Job Analysis block** — the `JobAnalysis` output
+3. **Candidate Resume Data block** — the full merged `ResumeData` object as JSON (this is the largest section, often 2,000+ tokens)
+4. **Data structure guide** — explains what `technicalDetails`, `pre_written_bullets`, and `tags` mean and how to use each one
+5. **Resume template structure** — shows the exact LaTeX layout the AI is generating for, so it understands the visual constraints
+6. **Hard budget rules:**
+   - Maximum 3 projects selected
+   - Maximum 2 work experience entries selected
+   - Maximum 3 bullets per included entry
+   - Maximum 12 total bullets across all entries
+   - Maximum 18 words per bullet
+7. **Entry-level language rules** — lists forbidden senior vocabulary (`spearheaded`, `orchestrated`, `architected`, `drove strategic vision`, etc.) and provides correct alternatives
+8. **Skill validation rules** — selected skills must be demonstrated in at least one bullet of an entry that has that skill in its `tags`
+
+The output `TailoredContent` contains:
+
+```typescript
+interface TailoredContent {
+  tailored_professional_summary: string;  // Used for cover letter only (not on resume)
+  selected_skills: Record<string, string[]>; // {category: [skill, skill]}
+  selected_certifications: Array<{ name: string; year: string }>;
+  selected_projects: Array<{
+    id: string;
+    title: string;
+    role?: string;        // Optional subtitle (e.g. "Product Engineer")
+    date: string;
+    bullets: Array<{
+      original_id: string;
+      tailored_text: string;
+      relevance_score: number;  // 0–100
+    }>;
+    include: boolean;
+  }>;
+  selected_work_experience: Array<{
+    id: string;
+    company: string;
+    location: string;
+    title: string;
+    date: string;
+    bullets: Array<{
+      original_id: string;
+      tailored_text: string;
+      relevance_score: number;
+    }>;
+    include: boolean;
+  }>;
+  section_order: ['projects', 'work_experience'] | ['work_experience', 'projects'];
+  tailoring_summary: string;  // AI's explanation of its decisions
+}
+```
+
+The `section_order` field is a critical UX decision the AI makes: tech/engineering/data/product roles get `["projects", "work_experience"]` (projects first); business/consulting/sales/ops roles get `["work_experience", "projects"]` (experience first). This single field changes the entire structure of the output PDF.
+
+---
+
+### Step 2.5 — Coherence Pass (`ensureCoherence`)
+
+**Input:** `TailoredContent` draft + `JobAnalysis` + `CompanyResearch`  
+**Output:** Refined `TailoredContent` + `CoherenceReport`  
+**Fatal if fails:** No — continues with unrefined draft
+
+After the initial tailoring, this pass evaluates whether the bullets work together as a cohesive story, not just as individually optimized points. It checks four things:
+
+1. **Within-entry story** — Do the bullets in each project/job form a logical progression? (e.g., "Built X → Tested Y → Deployed Z" reads better than three disconnected facts)
+2. **Cross-entry redundancy** — If Project A and Experience B both say "Used Python for data analysis," one gets reframed to show a different dimension (e.g., "Built Python pipelines to process 10K+ records")
+3. **Cross-entry theme reinforcement** — Key JD themes should appear across multiple entries, not buried in one place. If "collaboration" is important, multiple bullets across different entries should demonstrate it
+4. **Skill-to-bullet linkage** — Every skill in `selected_skills` must be visibly demonstrated in at least one bullet. If a skill cannot be demonstrated, it gets removed from `selected_skills`
+
+The `CoherenceReport` documents:
+```typescript
+interface CoherenceReport {
+  redundancies_resolved: string[];   // What duplicate bullets were reframed
+  stories_built: string[];           // Which entries got logical reordering
+  themes_reinforced: string[];       // Which JD themes now appear in multiple places
+  summary: string;
+}
+```
+
+---
+
+### Step 3 — Compatibility Verdict (`runCompatibilityVerdict`)
+
+**Input:** Refined `TailoredContent` + `JobAnalysis` + `CompanyResearch`  
+**Output:** `TailoringVerdict`  
+**Fatal if fails:** No — skips refinement, goes straight to LaTeX
+
+This is the quality gate. Claude acts as a "senior resume QA specialist" reviewing the draft:
+
+```typescript
+interface TailoringVerdict {
+  compatibility_score: number;          // 0–100
+  compatibility_label: 'Excellent' | 'Strong' | 'Good' | 'Needs Work' | 'Poor';
+  needs_refinement: boolean;            // true if score < 80 OR any critical gap
+  strengths: string[];                  // What to keep — do not change these
+  critical_gaps: Array<{
+    area: 'skills' | 'projects' | 'experience' | 'bullets' | 'tone' | 'keywords';
+    issue: string;         // Specific problem cited (names actual bullets/entries)
+    suggestion: string;    // Exactly what to change
+    priority: 'critical' | 'important' | 'minor';
+  }>;
+  refinement_instructions: string[];    // Directive sentences for the refiner
+  summary: string;
+}
+```
+
+**Scoring scale:**
+- 90–100: Excellent — hire immediately, no changes needed
+- 75–89: Strong — minor tweaks would help
+- 60–74: Good — 1–2 meaningful gaps
+- 45–59: Needs Work — notable gaps in coverage or phrasing
+- 0–44: Poor — does not adequately address the role
+
+`needs_refinement` is `true` if the score is below 80 OR if any gap has `priority: "critical"`. This triggers Step 4.
+
+---
+
+### Step 4 — Targeted Refinement (`refineTailoredContent`)
+
+**Input:** `TailoredContent` + `TailoringVerdict` + `JobAnalysis` + `CompanyResearch`  
+**Output:** Refined `TailoredContent`  
+**Fatal if fails:** No — uses pre-refinement draft  
+**Only runs if:** `verdict.needs_refinement === true`
+
+This is a surgical fix pass, not a re-run of the full tailoring. The prompt explicitly says: *"Fix ONLY what the verdict flagged. Leave everything else unchanged."*
+
+Hard constraints that cannot be violated in this step:
+- No 4th bullet added to any entry (bullet count per entry must not increase)
+- No `include: false` entry changed to `include: true` (no new entries added)
+- No skills added that aren't already in the portfolio
+- Entry-level language enforced
+- ≤18 words per bullet
+- Same `section_order`, same selected entries, same structure
+
+The `refinement_instructions` from the verdict (e.g., "Rewrite the second Apple bullet to mention data analysis instead of general support") are passed directly into this prompt as a numbered list.
+
+---
+
+### Step 5 — LaTeX Generation (`generateLatexResume`)
+
+**Zero AI calls. Fully deterministic.**
+
+This TypeScript function converts the final `TailoredContent` JSON into a LaTeX document string. It runs in milliseconds.
+
+**Template preamble:** The function reads from `src/templates/resume_template.tex` up to and including `\begin{document}`. This means any edits the admin makes to the template (font size, margins, spacing, new packages) are automatically reflected in every AI-generated resume without touching any code. A hardcoded fallback preamble exists if the file cannot be read.
+
+**Section ordering:** The `section_order` field from the tailored content drives which section appears first:
+```typescript
+for (const section of sectionOrder) {
+  latex += section === 'projects' ? renderProjectWork() : renderWorkExperience();
+}
+```
+
+**Project entry format:**
+```latex
+\textbf{Project Title} \hfill Date \\
+\textit{Role}          % Only if a role field exists
+\begin{itemize}
+  \item Bullet one
+  \item Bullet two
+\end{itemize}
+```
+
+**Work experience format:**
+```latex
+\textbf{Company Name} \hfill Location \\
+\textit{Job Title} \hfill Date
+\begin{itemize}
+  \item Bullet one
+\end{itemize}
+```
+
+**Fixed layout (always in this order):**
+1. Header (name, email, phone, GitHub, LinkedIn)
+2. Skills (one `\item` per category: `\textbf{Category:} skill1, skill2`)
+3. Section 1 (controlled by `section_order[0]`)
+4. Section 2 (controlled by `section_order[1]`)
+5. Certifications (all on one line: `Name (Year) | Name (Year)`)
+6. Education (always last)
+
+**LaTeX escaping:** Every user-facing string passes through `escapeLatex()` which handles `& % $ # _ { } ~ ^` and backslashes:
+```typescript
+const replacements: Record<string, string> = {
+  '&': '\\&',   '%': '\\%',   '$': '\\$',
+  '#': '\\#',   '_': '\\_',   '{': '\\{',
+  '}': '\\}',   '~': '\\textasciitilde{}',
+  '^': '\\textasciicircum{}',
+};
+```
+
+---
+
+### Step 6 — Cover Letter Generation
+
+**AI call + deterministic LaTeX wrapper**
+
+`generateCoverLetter()` sends the following to Claude:
+- Today's date (formatted as "March 16, 2026")
+- Full `CompanyResearch` intel
+- First 1,200 characters of the job description
+- Tailored professional summary
+- Top skills (formatted as "Category: skill1, skill2 | Category: skill3")
+- Top 2 bullets from each included project and experience entry
+
+The prompt enforces a strict structure:
+1. Date (today's full date)
+2. Contact block (Hiring Manager name/title/company/address)
+3. Salutation (`Dear Hiring Manager:` or name if found in JD)
+4. Opening paragraph (state position, three reasons you are a fit)
+5. Middle paragraph(s) (why this company specifically, one or two real accomplishments with specifics)
+6. Closing paragraph (restate enthusiasm, thank reader, request discussion)
+7. Sign-off (`Sincerely,` + candidate name)
+
+`generateLatexCoverLetter()` wraps the letter body in a LaTeX document with IBM Plex Sans font, `parskip` paragraph spacing (no indents, 10pt between paragraphs), and a matching candidate header.
+
+---
+
+### Pipeline Output
+
+Both the resume and cover letter `.tex` files are saved to the `generated/` directory with a timestamp-based filename. Then both are compiled via `xelatex`. A JSON sidecar file is also saved containing the complete pipeline metadata:
+
+```json
+{
+  "company_research": { ... },
+  "job_analysis": { ... },
+  "coherence_report": { ... },
+  "tailoring_verdict": { ... },
+  "refinement_applied": true,
+  "tailored_content": { ... },
+  "timestamp": "2026-03-16T..."
+}
+```
+
+This sidecar is what powers the Job Tracker's stored analysis display in the admin dashboard.
+
+---
+
+## 6. The Centralized AI Client
+
+**File:** `src/lib/ai/anthropic.ts`
+
+This is the single source of truth for all AI operations. Every service and API route calls one of three functions from this file. No AI calls are made anywhere else in the codebase.
+
+### `generate()` — Standard Non-Streaming Call
+
+```
+Attempt 1
+    │── success → return { text, model }
+    │── auth error → throw AIAuthError (no retry)
+    │── quota error → throw AIQuotaError (no retry)
+    │── retryable error → wait, try again
+    │
+Attempt 2 (after delay: 3s * 2^0 ± 500ms jitter = ~3–3.5s)
+Attempt 3 (after delay: 3s * 2^1 ± 500ms = ~5.5–6.5s)
+Attempt 4 (after delay: 3s * 2^2 ± 500ms = ~11.5–12.5s)
+Attempt 5 (after delay: 3s * 2^3 ± 500ms = ~23.5–24.5s)
+Attempt 6 (after delay: capped at 60s)
+    │── all failed → throw AIModelError
+```
+
+Per-request timeout is 120 seconds, implemented as a `Promise.race()` between the API call and a `setTimeout` reject.
+
+**JSON mode:** When `jsonMode: true` is passed, the prompt is augmented with: `"IMPORTANT: Return ONLY valid JSON. No markdown, no explanation, no code fences."` The response then passes through `cleanJsonResponse()` and `JSON.parse()`.
+
+**Multimodal support:** Images are passed as `inlineParts` in Gemini-style format (`{ inlineData: { data: base64, mimeType } }`) and auto-converted to Anthropic's content block format before the API call.
+
+### `generateStream()` — Streaming for Chat
+
+This is an `async function*` (async generator). It uses Anthropic's `messages.stream()` API and yields each `text_delta` chunk as it arrives. The chat API route converts this into a `ReadableStream` that the browser reads in real time.
+
+```typescript
+const readableStream = new ReadableStream({
+  async start(controller) {
+    const gen = generateStream(promptText, { ... });
+    for await (const chunk of gen) {
+      controller.enqueue(encoder.encode(chunk));
+    }
+    controller.close();
+  }
+});
+```
+
+The browser receives text tokens as they stream in, which is what makes the chat feel instant.
+
+### Error Classification
+
+```typescript
+isAuthError():    HTTP 401/403 or "authentication"/"api key" in message → AIAuthError
+isQuotaError():   HTTP 429 or "rate limit"/"quota"/"credit balance"     → AIQuotaError
+isRetryableError(): HTTP 5xx/529/503/502/500 or "overloaded"/"fetch failed"/"network" → retry
+```
+
+---
+
+## 7. The LaTeX PDF Compilation System
+
+**File:** `src/lib/utils/latex-utils.ts`
+
+The `compileLatex()` function shells out to the system `xelatex` binary:
+
+```bash
+cd "/path/to/generated" && xelatex -interaction=nonstopmode -output-directory="." "resume.tex"
+```
+
+**Critical edge case:** XeLaTeX exits with code **1** for warnings (overfull hbox, missing font glyphs, etc.) even when the PDF is successfully written. If `execSync` throws because of exit code 1, the function checks whether the PDF file actually exists before declaring failure. This prevents a false error on every successful compilation that happens to have a minor warning.
+
+```typescript
+} catch (execError: any) {
+  // Check if PDF was actually written despite non-zero exit
+  if (fileExists(pdfPath)) {
+    return { success: true, pdfPath, pdfFilename, size };
+  }
+  return { success: false, error: execError.message };
+}
+```
+
+After successful compilation, `cleanupLatexArtifacts()` removes the `.aux`, `.log`, and `.out` files to keep the generated directory clean.
+
+---
+
+## 8. Data Architecture
+
+### `portfolio.json` — Admin Source of Truth
+
+Everything the admin manages flows through this file. The `ResumeService` reads it on startup and re-reads it after any admin save.
+
+```json
+{
+  "profile": { "name", "role", "tagline", "bio", "email", "location", "availability" },
+  "skills": [{ "id", "name", "category" }],
+  "experience": [{
+    "id", "company", "logo", "website", "location",
+    "positions": [{ "role", "period", "description", "technicalDetails", "tags" }]
+  }],
+  "projects": [{
+    "id", "title", "description", "technicalDetails", "key_features",
+    "tags", "link", "featured", "images", "hasLiveDemo", "attachments"
+  }],
+  "certifications": [{ "id", "name", "issuer", "year" }],
+  "leadership": [{ "id", "organization", "role", "period", "location", "bullets" }],
+  "socialLinks": [...],
+  "navItems": [...],
+  "siteMetadata": { "title", "description" }
+}
+```
+
+### `resume_data.json` — Personal Info + Metric Bullets
+
+Stores the information that never changes (personal contact info, education) plus pre-written bullet points that contain real, verified metrics. These bullets are merged into the AI's source data by keyword-matching project titles and company names.
+
+### `job-tracker.json` — Application Records
+
+Auto-created on first save. Each record:
+```json
+{
+  "id": "job_1710000000000",
+  "savedAt": "2026-03-16T...",
+  "company": "Google",
+  "role": "Data Analyst",
+  "jobDescription": "...",
+  "resumeFilename": "tailored_resume_2026_03_16.pdf",
+  "coverLetterFilename": "tailored_cover_letter_2026_03_16.pdf",
+  "compatibilityScore": 82,
+  "analysis": { ... },
+  "applicationStatus": "Applied",
+  "notes": "...",
+  "qaHistory": [...]
+}
+```
+
+### Data Merge Logic
+
+`ResumeService.loadResumeData()` performs five merge operations:
+
+1. **Skills** — Groups `portfolio.json` skills by `category` field into a `Record<string, string[]>` object
+2. **Projects** — Maps every `portfolio.json` project and attaches `pre_written_bullets` from `resume_data.json` by matching title keywords (word length > 4, case-insensitive)
+3. **Experience** — Flattens the multi-position experience format. One company with two roles becomes two separate entries, each with its own `description`, `technicalDetails`, `tags`, and matched `pre_written_bullets`
+4. **Certifications** — Direct copy from `portfolio.json`
+5. **Leadership** — Direct copy from `portfolio.json`, filtered to non-empty bullets
+
+---
+
+## 9. The Admin Content Management System
+
+**File:** `src/app/admin/page.tsx` (5,700+ lines)
+
+The admin dashboard is a fully client-side React application protected by password authentication. It uses React `useState` for all state management — no Redux, no Zustand.
+
+### Authentication
+
+Password comparison happens in client-side state. The password is checked against a hardcoded value on the client. On success, `setAuthenticated(true)` unlocks the full dashboard.
+
+### Navigation
+
+**Desktop:** Vertical sidebar with tab buttons  
+**Mobile:** Bottom navigation bar with a slide-in drawer (CSS `slideInFromLeft` animation, `backdrop-filter: blur(20px)`)
+
+### Tabs
+
+| Tab | What It Manages |
+|---|---|
+| Profile | Name, role, tagline, bio, location, availability |
+| Skills | Add/edit/delete skills with category assignment |
+| Experience | Company entries with multiple positions, descriptions, technicalDetails, tags |
+| Projects | Full project entries with images, links, technicalDetails, key_features |
+| Certifications | Name, issuer, year |
+| Leadership | Organization, role, period, bullets |
+| Resume | LaTeX template editor + AI tailoring interface |
+| Job Tracker | All saved applications with scores, status, interview prep |
+| Coursework | Upload PDFs/images → AI converts to portfolio entry |
+| Settings | API key validation, data export |
+
+### Resume Tab Features
+
+The Resume tab is the most complex section of the admin:
+
+1. **LaTeX Template Editor** — A `<textarea>` showing the raw content of `resume_template.tex`. Changes compile live via `POST /api/resume/compile` and the resulting PDF is displayed in an `<iframe>`.
+
+2. **AI Tailoring Interface:**
+   - Company name field
+   - Role name field
+   - Job description textarea
+   - Custom filename field
+   - "Tailor Resume with AI" button → calls `POST /api/resume/tailor`
+   - Results panel shows: compatibility score badge, coherence report summary, verdict breakdown, refinement status
+   - Inline LaTeX editor for the generated `.tex` file (allows manual tweaks before recompiling)
+   - Download buttons for resume PDF and cover letter PDF
+   - "Save to Job Tracker" button
+
+3. **Job Tracker Display** — Renders all saved applications with compatibility score bars, expandable interview Q&A sections, and status dropdowns.
+
+### AI Data Processor
+
+In the Projects and Experience tabs, there is a natural language input: paste any raw text (e.g., a job description you held, notes about a project) and click "Process with AI." The system calls `POST /api/portfolio/process`, which sends the text to Claude with a schema for the target category (experience, project, or skill). Claude returns structured JSON that matches the `portfolio.json` format, and a single "Add to Portfolio" button inserts it.
+
+---
+
+## 10. Streaming Chat Assistant
+
+**Files:** `src/app/api/chat/route.ts`, `src/components/PortfolioChat.tsx`
+
+### Backend (`/api/chat`)
+
+The chat route loads `portfolio.json` fresh on every request (no caching — edits in the admin reflect immediately in chat). It builds a system instruction that includes the full `profile`, `skills`, `experience`, and `projects` from the portfolio.
+
+The route then calls `generateStream()` and pipes each yielded text chunk into a `ReadableStream`:
+
+```typescript
+const readableStream = new ReadableStream({
+  async start(controller) {
+    const gen = generateStream(promptText, { systemInstruction, history, inlineParts });
+    for await (const chunk of gen) {
+      controller.enqueue(encoder.encode(chunk));
+    }
+    controller.close();
+  }
+});
+
+return new Response(readableStream, {
+  headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+});
+```
+
+### Site Navigation Commands
+
+The AI's system instruction includes: *"Append `[[NAVIGATE:section_id]]` when asked to go to a section."* The `PortfolioChat` component intercepts these commands from the streamed response and calls `document.getElementById(section_id).scrollIntoView()` to navigate the user to that part of the page.
+
+### Vision Support
+
+If the user uploads an image, it is read as a data URI (`data:image/jpeg;base64,...`), the base64 data is extracted, and passed as an `inlinePart` to `generateStream()`. Claude can then analyze and describe the image in the chat response.
+
+### Multi-Turn History
+
+Each chat message is stored in React state as `Array<{ role, content }>`. When a new message is sent, the full history is passed to the API route and then to `generateStream()` as `history`, which builds it into the `messages[]` array sent to Claude. This maintains full conversation context across turns.
+
+---
+
+## 11. Job Tracker & Skill Gap Analyzer
+
+### Job Tracker API (`/api/jobs`)
+
+Full CRUD on `job-tracker.json`:
+
+| Method | Endpoint | Action |
+|---|---|---|
+| GET | `/api/jobs` | List all applications |
+| POST | `/api/jobs` | Save new application |
+| PATCH | `/api/jobs` | Update status/notes/score |
+| DELETE | `/api/jobs?id=...` | Delete application |
+
+Each saved application can store the complete AI analysis output alongside the job description, resume/cover letter filenames, compatibility score, application status, and a `qaHistory` array for storing interview Q&A pairs.
+
+### Skill Gap Analyzer (`/api/jobs/analyze`)
+
+**Input:** Job description text  
+**Output:** `SkillGapAnalysis` JSON
+
+Claude plays the role of a "brutally honest senior technical recruiter with 20+ years of experience." The candidate profile (skills, experience, projects) is loaded from `portfolio.json` and sent alongside the JD.
+
+```typescript
+interface SkillGapAnalysis {
+  compatibilityScore: number;         // 0–100
+  compatibilityLabel: string;         // "Strong Match" | "Good Match" | "Partial Match" | ...
+  industry: string;
+  roleType: string;
+  seniorityLevel: string;
+  presentSkills: string[];            // Skills candidate clearly demonstrates
+  missingSkills: Array<{
+    skill: string;
+    importance: 'critical' | 'important' | 'nice-to-have';
+    reason: string;                   // Why this gap matters for this specific role
+  }>;
+  experienceGaps: string[];           // Domain or industry depth gaps
+  criticalVerdict: string;            // 2–4 sentence honest assessment
+  improvementPlan: string[];          // Specific, actionable steps
+  marketSkillsToLearn: string[];      // Broadly in-demand skills for this role type
+  summary: string;
+}
+```
+
+The prompt explicitly says "DO NOT inflate the score" — the AI is instructed to be harsh and realistic.
+
+---
+
+## 12. Interview Prep Coach
+
+**Endpoint:** `POST /api/jobs/interview-prep`
+
+**Input:** Question, job description, company, role, and the full `SkillGapAnalysis` from the job tracker
+
+The AI uses the skill gap analysis results (what skills the candidate has, what is missing, the critical verdict) to write answers that are honest about gaps while pivoting to relevant experience.
+
+**Question type detection:**
+- Behavioral → STAR format (Situation, Task, Action, Result)
+- Situational → Ground in real past experience, then apply to hypothetical
+- Skills/Technical → Reference specific projects or roles
+- Motivation → Connect genuine background to company and role
+- Personal → Draw from real life experiences
+
+**Length rules:** 8–14 sentences for behavioral/complex questions, 4–6 for simple ones.
+
+**Language rules:** Entry-level conversational voice. The prompt specifically bans: `spearheaded`, `orchestrated`, `leveraged`, `synergized`, `drove strategic vision`, `owned end-to-end`. It instructs the AI to write like "a thoughtful, grounded student would actually speak in an interview."
+
+---
+
+## 13. Coursework Analyzer
+
+**Endpoint:** `POST /api/coursework/analyze`  
+**Service:** `src/lib/services/coursework-service.ts`
+
+This feature lets you upload university assignments — PDFs, Word documents, or images — and converts them into professional portfolio project entries.
+
+**How it handles different file types:**
+
+```
+.txt  → Read as UTF-8 text, prepend filename header, add as text part
+.pdf  → Extract text via pdf-parse (up to 50,000 chars), add as text part
+.jpg/.jpeg/.png/.webp/.gif → Read as binary, encode as base64, add as image inlinePart
+```
+
+Files over 10MB are skipped with a warning. All parts are assembled into a single Claude call with a prompt asking for a `CourseworkAnalysis` JSON:
+
+```typescript
+interface CourseworkAnalysis {
+  title: string;            // Professional project title
+  description: string;      // 2–3 paragraph description (problem → solution → result)
+  tags: string[];           // Skills and technologies
+  key_features: string[];   // 3–5 standout capabilities
+  technicalDetails: string; // Implementation specifics (architecture, libraries, pipeline)
+  analysis_summary: string; // "Analyzed X files..."
+}
+```
+
+The output maps directly to the project schema in `portfolio.json`. From the admin Coursework tab, one click adds it as a new portfolio project.
+
+---
+
+## 14. AI-Curated News Feed
+
+**Endpoint:** `GET /api/news`  
+**Page:** `src/app/newsletter/page.tsx`
+
+### Step 1: Fetch from Reddit
+
+The endpoint maps a `category` query parameter to a subreddit:
+
+```typescript
+const SUBREDDITS: Record<string, string> = {
+  tech: 'technology',
+  ai: 'artificial',
+  web: 'webdev',
+  business: 'startups',
+};
+```
+
+It fetches `https://www.reddit.com/r/{subreddit}/hot.json?limit=25` with a custom User-Agent header. Posts are filtered: stickied posts removed, self-posts (text-only) removed, Reddit-hosted domains removed. The remaining posts are cleaned — HTML entities decoded, thumbnail URLs extracted, dates formatted, up to 20 articles selected.
+
+### Step 2: AI Relevance Scoring
+
+The 20 article titles (without content, for speed) are sent to Claude along with the portfolio `profile.role`, `profile.bio`, top 10 skill names, and project titles. Claude assigns a `relevanceScore` (1–10) and a one-sentence `aiInsight` to each article explaining why it matters to this specific person.
+
+### Step 3: Filter and Sort
+
+Articles with `relevanceScore >= 7` are marked as AI-recommended. All scored articles are sorted by relevance score. The top 9 are returned to the client.
+
+If the AI call fails, the endpoint falls back to sorting by Reddit `score` (upvotes) instead.
+
+**Article Reader:** `GET /api/news/read` uses `@mozilla/readability` + `jsdom` to fetch the full article URL, parse the HTML, and extract the clean article text — the same technique used by apps like Pocket and Instapaper.
+
+---
+
+## 15. Skill Builder
+
+**Page:** `src/app/skill-builder/page.tsx`  
+**Data:** `src/data/skill-paths.json` + `src/lib/skill-paths.ts`
+
+### Architecture
+
+The Skill Builder is a fully client-side React application — no API calls, no server dependency. All progress is persisted to `localStorage` under the key `skill-builder-progress-v2`.
+
+### State Structure
+
+```typescript
+interface ProgressData {
+  selectedPathId: string | null;
+  completedLevels: Record<string, string[]>;  // pathId → completed level keys
+  currentLevels: Record<string, string | null>; // pathId → current level key
+  completedSteps: Record<string, number[]>;     // "pathId-level" → completed step ids
+  streak: number;
+  lastActiveDate: string | null;
+  totalTimeMinutes: number;
+  startedPaths: string[];
+}
+```
+
+### Streak Calculation
+
+```typescript
+function calculateStreak(lastDate: string | null, currentStreak: number): number {
+  if (!lastDate) return 1;                    // First use
+  const diff = daysBetween(today, lastDate);
+  if (diff === 0) return currentStreak;       // Already active today
+  if (diff === 1) return currentStreak + 1;   // Consecutive day
+  return 1;                                   // Streak broken
+}
+```
+
+### Views
+
+| View | Component | What It Shows |
+|---|---|---|
+| `paths` | `PathSelector` | Grid of all learning paths with progress bars |
+| `roadmap` | `ProjectRoadmap` | Sequential project levels in selected path |
+| `guide` | `ProjectGuide` | Step-by-step instructions for current level |
+| `dashboard` | `ProgressDashboard` | Global stats across all paths |
+
+### Session Time Tracking
+
+While the user is in the `guide` view, a `setInterval` runs every 60,000ms and increments `totalTimeMinutes` in state (which is immediately persisted to localStorage). This gives an accurate reading of total time spent learning.
+
+### Statistics (useMemo)
+
+All statistics are derived from state using `useMemo` to avoid recalculation on unrelated renders:
+- Total paths, started paths
+- Total levels vs. completed levels
+- Total steps vs. completed steps
+- Overall completion percentage
+- Streak, total learning time in hours/minutes
+
+---
+
+## 16. Project Enhancer
+
+**Endpoint:** `POST /api/projects/enhance`
+
+A lightweight AI feature in the admin dashboard. Send any portfolio project object and Claude acts as a "Senior Technical Recruiter and Lead Software Engineer mentor" to suggest four categories of improvements:
+
+```json
+{
+  "visual_enhancements": ["How to make it visually impressive"],
+  "technical_deep_dive": ["Advanced features or architectural improvements"],
+  "resume_improvements": ["How to rephrase the description or add metrics"],
+  "wow_factor": "One powerful unique feature idea"
+}
+```
+
+---
+
+## 17. API Surface — All 18 Endpoints
+
+| Method | Endpoint | Max Duration | Purpose |
+|---|---|---|---|
+| POST | `/api/resume/tailor` | 180s | Full 6-step pipeline → PDF |
+| POST | `/api/resume/compile` | 30s | Compile .tex → .pdf via xelatex |
+| GET | `/api/resume/compile` | — | Read template + PDF metadata |
+| POST | `/api/resume/download` | — | Serve PDF file binary |
+| POST | `/api/resume/refine` | 120s | Standalone refinement call |
+| GET/POST | `/api/resume/template` | — | Read/write resume_template.tex |
+| POST | `/api/resume/diagnose` | — | Debug LaTeX compilation errors |
+| GET | `/api/resume/validate-key` | — | Test Anthropic API key |
+| POST | `/api/chat` | 60s | Streaming chat (SSE) |
+| POST | `/api/jobs/analyze` | 120s | Skill gap analysis |
+| POST | `/api/jobs/interview-prep` | 120s | STAR interview answer |
+| GET | `/api/jobs` | — | List applications |
+| POST | `/api/jobs` | — | Save application |
+| PATCH | `/api/jobs` | — | Update application |
+| DELETE | `/api/jobs` | — | Delete application |
+| GET/POST | `/api/portfolio` | — | Read/write portfolio.json |
+| POST | `/api/portfolio/process` | — | NLP text → structured JSON |
+| POST | `/api/projects/enhance` | 120s | Project improvement suggestions |
+| POST | `/api/projects/analyze-document` | 180s | Document-based project analysis |
+| POST | `/api/coursework/analyze` | — | PDF/image → portfolio entry |
+| GET | `/api/news` | 120s | Reddit + AI news curation |
+| GET | `/api/news/read` | — | Article content extraction |
+| POST | `/api/upload` | — | File upload handler |
+
+---
+
+## 18. Service Layer & Design Patterns
+
+### Singleton Pattern
+
+All four services use the same `static getInstance()` pattern to ensure a single shared instance across the Node.js process:
+
+```typescript
+class ResumeService {
+  private static _instance: ResumeService | null = null;
+
+  private constructor() {
+    this.resumeData = this.loadResumeData();
+  }
+
+  static getInstance(): ResumeService {
+    if (!this._instance) this._instance = new ResumeService();
+    return this._instance;
+  }
+
+  reload(): void {
+    this.resumeData = this.loadResumeData();
+  }
+}
+```
+
+The `reload()` method is called by any API route that saves changes to `portfolio.json`, so the in-memory data stays in sync without requiring a server restart.
+
+| Service | Responsibility |
+|---|---|
+| `ResumeService` | Data loading/merging, all 6 pipeline steps, LaTeX generation |
+| `ChatService` | Portfolio data loading, multi-turn chat with image support |
+| `CourseworkService` | PDF text extraction, image encoding, multimodal AI call |
+| `DataProcessingService` | Raw text → structured JSON for portfolio entry creation |
+
+### Browser-Safe Proxy Pattern
+
+`src/lib/utils/anthropic-browser.ts` exports browser-callable wrappers for every AI feature. Each wrapper:
+1. Checks `isStaticDeployment()` — throws a clear error if true
+2. Calls the corresponding API route via `fetch()`
+3. Returns the parsed result
+
+This means the admin dashboard and portfolio components never import server-only code. All AI logic stays on the server.
+
+---
+
+## 19. Security Architecture
+
+| Concern | Solution |
+|---|---|
+| API key exposure | `ANTHROPIC_API_KEY` is a server env var. Never in client JS bundles. |
+| Static deployment safety | `isStaticDeployment()` throws before any AI fetch attempt |
+| Admin access | Password-protected client-side state gate |
+| File path traversal | All file paths are constructed with `path.join(getProjectRoot(), ...)` |
+| LaTeX injection | All user strings pass through `escapeLatex()` before entering .tex files |
+| Oversized uploads | CourseworkService skips files > 10MB with a warning |
+| PDF serving | PDFs served from scoped `generated/` directory, not arbitrary paths |
+
+---
+
+## 20. File & Directory Structure
+
+```
+Jawads Portfolio/
+├── src/
+│   ├── app/
+│   │   ├── page.tsx                    ← Public portfolio homepage
+│   │   ├── layout.tsx                  ← Root layout (fonts, metadata)
+│   │   ├── globals.css                 ← Global styles
+│   │   ├── admin/
+│   │   │   └── page.tsx                ← Admin CMS (5,700+ lines)
+│   │   ├── skill-builder/
+│   │   │   └── page.tsx                ← Skill Builder app
+│   │   ├── newsletter/
+│   │   │   └── page.tsx                ← AI News Feed
+│   │   └── api/
+│   │       ├── chat/route.ts           ← Streaming chat
+│   │       ├── resume/
+│   │       │   ├── tailor/route.ts     ← 6-step pipeline (180s)
+│   │       │   ├── compile/route.ts    ← xelatex compilation
+│   │       │   ├── download/route.ts   ← PDF file serving
+│   │       │   ├── refine/route.ts     ← Standalone refinement
+│   │       │   ├── template/route.ts   ← Template editor
+│   │       │   ├── diagnose/route.ts   ← LaTeX debug
+│   │       │   └── validate-key/route.ts
+│   │       ├── jobs/
+│   │       │   ├── route.ts            ← CRUD (GET/POST/PATCH/DELETE)
+│   │       │   ├── analyze/route.ts    ← Skill gap analysis
+│   │       │   └── interview-prep/route.ts
+│   │       ├── portfolio/
+│   │       │   ├── route.ts            ← Read/write portfolio.json
+│   │       │   └── process/route.ts    ← NLP → structured JSON
+│   │       ├── projects/
+│   │       │   ├── enhance/route.ts    ← Project improvement AI
+│   │       │   └── analyze-document/route.ts
+│   │       ├── coursework/
+│   │       │   └── analyze/route.ts    ← PDF/image → portfolio entry
+│   │       ├── news/
+│   │       │   ├── route.ts            ← Reddit + AI curation
+│   │       │   └── read/route.ts       ← Article extraction
+│   │       └── upload/route.ts         ← File uploads
+│   │
+│   ├── components/
+│   │   ├── Hero.tsx                    ← Landing section
+│   │   ├── Experience.tsx              ← Work history
+│   │   ├── Projects.tsx                ← Project gallery
+│   │   ├── Skills.tsx                  ← Skills grid
+│   │   ├── Contact.tsx                 ← Contact section
+│   │   ├── PortfolioChat.tsx           ← Chat widget
+│   │   ├── ProjectEnhancer.tsx         ← Project AI advisor
+│   │   ├── AdminButton.tsx             ← Admin access button
+│   │   ├── Header.tsx / Footer.tsx
+│   │   ├── ClientLayout.tsx            ← Client-side layout wrapper
+│   │   ├── ErrorBoundary.tsx           ← React error boundary
+│   │   ├── ImageLightbox.tsx           ← Full-screen image viewer
+│   │   ├── NewsletterButton.tsx
+│   │   └── SkillBuilder/
+│   │       ├── PathSelector.tsx
+│   │       ├── ProjectRoadmap.tsx
+│   │       ├── ProjectGuide.tsx
+│   │       └── ProgressDashboard.tsx
+│   │
+│   ├── data/
+│   │   ├── portfolio.json              ← Admin-managed content (source of truth)
+│   │   ├── resume_data.json            ← Personal info + pre-written bullets
+│   │   ├── skill-paths.json            ← Skill Builder learning paths
+│   │   └── job-tracker.json            ← Auto-created on first job save
+│   │
+│   ├── lib/
+│   │   ├── ai/
+│   │   │   └── anthropic.ts            ← Centralized AI client (generate/stream/json)
+│   │   ├── services/
+│   │   │   ├── resume-service.ts       ← Pipeline steps + LaTeX generation
+│   │   │   ├── chat-service.ts         ← Portfolio chat
+│   │   │   ├── coursework-service.ts   ← Document analysis
+│   │   │   └── data-processing-service.ts ← Text → structured JSON
+│   │   ├── utils/
+│   │   │   ├── latex-utils.ts          ← xelatex compilation + artifact cleanup
+│   │   │   ├── file-utils.ts           ← Path resolution, file I/O helpers
+│   │   │   └── anthropic-browser.ts    ← Browser-safe AI proxy wrappers
+│   │   ├── api/
+│   │   │   └── responses.ts            ← Standardized API response helpers
+│   │   ├── constants.ts                ← PATHS, LATEX_CONFIG constants
+│   │   └── skill-paths.ts              ← TypeScript types for Skill Builder
+│   │
+│   └── templates/
+│       └── resume_template.tex         ← Editable LaTeX resume template
+│
+├── generated/                          ← Timestamped PDF output (gitignored)
+├── public/
+│   ├── companies/                      ← Company logos (SVG)
+│   ├── projects/                       ← Project screenshots
+│   └── coursework/                     ← Uploaded coursework files
+├── package.json
+├── next.config.mjs
+├── tailwind.config.ts
+└── tsconfig.json
+```
+
+---
+
+## 21. What I Learned Building This
+
+### Prompt Engineering at Scale
+Writing prompts is not just adding instructions — it is system design. The tailoring prompt is structured like a formal specification with named sections, numbered rules, concrete examples of wrong vs. correct outputs, and hard budget constraints. Every word in the prompt affects the output, and discovering which constraints were necessary came through testing and iterating on failures.
+
+### Building Reliable AI Pipelines
+AI calls fail. Claude returns HTTP 529 ("overloaded") regularly under load. The 5-retry exponential backoff system was not optional — it was the difference between a system that works reliably and one that breaks 20% of the time. Building the error classification system (auth vs. quota vs. retryable) taught me how to think about failure modes in distributed systems.
+
+### Streaming Is a UX Decision
+Chat without streaming feels broken. Users expect to see text appearing token by token — it signals that something is happening and that the response is being generated live. Implementing `generateStream()` as an async generator and piping it through a `ReadableStream` was a more complex engineering path, but the user experience difference is dramatic.
+
+### JSON as API Contract
+Using TypeScript interfaces for every AI response (`CompanyResearch`, `JobAnalysis`, `TailoredContent`, `TailoringVerdict`) was the right call even though the AI generates JSON dynamically. Having the types defined made it easy to catch when the AI returned an unexpected shape, forced me to think about the schema upfront, and made the LaTeX generation step simpler because the data structure was guaranteed.
+
+### XeLaTeX as a Production PDF Engine
+XeLaTeX is a command-line tool, not a library. Shelling out to it from Node.js with `execSync` meant dealing with exit codes, file paths, working directories, and compilation artifacts. The exit-code-1 edge case (warnings without errors) was a genuine bug that took careful reading of the XeLaTeX documentation to understand and fix correctly.
+
+### Singleton Services in Next.js
+Next.js API routes are serverless functions — they can spin up fresh instances on every cold start. Singletons prevent re-reading large JSON files on every request and maintain in-memory state between calls within the same process lifetime. Using `reload()` on admin saves kept the data layer consistent without restarting the server.
+
+---
+
+## Summary
+
+This platform demonstrates end-to-end full-stack engineering combining:
+
+- **AI product thinking** — designing a pipeline that produces a genuinely better output than any individual AI call could
+- **Systems design** — centralized AI client, singleton services, typed data contracts, layered error handling
+- **Document engineering** — LaTeX generation, XeLaTeX compilation, font and typography configuration
+- **Real-time UX** — streaming text, SSE, multi-turn chat with history
+- **Full-stack development** — Next.js App Router, TypeScript throughout, 18 API endpoints, file system persistence
+- **Prompt engineering** — complex multi-constraint prompts, JSON mode, structured output parsing, iterative refinement
+
+**Every component of this system was researched, designed, and built independently.** There was no template for "AI resume tailoring engine with LaTeX PDF output." The architecture, the pipeline design, the error handling strategy, and the prompts were all original solutions to real problems encountered during development.
+
+---
+
+*Built by Jawad Iskandar — March 2026*

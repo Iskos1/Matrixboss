@@ -1,142 +1,196 @@
 \documentclass[10pt, a4paper]{article}
 
-% --- UNIVERSAL PREAMBLE BLOCK ---
-\usepackage[a4paper, top=1.2cm, bottom=1.2cm, left=1.2cm, right=1.2cm]{geometry}
+% --- GEOMETRY ---
+\usepackage[a4paper, top=1.1cm, bottom=1.1cm, left=1.2cm, right=1.2cm]{geometry}
 \usepackage{fontspec}
-
 \usepackage[english]{babel}
 
-% IBM Plex Sans — clean, modern, professional sans-serif (available in TeX Live 2025)
-\setmainfont{IBMPlexSans}[
-  Extension = .otf,
-  UprightFont = *-Regular,
-  BoldFont = *-Bold,
-  ItalicFont = *-Italic,
-  BoldItalicFont = *-BoldItalic,
+% IBM Plex Sans — load by filename so xelatex finds it reliably
+\setmainfont{IBMPlexSans-Regular.otf}[
+  Path           = /usr/local/texlive/2025/texmf-dist/fonts/opentype/ibm/plex/,
+  BoldFont       = IBMPlexSans-Bold.otf,
+  ItalicFont     = IBMPlexSans-Italic.otf,
+  BoldItalicFont = IBMPlexSans-BoldItalic.otf,
 ]
 
-% List formatting - compact and clean
-\usepackage{enumitem}
-\setlist[itemize]{leftmargin=*, nosep, label=\textbullet}
-
-% Section formatting - Centered and Uppercase transformation
-\usepackage{titlesec}
-\titleformat{\section}
-  {\large\bfseries\filcenter} 
-  {} 
-  {0em} 
-  {\MakeUppercase} 
-  [\titlerule] 
-\titlespacing{\section}{0pt}{8pt}{4pt}
-
-% Link Coloring (Professional Dark Blue)
+% --- COLORS ---
 \usepackage{xcolor}
-\definecolor{linkblue}{RGB}{0, 0, 139} 
+\definecolor{navyblue}{RGB}{10, 36, 99}
+\definecolor{accentblue}{RGB}{30, 80, 160}
+\definecolor{lightgray}{RGB}{245, 245, 245}
+\definecolor{linkblue}{RGB}{0, 0, 139}
 
-% Hyperlink setup
+% --- PACKAGES ---
+\usepackage{enumitem}
+\usepackage{titlesec}
 \usepackage{hyperref}
+\usepackage{multicol}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage[most]{tcolorbox}
+\usepackage{tikz}
+\usepackage{dashrule}
+\usepackage{fontawesome5}
+
+% Fix hyphenation globally
+\usepackage{microtype}
+\hyphenpenalty=8000
+\tolerance=500
+
 \hypersetup{
     colorlinks=true,
-    linkcolor=linkblue,
-    filecolor=linkblue,
     urlcolor=linkblue,
-    pdftitle={Resume - Jawad Mousa Iskandar},
-    pdfpagemode=FullScreen,
+    linkcolor=linkblue,
+    pdftitle={Resume - Jawad Iskandar},
 }
 
-% --- USER CONFIGURATION SECTION ---
-\newcommand{\myName}{Jawad Mousa Iskandar}
-\newcommand{\myEmail}{Jawad.iskandar@outlook.com}
-\newcommand{\myPhone}{(571) 269-8465}
+% --- LIST STYLE ---
+\setlist[itemize]{
+  leftmargin=1.2em,
+  nosep,
+  topsep=3pt,
+  itemsep=3.5pt,
+  label={\color{accentblue}\textbullet}
+}
 
-% Social Links
-\newcommand{\myGithubLink}{https://github.com/Iskos1}
-\newcommand{\myGithubDisp}{github.com/Iskos1}
+% --- SECTION HEADERS ---
+\titleformat{\section}
+  {\color{navyblue}\large\bfseries}
+  {}
+  {0em}
+  {\MakeUppercase}
+  [{\color{accentblue}\titlerule[1pt]}]
+\titlespacing{\section}{0pt}{8pt}{5pt}
 
-\newcommand{\myLinkedinLink}{https://linkedin.com/in/jawad-iskandar/}
-\newcommand{\myLinkedinDisp}{linkedin.com/in/jawad-iskandar}
+% --- HELPER: job entry with left accent bar ---
+\newcommand{\jobentry}[4]{%
+  \noindent
+  \begin{tikzpicture}[baseline=(current bounding box.north)]
+    \fill[accentblue] (0,0) rectangle (2.5pt, -1.5em);
+  \end{tikzpicture}%
+  \hspace{4pt}%
+  \begin{minipage}[t]{\dimexpr\linewidth-10pt}
+    \textbf{#1} \hfill \textit{\small #2} \\[-2pt]
+    \textit{\small #3} \hfill \textit{\small #4}
+  \end{minipage}
+}
+
+% --- CERT BOX ---
+\newcommand{\certbadge}[2]{%
+  \tcbox[
+    colback=lightgray,
+    colframe=accentblue,
+    boxrule=0.6pt,
+    arc=2pt,
+    left=3pt, right=3pt, top=1pt, bottom=1pt,
+    nobeforeafter,
+    tcbox raise base,
+  ]{\textbf{\small #1} \textcolor{accentblue}{\small #2}}%
+}
 
 \begin{document}
-
 \pagestyle{empty}
 
-% --- CONTACT INFORMATION ---
+% ============================================================
+% HEADER — all contact on one line
+% ============================================================
 \begin{center}
-    {\LARGE \textbf{\myName}} \\
-    \vspace{2pt}
-    {\small \myEmail \ | \myPhone \ | \href{\myGithubLink}{\myGithubDisp} \ | \href{\myLinkedinLink}{\myLinkedinDisp}}
+    {\LARGE \textbf{\textcolor{navyblue}{Jawad Iskandar}}} \\[4pt]
+    {\small
+      \textcolor{accentblue}{\faEnvelope}~\href{mailto:Jawad.iskandar@outlook.com}{Jawad.iskandar@outlook.com}
+      ~\textcolor{navyblue}{$|$}~
+      \textcolor{accentblue}{\faPhone}~(571) 269-8465
+      ~\textcolor{navyblue}{$|$}~
+      \textcolor{accentblue}{\faMapMarker*}~Fairfax, VA
+      ~\textcolor{navyblue}{$|$}~
+      \textcolor{accentblue}{\faGithub}~\href{https://github.com/Iskos1}{github.com/Iskos1}
+      ~\textcolor{navyblue}{$|$}~
+      \textcolor{accentblue}{\faLinkedin}~\href{https://linkedin.com/in/jawad-iskandar/}{linkedin.com/in/jawad-iskandar}
+    }
 \end{center}
 
-% --- SKILLS ---
-\section{Skills}
-\begin{itemize}
-    \item \textbf{Development:} JavaScript (ES6+), SQL, OpenAI API, AWS (VPC, S3, Security Groups), Azure Blob Storage, HTML5/CSS3, Git/GitHub.
-    \item \textbf{Analysis:} Technical SEO, Web Analytics \& Data Reporting, Conversion Rate Optimization (CRO), Prompt Engineering, Financial Modeling, User Acceptance Testing (UAT).
+\vspace{2pt}
+
+% ============================================================
+% EDUCATION
+% ============================================================
+\section{Education}
+
+\jobentry{George Mason University}{Fairfax, VA}{B.S. in Business and Information Systems}{Dec 2025}
+
+\vspace{2pt}
+\noindent\hspace{6pt}\textcolor{accentblue}{\textbf{Relevant Coursework:}} Cloud Computing Essentials, Data Mining for Business Applications, Information Systems Audit \& Control, Systems Analysis \& Design, Programming for Analytics.
+
+% ============================================================
+% SKILLS
+% ============================================================
+\section{Technical Skills}
+
+\begin{itemize}[leftmargin=0pt, label={}, itemsep=2pt]
+  \item \textbf{Development:} JavaScript (ES6+), SQL, OpenAI API, HTML5/CSS3, Git/GitHub
+  \item \textbf{Cloud \& Infra:} AWS (VPC, S3, IAM, Security Groups), Azure Blob Storage
+  \item \textbf{Analysis \& SEO:} Technical SEO, Web Analytics, CRO, Prompt Engineering, Financial Modeling
+  \item \textbf{Tools:} Ahrefs, Google Analytics, User Acceptance Testing (UAT)
 \end{itemize}
 
-% --- WORK EXPERIENCE ---
+% ============================================================
+% WORK EXPERIENCE
+% ============================================================
 \section{Work Experience}
 
-\noindent
-\textbf{Handshake} \hfill Remote \\
-\textit{Generative AI Fellow} \hfill Dec 2025 -- Present
+\jobentry{Handshake}{Remote}{Generative AI Fellow}{Dec 2025 -- Present}
 \begin{itemize}
     \item Refined LLM accuracy by engineering 500+ complex prompts per week for high-quality supervised fine-tuning.
-    \item Decreased model error rates by 15\% through rigorous fact-checking and identification of safety/bias edge cases.
-    \item Developed standardized prompt templates that improved team workflow efficiency by 20\%.
+    \item Decreased model error rates by \textbf{15\%} through rigorous fact-checking and identification of safety/bias edge cases.
+    \item Developed standardized prompt templates that improved team workflow efficiency by \textbf{20\%}.
 \end{itemize}
 
-\vspace{4pt}
+\vspace{7pt}
 
-\noindent
-\textbf{Apple Inc.} \hfill Fairfax, VA \\
-\textit{Business Specialist} \hfill Sept 2021 -- June 2024
+\jobentry{Apple Inc.}{Fairfax, VA}{Business Specialist}{Sept 2021 -- June 2024}
 \begin{itemize}
-    \item Optimized client inventory management workflows through strategic MDM solutions, facilitating scalable and secure enterprise deployments.
+    \item Advised 20+ enterprise clients per week on MDM deployment strategies, streamlining device fleet management at scale.
+    \item Optimized client inventory management workflows through strategic MDM solutions, enabling secure and scalable deployments.
 \end{itemize}
 
-% --- PROJECT WORK ---
+% ============================================================
+% PROJECT WORK
+% ============================================================
 \section{Project Work}
 
-\noindent
-\textbf{FlashConverter (SaaS)} \hfill Dec 2025 -- Present \\
-\textit{Product Engineer}
+\jobentry{FlashConverter (SaaS)}{}{Product Engineer}{Dec 2025 -- Present}
 \begin{itemize}
-    \item Integrated OpenAI API to automatically categorize bank transactions with 90\% accuracy, streamlining financial reconciliation.
-    \item Accelerated dashboard development by 70\% using AI-assisted workflows to prototype and deploy secure financial features.
+    \item Integrated OpenAI API to automatically categorize bank transactions with \textbf{90\% accuracy}, streamlining financial reconciliation.
+    \item Accelerated dashboard development by \textbf{70\%} using AI-assisted workflows to prototype and deploy secure financial features.
     \item Implemented privacy-first architecture using IndexedDB to store sensitive banking data 100\% locally in the browser.
 \end{itemize}
 
-\vspace{4pt}
+\vspace{7pt}
 
-\noindent
-\textbf{Dispomode.com} \hfill Mar 2023 -- Dec 2023 \\
-\textit{Technical Lead}
+\jobentry{Dispomode.com}{}{Technical Lead}{Mar 2023 -- Dec 2023}
 \begin{itemize}
-    \item Launched a custom HTML/JS storefront optimized for SEO, scaling organic traffic to 100,000 monthly visitors.
-    \item Generated \$500 in daily revenue by identifying high-value, low-competition keywords using Ahrefs for targeted content strategy.
-    \item Developed automated upsell funnels and email capture systems that significantly increased customer lifetime value.
+    \item Launched a custom HTML/JS storefront optimized for SEO, scaling organic traffic to \textbf{100,000 monthly visitors}.
+    \item Generated \textbf{\$500 in daily revenue} by identifying high-value, low-competition keywords using Ahrefs for targeted content strategy.
+    \item Built automated upsell funnels and email capture systems that significantly increased customer lifetime value.
 \end{itemize}
 
-\vspace{4pt}
+\vspace{7pt}
 
-\noindent
-\textbf{Cloud Infrastructure} \hfill Mar 2025
+\jobentry{Personal Lab -- Cloud Infrastructure}{}{Independent Project}{Mar 2025}
 \begin{itemize}
     \item Configured a secure hybrid cloud network using AWS VPC and VPN gateways to filter and monitor inbound/outbound traffic.
-    \item Provisioned multi-cloud storage solutions using AWS S3 and Azure with granular IAM policies for data security.
+    \item Provisioned multi-cloud storage using AWS S3 and Azure Blob Storage with granular IAM policies for data security.
 \end{itemize}
 
-% --- CERTIFICATIONS ---
+% ============================================================
+% CERTIFICATIONS — centered
+% ============================================================
 \section{Certifications}
-\noindent
-\textbf{AWS Certified Cloud Practitioner} (2025) \ | \ \textbf{CompTIA Security+} (2025) \ | \ \textbf{Google Analytics (GAIQ)} (2024)
 
-% --- EDUCATION ---
-\section{Education}
-\noindent
-\textbf{George Mason University} \hfill Fairfax, VA \\
-\textit{B.S. in Business and Information Systems} \hfill Dec 2025 \\
-{\small \textbf{Relevant Coursework:} Cloud Computing Essentials, Data Mining for Business Applications, Information Systems Audit and Control, Systems Analysis and Design, Programming for Analytics.}
+\begin{center}
+\certbadge{AWS Cloud Practitioner}{\ 2025} \hspace{6pt}
+\certbadge{CompTIA Security+}{\ 2025} \hspace{6pt}
+\certbadge{Google Analytics GAIQ}{\ 2024}
+\end{center}
 
 \end{document}

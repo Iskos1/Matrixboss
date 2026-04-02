@@ -1,30 +1,60 @@
 "use client";
 
+import { useState } from "react";
 import portfolioData from "@/data/portfolio.json";
 import type { ExperienceItem } from "@/lib/portfolio/types";
 const defaultExperience = portfolioData.experience as ExperienceItem[];
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, ArrowUpDown } from "lucide-react";
+import { getExperienceStartDate } from "@/lib/portfolio/utils";
+
+function isValidExternalWebsite(url: string): boolean {
+  if (!url || !url.trim()) return false;
+  try {
+    const u = new URL(url);
+    return (u.protocol === "http:" || u.protocol === "https:") && Boolean(u.host);
+  } catch {
+    return false;
+  }
+}
 
 interface ExperienceProps {
   experience?: ExperienceItem[];
 }
 
 export default function Experience({ experience = defaultExperience }: ExperienceProps) {
+  const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
+
   if (!experience) return null;
 
-  // Only show non-placeholder entries (Burger 7 placeholder has no real description)
-  const displayExperience = experience.filter((e) => {
+  const filtered = experience.filter((e) => {
     const firstPosition = e.positions?.[0];
     const desc = firstPosition?.description || (e as any).description || "";
     return desc && !desc.startsWith("Description of your role");
+  });
+
+  const displayExperience = [...filtered].sort((a, b) => {
+    const diff = getExperienceStartDate(b) - getExperienceStartDate(a);
+    return sortOrder === "newest" ? diff : -diff;
   });
 
   return (
     <section id="experience" className="py-16 px-6 bg-white border-b border-slate-200">
       <div className="max-w-5xl mx-auto">
 
-        <p className="text-xs font-bold uppercase tracking-widest text-blue-600 mb-1">Experience</p>
-        <h2 className="text-2xl font-bold text-slate-900 mb-8">Professional Background</h2>
+        <div className="flex items-end justify-between mb-8 gap-4">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-widest text-blue-600 mb-1">Experience</p>
+            <h2 className="text-2xl font-bold text-slate-900">Professional Background</h2>
+          </div>
+          <button
+            onClick={() => setSortOrder(sortOrder === "newest" ? "oldest" : "newest")}
+            className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-blue-600 bg-slate-100 hover:bg-blue-50 border border-slate-200 hover:border-blue-200 px-3 py-2 rounded-lg transition-colors flex-shrink-0"
+            title="Toggle sort order"
+          >
+            <ArrowUpDown size={13} />
+            {sortOrder === "newest" ? "Newest First" : "Oldest First"}
+          </button>
+        </div>
 
         <div className="space-y-10">
           {displayExperience.map((item) => {
@@ -72,7 +102,7 @@ export default function Experience({ experience = defaultExperience }: Experienc
                         <p className="text-xs text-slate-500">{item.location}</p>
                       )}
                     </div>
-                    {item.website && (
+                    {item.website && isValidExternalWebsite(item.website) && (
                       <a
                         href={item.website}
                         target="_blank"

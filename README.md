@@ -29,10 +29,10 @@ npm install
 npm run dev
 ```
 
-Visit **http://localhost:3000**
+Visit **http://localhost:3001**
 
 ### Admin Panel
-- URL: **http://localhost:3000/admin**
+- URL: **http://localhost:3001/admin**
 - Password: `jawad2026`
 
 ### AI Resume Setup
