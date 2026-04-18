@@ -1,6 +1,345 @@
 {
   "applications": [
     {
+      "id": "job_1775497649387",
+      "savedAt": "2026-04-06T17:47:29.387Z",
+      "company": "Unknown Company",
+      "role": "Entry-level federal market intelligence role combining structured research, AI-assisted analysis, and CRM pipeline management to identify and evaluate government contract opportunities for A-TEK's Growth team.",
+      "jobDescription": "AI Market Intelligence Analyst (Federal Contracts)\nHybrid - McLean, VA, United States\nEmpower, Innovate, Impact!  At Team A-TEK, we EMPOWER people to drive INNOVATION that IMPACTS mission!\n\nA-TEK operates at the intersection of mission and innovation by applying our deep domain expertise across the federal markets. Embracing our digital-first strategy, A-TEK provides enhanced capabilities in application development, digital transformation, enterprise IT, and scientific services. Our solutions are designed to modernize, automate, secure, protect, and enhance the operations of our federal clients, ensuring they stay ahead in a rapidly evolving digital landscape.\n\nOur work is fueled by a passion to serve our clients’ needs and to protect the safety and welfare of Americans. That passion shapes how we nurture our most valuable asset – Our Employees. A-TEK actively cultivates the talent that drives our success and fosters a creative, challenging, and mission-driven work environment for current and future employees.\n\n \n\nA-TEK is seeking an AI Market Research Analyst to support federal business development by identifying, analyzing, and tracking contract opportunities across the federal marketplace.\n\nThis role combines structured research, federal market analysis, and practical use of AI tools to improve how we identify and evaluate opportunities. You will help the Growth team move faster and make more informed decisions by turning complex data into clear, actionable insights.\n\nThis is an entry-level role with growth potential for candidates who demonstrate strong analytical thinking, curiosity, and the ability to effectively apply AI tools in real-world workflows. This is a hybrid role based in McLean, VA.\n\n \n\nKey Responsibilities\n\nFederal Opportunity Research\n\nIdentify and track federal contract opportunities (RFPs, RFQs, RFIs, Sources Sought, recompetes) across SAM.gov, GovWin, GSA eBuy, and agency forecasts\nMonitor relevant agencies and align opportunities to A-TEK’s capabilities and strategic priorities\nSummarize solicitation requirements, timelines, and key evaluation factors using AI-assisted tools\nOpportunity Analysis & Prioritization\n\nSupport evaluation of opportunities based on strategic fit, timing, contract vehicle, incumbency, and probability of win\nIdentify incumbents, competitors, and potential partners\nDevelop concise opportunity summaries and briefs to support internal decision-making\nPipeline & CRM Management\n\nMaintain accurate and up-to-date opportunity records in Salesforce CRM\nTrack key lifecycle milestones including forecast release, solicitation, proposal deadlines, and awards\nEnsure data quality, consistency, and completeness across pipeline records\nAI-Assisted Research & Continuous Improvement\n\nUse AI tools (e.g., ChatGPT, Perplexity, GovWin AI features) to improve research speed and insight quality\nApply structured prompts and repeatable approaches to summarize and analyze information\nContribute to improving internal research workflows and efficiency over time\nMarket & Competitive Intelligence\n\nResearch agency missions, spending trends, and procurement patterns\nTrack competitor activity and major contract awards\nSupport development of market intelligence summaries and reports\nReporting & Team Support\n\nSupport preparation of pipeline reports and dashboards for Growth leadership\nProvide research support to capture and proposal teams as needed\nParticipate in team meetings and contribute to pipeline discussions\n \n\nRequired Qualifications\n\nBachelor’s degree in Business, Data Analytics, Public Policy, Political Science, IT, or related field (or equivalent experience)\n0–2 years of experience in market research, federal contracting, business development, or data analysis\nInterest in federal procurement and government contracting\nFamiliarity with or willingness to learn Salesforce CRM\nExperience using or willingness to learn AI tools (e.g., ChatGPT, Perplexity)\nStrong analytical, organizational, and problem-solving skills\nProficiency in Microsoft Excel, PowerPoint, and Word\nAbility to work in a fast-paced, deadline-driven environment with attention to detail\n \n\nPreferred Qualifications\n\nExposure to federal procurement platforms (SAM.gov, GovWin, GSA eBuy, USAspending)\nBasic understanding of federal contract vehicles (GWACs, IDIQs, BPAs)\nInterest or experience in applying AI tools to research or business workflows\nExposure to capture management or proposal processes\n \n\nGrowth Opportunity\n\nThis role offers the opportunity to build foundational experience in federal market intelligence while developing practical skills in AI-assisted research. High performers will have the opportunity to take on increased responsibility in opportunity analysis, pipeline strategy, and advanced AI-driven workflows over time.\n\nCompensation & Benefits\n\nThe salary range for this position is $55,000 to $65,000 annually, based on experience and qualifications.\n\nA-TEK offers a comprehensive benefits package that may include:\n\nMedical, dental, and vision insurance\n401(k) with company contribution\nPaid time off (PTO) and company holidays\nProfessional development and training opportunities\nExposure to AI tools and emerging technologies\nPotential performance-based incentives\nWhy Join A-TEK\n\nAt A-TEK, you will be part of a Growth team that is actively integrating AI into how we approach federal market intelligence and business development. You’ll gain hands-on experience with real opportunities, modern tools, and a team focused on continuous improvement.\n\nThis version fixes the main problem: your original “strong” JD was overselling the role relative to comp.\n\n\nCandidates may use tools (including AI) for proofreading or formatting; however, using any tool to fabricate, exaggerate, or misrepresent qualifications, experience, or work product is not permitted. We may assess application materials for job-related technical depth, internal consistency, and demonstrated hands-on experience, including through follow-up questions, skills assessments, or reference checks.\n\nMisrepresentation or falsification may result in removal from further consideration. Candidates who need a reasonable accommodation in the application or interview process may request one.\n\nA-TEK, Inc. is an Equal Opportunity/Affirmative Action employer.  All qualified applicants will receive consideration for employment without regard to race, color, religion, sex, sexual orientation, gender identity, national origin, or status as a qualified individual with a disability, or Vietnam era or other protected Veteran status. Verification of education may be requested before or during the hiring process.",
+      "resumeFilename": "tailored_resume_2026_04_06T17_4.pdf",
+      "coverLetterFilename": "tailored_cover_letter_2026_04_06T17_4.pdf",
+      "compatibilityScore": 62,
+      "analysis": {
+        "compatibilityScore": 62,
+        "compatibilityLabel": "Partial Match",
+        "industry": "Federal Government Contracting / Defense IT",
+        "roleType": "Market Intelligence Analyst / Business Development Support",
+        "seniorityLevel": "Entry-Level",
+        "presentSkills": [
+          "Market research and data analysis",
+          "AI tools usage (ChatGPT, generative AI platforms)",
+          "Prompt engineering",
+          "Salesforce CRM",
+          "Microsoft Excel",
+          "Data analytics and visualization (Tableau, Power BI)",
+          "SQL and data pipeline work",
+          "Python and R for data analysis",
+          "Business analysis and strategy",
+          "Competitive market analysis (SEO/keyword gap analysis experience is transferable)",
+          "Business intelligence",
+          "Process optimization",
+          "Strong communication and client-facing skills (Apple, Yard House)",
+          "Entrepreneurial experience with real business metrics (Dispomode)",
+          "Technical writing and documentation",
+          "PowerPoint and presentation skills (implied through academic projects)",
+          "Regulatory and legal compliance awareness",
+          "Financial management and operations",
+          "KPI modeling and root cause analysis (Brazilian E-Commerce project)",
+          "NLP and LLMs familiarity",
+          "Adaptability and working under pressure"
+        ],
+        "missingSkills": [
+          {
+            "skill": "Federal procurement platform experience (SAM.gov, GovWin, GSA eBuy, USAspending)",
+            "importance": "critical",
+            "reason": "This is the literal core of the job. The candidate has zero demonstrated exposure to federal contracting databases or procurement workflows. Every key responsibility revolves around these platforms."
+          },
+          {
+            "skill": "Federal contracting knowledge (RFPs, RFQs, RFIs, Sources Sought, recompetes)",
+            "importance": "critical",
+            "reason": "The candidate shows no understanding of the federal acquisition lifecycle. This domain knowledge is foundational to performing the role and cannot be faked in interviews."
+          },
+          {
+            "skill": "Federal contract vehicles (GWACs, IDIQs, BPAs, GSA Schedules)",
+            "importance": "critical",
+            "reason": "Understanding contract vehicles is essential for opportunity evaluation and strategic fit analysis. No evidence this candidate knows what these are."
+          },
+          {
+            "skill": "Capture management and proposal support",
+            "importance": "important",
+            "reason": "The role explicitly supports capture and proposal teams. Zero exposure to BD or capture processes in a government contracting context is a real gap."
+          },
+          {
+            "skill": "Federal agency mission and budget cycle knowledge",
+            "importance": "important",
+            "reason": "Tracking agency spending trends, procurement patterns, and budget cycles requires baseline fluency with how the federal government funds and buys technology. Candidate has none of this."
+          },
+          {
+            "skill": "Competitor and incumbent analysis in federal space",
+            "importance": "important",
+            "reason": "The candidate has commercial competitive analysis experience but no understanding of how to research federal incumbents, FPDS data, or government contractor competitive landscapes."
+          },
+          {
+            "skill": "Pipeline reporting and CRM data hygiene in a BD context",
+            "importance": "important",
+            "reason": "While the candidate lists Salesforce, there is no evidence of using it in a business development pipeline management context, which is operationally different from sales CRM use."
+          },
+          {
+            "skill": "GovWin IQ or similar federal intelligence platforms",
+            "importance": "nice-to-have",
+            "reason": "GovWin is the industry-standard federal opportunity tracking tool. Familiarity gives a significant head start on day one."
+          }
+        ],
+        "experienceGaps": [
+          "Zero federal government or government contracting exposure of any kind — this is the single biggest gap for a federal-focused role",
+          "No business development or growth team experience in any professional setting",
+          "No experience producing opportunity briefs, pipeline reports, or capture summaries",
+          "Commercial market research experience (Dispomode SEO, Apple B2B) does not directly translate to federal procurement intelligence without a significant learning curve",
+          "Academic projects are strong but all commercial or academic in nature — no federal context whatsoever",
+          "No demonstrated ability to synthesize solicitation documents (PWS, SOW, evaluation criteria) into actionable summaries",
+          "The Handshake AI Fellow role, while relevant to AI tools, is gig-based model training work — not applied AI research in a professional analyst context",
+          "Work history is fragmented across retail, food service, and gig work — no continuous professional trajectory toward federal BD or market intelligence"
+        ],
+        "criticalVerdict": "This candidate is genuinely interesting — they have real analytical chops, solid AI tool experience, an entrepreneurial track record with measurable outcomes, and strong technical skills that exceed what this entry-level role actually demands. However, they are walking into a federal contracting role with zero federal market knowledge, which is a significant handicap even at the entry level. The job is fundamentally about federal procurement intelligence, and the candidate cannot name a single federal contract vehicle, has never touched SAM.gov or GovWin, and has no BD pipeline experience. The good news is the role explicitly welcomes candidates with willingness to learn, and this candidate's analytical foundation and AI proficiency give them a real shot — but they need to show up to any interview having done serious homework on federal procurement basics or they will be screened out immediately by anyone who knows the space.",
+        "improvementPlan": [
+          "Spend 10 hours on SAM.gov before any interview — search for active RFPs in IT and digital transformation, understand the structure of solicitations (PWS, evaluation factors, NAICS codes), and be able to speak fluently about what you found",
+          "Create a free GovWin IQ trial account or explore USAspending.gov and FPDS.gov to research a real federal agency's spending patterns and recent IT contract awards — bring this analysis to your interview as a demonstration of initiative",
+          "Learn the federal contract vehicle ecosystem: memorize what GWACs, IDIQs, BPAs, and GSA Schedules are, how they differ, and why they matter for opportunity qualification — this is a 2-3 hour research task that will immediately set you apart",
+          "Study the federal acquisition lifecycle end-to-end: understand the difference between RFI, Sources Sought, RFQ, and RFP, and what each means for a BD team's pipeline strategy",
+          "Frame your Dispomode market research experience explicitly in the language of competitive intelligence — incumbents, market share, opportunity sizing — and draw a direct parallel to federal competitive landscape analysis in your cover letter and interviews",
+          "Highlight your Salesforce experience and your AI prompt engineering background prominently — these are genuine differentiators for this specific role at this salary band",
+          "Look up A-TEK's current contract portfolio on USAspending.gov and FPDS before interviewing — knowing their agency clients, contract vehicles, and recent wins will demonstrate exactly the research capability they are hiring for"
+        ],
+        "marketSkillsToLearn": [
+          "SAM.gov and federal procurement research",
+          "GovWin IQ for federal opportunity tracking",
+          "Federal acquisition regulation (FAR) basics",
+          "FPDS and USAspending.gov data analysis",
+          "Federal budget cycle and continuing resolution impacts on procurement",
+          "Capture management methodology (Shipley or equivalent)",
+          "NAICS code classification and its role in federal BD",
+          "Incumbent research and competitive intelligence in federal markets",
+          "AI-assisted document summarization for RFP analysis",
+          "Pipeline metrics and win probability frameworks"
+        ],
+        "summary": "This candidate brings a stronger analytical and technical foundation than most entry-level applicants at this salary band — real Python, SQL, AI tools experience, a successful entrepreneurial venture with measurable revenue metrics, and genuine Salesforce exposure. The critical problem is a complete absence of federal market knowledge, which is the entire domain this role operates in. They are a viable hire if the company is willing to invest in onboarding someone with zero federal contracting context, and the candidate's learning agility and AI proficiency suggest they could close that gap quickly — but they need to demonstrate federal market curiosity and self-directed learning before an offer is on the table."
+      }
+    },
+    {
+      "id": "job_1775364919938",
+      "savedAt": "2026-04-05T04:55:19.938Z",
+      "company": "Unknown Company",
+      "role": "This role is fundamentally about analyzing, modeling, modifying, and supporting complex systems and processes to improve efficiency, effectiveness, and reliability within a financial services technology environment.",
+      "jobDescription": "Systems Analyst I-Operations (IT Analyst I)\nSan Antonio, TX, USA\nEmployees can work remotely\nFull-time\nShift: 1st\nCompany Description\nVericast is the financial institution (FI) performance partner. We help banks and credit unions drive growth, improve efficiency, increase engagement and navigate change through the power of data, technology and people. Our advanced analytics, data-driven insights and integrated solution set enable better execution with agility, precision and scale. That’s why thousands of financial institutions look to Vericast and our 150 years of financial services expertise to help them achieve more.\n\nJob Description\nAn Analyst analyzes models modifies and supports a complex system process or operation in order to improve its efficiency, effectiveness and reliability. An Analyst analyzes models modifies and supports a complex system process or operation in order to improve its efficiency, effectiveness and reliability.\n\nKEY DUTIES/RESPONSIBILITIES\n\nAcceptable facilitation skills. Immediate supervision required. Competent to work independently on a few activities and requires general direction for most activities. 5%\nLimited systems analysis work. 10%\nApplies acceptable modeling principles and practices. 20%\nResponsible for fulfilling end-user requests. 25%\nAssists in maintaining simple applications/systems. 40%\nQualifications\nEDUCATION\n\nAssociates degree or equivalent work experience\nEXPERIENCE\n\n0+ Years with Associates degree or 3+ years’ work experience\nCOMMUNICATION AND CONTACTS\n\nCommunicates directly with internal and external customers. Communicates directly with internal and external customers.\nAdditional Information\nBase Salary Range: $50,000-$70,000\n\nApplications will be accepted until the posted deadline April 5, 2026 or until a sufficient candidate pool has been identified.\n\nThe ultimate compensation offered for the position will depend upon several factors such as skill level, cost of living, experience, and responsibilities.\n\nVericast offers a generous total rewards benefits package that includes medical, dental and vision coverage, 401K with company match and generous PTO allowance. A wide variety of additional benefits like life insurance, employee assistance and pet insurance are also available, not to mention smart and friendly coworkers!\n\nAt Vericast, we don’t just accept differences - we celebrate them, we support them, and we thrive on them for the benefit of our employees, our clients, and our community. As an Equal Opportunity employer, Vericast considers applicants for all positions without regard to race, color, creed, religion, national origin or ancestry, sex, sexual orientation, gender identity, age, disability, genetic information, veteran status, or any other classifications protected by law. Applicants who have disabilities may request that accommodations be made in order to complete the selection process by contacting our Talent Acquisition team at talentacquisition@vericast.com. EEO is the law. To review your rights under Equal Employment Opportunity please visit: www.dol.gov/ofccp/regs/compliance/posters/pdf/eeopost.pdf.",
+      "resumeFilename": "tailored_resume_2026_04_05T04_5.pdf",
+      "coverLetterFilename": "tailored_cover_letter_2026_04_05T04_5.pdf",
+      "compatibilityScore": 62,
+      "analysis": {
+        "compatibilityScore": 62,
+        "compatibilityLabel": "Partial Match",
+        "industry": "Financial Services / Information Technology",
+        "roleType": "Systems Analyst / IT Operations",
+        "seniorityLevel": "Entry-Level",
+        "presentSkills": [
+          "SQL",
+          "Data Analytics",
+          "Business Analysis",
+          "Process Optimization",
+          "Business Intelligence",
+          "Tableau",
+          "Power BI",
+          "Excel",
+          "Python",
+          "Data Mining & ETL",
+          "Customer Communication (Internal & External)",
+          "End-User Support Experience",
+          "E-Commerce Operations & Systems Management",
+          "Cloud Platforms (AWS, Azure)",
+          "Documentation & Reporting",
+          "Adaptability & Problem Solving",
+          "Cross-Functional Collaboration"
+        ],
+        "missingSkills": [
+          {
+            "skill": "Enterprise IT Systems Knowledge (ERP, CRM, Banking Platforms)",
+            "importance": "critical",
+            "reason": "This role supports complex operational systems in a financial services context. The candidate has no demonstrated experience working with enterprise-grade IT systems common in banking or FI environments."
+          },
+          {
+            "skill": "Formal Systems Analysis Methodology",
+            "importance": "critical",
+            "reason": "The JD explicitly calls for systems analysis, modeling, and modification. The candidate's closest exposure is academic projects and e-commerce ops — not structured IT systems analysis in an enterprise setting."
+          },
+          {
+            "skill": "ITSM / Help Desk / Ticketing Systems (ServiceNow, Jira, Remedy)",
+            "importance": "critical",
+            "reason": "Fulfilling end-user requests (25% of the role) in an enterprise IT context requires ticketing and ITSM tool proficiency. No evidence of this anywhere in the candidate's profile."
+          },
+          {
+            "skill": "Application Maintenance & Support",
+            "importance": "critical",
+            "reason": "40% of the role is maintaining simple applications/systems. The candidate has built personal projects but has zero demonstrated experience maintaining live enterprise applications in a support capacity."
+          },
+          {
+            "skill": "Process Modeling / Diagramming (Visio, BPMN, UML)",
+            "importance": "important",
+            "reason": "Systems analysis roles require formal process modeling. The candidate has no demonstrated use of standard modeling tools or notations."
+          },
+          {
+            "skill": "Financial Services / Banking Domain Knowledge",
+            "importance": "important",
+            "reason": "Vericast serves banks and credit unions. Familiarity with FI operations, compliance, or banking technology would be a meaningful differentiator. Candidate has none."
+          },
+          {
+            "skill": "Requirements Gathering & Documentation",
+            "importance": "important",
+            "reason": "Core to an analyst role. While the candidate has a business analysis project, there is no professional track record of gathering and documenting requirements in a real IT environment."
+          },
+          {
+            "skill": "Testing & Quality Assurance Basics",
+            "importance": "nice-to-have",
+            "reason": "Supporting and modifying applications typically involves basic UAT or regression testing. No QA experience is evident."
+          }
+        ],
+        "experienceGaps": [
+          "No professional IT or systems analyst experience in any industry — the closest analog is self-taught e-commerce platform management, which is a significant stretch for an enterprise IT role.",
+          "No experience working within a structured IT operations environment — the candidate has never fulfilled end-user IT requests, worked a support queue, or interfaced with enterprise infrastructure teams.",
+          "No financial services or banking industry exposure whatsoever — Vericast's entire value proposition is built around FI clients, and the candidate brings zero domain context.",
+          "Work history is fragmented across wildly different domains (AI training, substitute teaching, Home Depot, restaurant server, Apple retail) with no coherent IT career narrative.",
+          "Academic projects (SQL pipeline, cloud architecture) demonstrate potential but are coursework-level, not professional deliverables — a hiring manager at a company like Vericast will view these skeptically without real-world validation.",
+          "No demonstrated experience with formal system documentation, change management processes, or SDLC workflows in a corporate environment.",
+          "The candidate's most technical roles (Dispomode, AI Fellow) are either self-directed entrepreneurial ventures or gig-economy tasks — neither translates cleanly to working within a structured IT operations team with supervision and process compliance requirements."
+        ],
+        "criticalVerdict": "This candidate is a smart, resourceful generalist with genuine technical curiosity and a diverse skill set — but they are not a Systems Analyst, and their resume doesn't tell that story convincingly. The role demands someone who can slot into an enterprise IT operations environment, handle user requests through formal processes, and support live applications — none of which this candidate has done professionally. The academic projects are promising but paper-thin without real enterprise context, and the work history reads more like a career exploration phase than a focused IT trajectory. They're not unqualified to apply, but they're competing against candidates with actual IT support or analyst internship experience, and that gap is real.",
+        "improvementPlan": [
+          "Get an entry-level IT support or help desk role (even part-time or contract) to build legitimate end-user support experience — this is the single biggest gap and cannot be papered over with projects.",
+          "Obtain CompTIA A+ or ITIL Foundation certification to demonstrate formal IT operations knowledge and signal seriousness about an IT career path to hiring managers.",
+          "Learn and practice in a free ServiceNow developer instance or Jira — document this on your resume as hands-on ITSM tool experience to address the ticketing system gap.",
+          "Build a formal systems analysis case study using BPMN or UML process diagrams applied to one of your existing projects (e.g., Dispomode operations or the Brazilian e-commerce analytics platform) — this demonstrates modeling skills with real context.",
+          "Research Vericast's product suite and financial institution technology landscape — tailor your cover letter to connect your data analytics and business analysis work directly to FI performance metrics and banking operations.",
+          "Tighten the resume narrative ruthlessly — drop or minimize Home Depot, Yard House, and Burger 7 for this application. Lead with the SQL analytics project, cloud architecture project, Apple business specialist experience, and any technical certifications to build a coherent IT-oriented story.",
+          "Pursue a short course or certification in business systems analysis (e.g., IIBA ECBA prep, or a LinkedIn Learning systems analysis course) to demonstrate knowledge of formal analyst methodologies."
+        ],
+        "marketSkillsToLearn": [
+          "ITIL v4 Framework",
+          "ServiceNow (ITSM)",
+          "Business Process Modeling (BPMN / Visio)",
+          "Requirements Elicitation & Documentation",
+          "Agile / Scrum for IT Teams",
+          "SQL for Operational Reporting",
+          "Basic Networking & Infrastructure Fundamentals",
+          "UAT & Software Testing Basics",
+          "Microsoft 365 Administration Basics",
+          "Data Governance Fundamentals"
+        ],
+        "summary": "This candidate has a genuine technical foundation — SQL, Python, cloud exposure, business analysis coursework, and real entrepreneurial execution — that makes them interesting on paper for an entry-level analyst role. However, the complete absence of enterprise IT experience, ITSM tools, application support work, and financial services domain knowledge creates meaningful gaps against what this specific role at Vericast actually requires day-to-day. With targeted upskilling in IT operations fundamentals and a more focused career narrative, this candidate could be competitive for this role in 6-12 months."
+      },
+      "qaHistory": [
+        {
+          "q": "Message to the Hiring Team\nLet the company know about your interest working there",
+          "a": "What drew me to Vericast specifically is the focus on helping financial institutions — banks and credit unions that people depend on every day — actually run better through technology. There's something meaningful about that mission, and the fact that Vericast has been doing it for 150 years tells me this is an organization that genuinely understands the industry, not one that's just chasing trends.\n\nMy background is in business information systems, and the thread running through most of what I've built comes down to one question: how do you take something complex and make it work more reliably? For my Brazilian e-commerce analytics project, I built an end-to-end SQL pipeline across five datasets, modeled KPIs from scratch, and traced a recurring revenue problem back to three specific causes. That kind of work — following the data until you understand what's actually breaking down — is the type of problem I genuinely want to spend my time on.\n\nI also worked through a multi-cloud infrastructure project using AWS and Azure, configuring VPN tunnels, security group rules, and storage policies across both platforms. That project taught me something I didn't expect: keeping a system secure and reliable is a completely different challenge than building it in the first place. You have to think about what happens when things go wrong, not just when they go right.\n\nOn the people side — at Apple, I spent nearly three years doing hands-on technical troubleshooting for customers, running diagnostics, walking people through setups, and figuring out why a device or system wasn't behaving the way it should. I've been the person standing between something broken and someone who needs it working, and that experience shaped how I think about supporting end users.\n\nThis role feels like a real opportunity to bring those pieces together in an enterprise environment that actually matters. I know there's a learning curve ahead with formal IT operations and enterprise systems, and I'm genuinely ready to put in that work. Vericast is the kind of place I want to start building that career.",
+          "createdAt": "2026-04-05T04:58:00.391Z"
+        }
+      ],
+      "updatedAt": "2026-04-05T04:58:00.414Z"
+    },
+    {
+      "id": "job_1775239140711",
+      "savedAt": "2026-04-03T17:59:00.711Z",
+      "company": "Unknown Company",
+      "role": "Collecting and evaluating high-quality user-built spreadsheets and professional documents for an AI training data project via Handshake",
+      "jobDescription": "TYPE 1 — Personal spreadsheets\n✅ SUBMIT if your doc...\n  • Has multiple tabs with cross-sheet references or formulas\n  • Uses VLOOKUP/XLOOKUP, INDEX/MATCH, nested formulas, pivot tables, or dynamic arrays\n  • Has real data you've been maintaining over weeks, months, or years\n  • Has charts, conditional formatting, or data validation you built yourself\n  • Took more than a few hours to build\n\n❌ DON'T submit if your doc...\n  • Is a single tab with basic data and no formulas\n  • Was built in under an hour\n  • Is mostly empty or uses only SUM/AVERAGE\n  • Is a starter template you barely touched\n\nTYPE 2 — Professional/work documents\n✅ SUBMIT if your doc...\n  • Is something you'd be proud to send to a client, investor, or senior stakeholder\n  • Has sophisticated structure, real analytical depth, or polished visual design\n  • Reflects genuine domain expertise\n  • Took meaningful time and effort to produce\n\n❌ DON'T submit if your doc...\n  • Is a generic downloaded template with your name swapped in\n  • Has only basic formatting with nothing that reflects real expertise\n  • Is a rough internal draft with no polish\n\nALL TYPES\n✅ DO: Submit something you genuinely built and used\n❌ DON'T: Submit anything AI-generated or heavily AI-assisted\n❌ DON'T: Submit multiple low quality docs. This behavior may make you ineligible for future Handshake AI projects.\n",
+      "resumeFilename": "tailored_resume_2026_04_03T17_5.pdf",
+      "coverLetterFilename": "tailored_cover_letter_2026_04_03T17_5.pdf",
+      "compatibilityScore": 72,
+      "analysis": {
+        "compatibilityScore": 72,
+        "compatibilityLabel": "Good Match",
+        "industry": "AI Training / Data Labeling / Crowdsourced Intelligence",
+        "roleType": "Spreadsheet / Document Quality Contributor",
+        "seniorityLevel": "Entry to Mid-Level",
+        "presentSkills": [
+          "Excel (Microsoft certified)",
+          "Data Analytics",
+          "SQL and data modeling",
+          "Python and Pandas",
+          "Data visualization (Tableau, Power BI, Chart.js)",
+          "Business Intelligence",
+          "Financial analytics (Flashconverter project)",
+          "Pivot tables and KPI modeling (Brazilian E-Commerce Analytics project)",
+          "Attention to detail (demonstrated in AI training QA tasks)",
+          "Process optimization",
+          "R programming and data manipulation",
+          "Google Data Analytics certification",
+          "Real data pipeline construction with multiple joined tables",
+          "Domain expertise in e-commerce, finance, and business strategy",
+          "AI model training and quality assessment (current Handshake role)"
+        ],
+        "missingSkills": [
+          {
+            "skill": "Demonstrated VLOOKUP/XLOOKUP or INDEX/MATCH usage in submitted work",
+            "importance": "critical",
+            "reason": "The job explicitly requires evidence of advanced formula usage in submitted documents. Having Excel certification is not the same as showing a live, complex spreadsheet with cross-sheet references."
+          },
+          {
+            "skill": "Nested formula construction with visible examples",
+            "importance": "critical",
+            "reason": "The job criteria specifically calls out nested formulas as a qualifying signal. No submitted work samples are referenced in the profile that demonstrate this hands-on."
+          },
+          {
+            "skill": "Dynamic arrays (FILTER, SORT, UNIQUE, SEQUENCE)",
+            "importance": "important",
+            "reason": "Modern Excel and Sheets power users are expected to know dynamic array functions. This is a differentiator between basic and advanced spreadsheet contributors."
+          },
+          {
+            "skill": "Pivot table construction with real maintained datasets",
+            "importance": "important",
+            "reason": "While SQL-based KPI modeling is present, there is no explicit evidence of Excel/Sheets pivot table work built and maintained over time — a direct job requirement."
+          },
+          {
+            "skill": "Conditional formatting with logic-driven rules",
+            "importance": "important",
+            "reason": "The job checks for this as a qualifying signal of a real, polished document. Not referenced anywhere in candidate profile."
+          },
+          {
+            "skill": "Multi-tab cross-sheet referenced spreadsheet (personal or professional)",
+            "importance": "critical",
+            "reason": "The core qualifier for Type 1 submission is a multi-tab doc with cross-sheet references maintained over time. No such artifact is evidenced in the profile."
+          },
+          {
+            "skill": "Data validation rules in spreadsheets",
+            "importance": "nice-to-have",
+            "reason": "A signal of polished spreadsheet craftsmanship. Absence weakens the quality of any submission."
+          },
+          {
+            "skill": "Professional-grade polished document for stakeholder delivery",
+            "importance": "important",
+            "reason": "For Type 2 qualification, documents must be stakeholder-ready with analytical depth. While the candidate has strong projects, there is no explicit evidence of a clean, client-facing Excel/Sheets deliverable."
+          }
+        ],
+        "experienceGaps": [
+          "No explicitly demonstrated artifact of a complex, multi-tab spreadsheet built and maintained over weeks or months — this is the central deliverable of the job and its absence is the biggest risk",
+          "Candidate's financial analytics work (Flashconverter) was built in JavaScript/IndexedDB, not Excel or Google Sheets — technically impressive but does not satisfy the submission criteria",
+          "SQL-based KPI modeling in the Brazilian E-Commerce project is strong analytically but was not done in a spreadsheet format — it will not qualify as a submission",
+          "Microsoft Excel Professional certification (2026) is listed but no tangible Excel output is showcased in the project portfolio to substantiate the credential",
+          "Writing quality in technical detail sections is inconsistent and informal — for a Type 2 professional document submission, polish and presentation discipline is essential and currently questionable",
+          "No evidence of documents built specifically for client, investor, or senior stakeholder consumption — the professional document bar requires this pedigree"
+        ],
+        "criticalVerdict": "This candidate has a genuinely strong analytical foundation — Excel certification, SQL modeling, data analytics projects, and active AI training experience are all real positives that make them a credible applicant. However, the central requirement of this job is the existence of a high-quality, complex spreadsheet or professional document that can be submitted — and that artifact is not clearly evidenced anywhere in the profile. Having the skills on paper is not the same as having the deliverable in hand. The candidate needs to audit their existing work immediately and determine whether anything they have built actually meets the submission bar, because submitting a low-quality document is explicitly flagged as disqualifying behavior.",
+        "improvementPlan": [
+          "Immediately audit all existing Excel or Google Sheets files you have built — personal budgets, financial trackers, class projects — and assess honestly whether any meet the multi-tab, cross-sheet formula threshold",
+          "If no qualifying spreadsheet exists, build one now using real personal data (budget tracker, job application tracker, investment portfolio) with VLOOKUP or XLOOKUP, INDEX/MATCH, pivot tables, conditional formatting, and data validation across at least 3 tabs",
+          "Reconstruct the Flashconverter financial platform logic inside Excel or Google Sheets to create a submission-ready artifact that mirrors the JavaScript project but lives in a spreadsheet format",
+          "Review your BUS 498 or MIS 431 academic project deliverables — if any included Excel-based financial models or data tables, polish them to a client-ready standard and document the analytical methodology clearly",
+          "Practice writing professional technical documentation — the informal, stream-of-consciousness writing style visible in the technical details sections would disqualify a Type 2 document submission immediately",
+          "Study dynamic array functions (FILTER, UNIQUE, SORT, XLOOKUP) to demonstrate modern Excel fluency beyond what the certification alone signals"
+        ],
+        "marketSkillsToLearn": [
+          "Advanced Excel dynamic arrays (FILTER, SORT, UNIQUE, XLOOKUP, LET)",
+          "Google Sheets with cross-sheet IMPORTRANGE and QUERY functions",
+          "Power Query for ETL within Excel",
+          "DAX formulas in Power BI connected to Excel data models",
+          "Financial modeling best practices (three-statement models, sensitivity analysis)",
+          "Dashboard design principles for executive-level reporting",
+          "Data storytelling and visualization for non-technical stakeholders",
+          "Airtable and Notion databases as modern spreadsheet alternatives",
+          "Excel VBA or Google Apps Script for automation",
+          "Looker Studio for connected spreadsheet-based reporting"
+        ],
+        "summary": "This candidate is analytically capable and has real credentials — Excel certification, SQL projects, data analytics coursework, and active AI training work all demonstrate genuine technical seriousness. The core problem is a gap between demonstrated skill and the specific deliverable this job requires: a complex, well-maintained spreadsheet or polished professional document that can be submitted for evaluation. If the candidate has such an artifact sitting in their files and simply did not showcase it, they should submit immediately. If they do not, they need to build one before applying, because submitting a weak or AI-assisted document carries an explicit disqualification risk that would harm their standing on the platform."
+      }
+    },
+    {
       "id": "job_1775113955682",
       "savedAt": "2026-04-02T07:12:35.682Z",
       "company": "Unknown Company",
